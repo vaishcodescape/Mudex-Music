@@ -2,8 +2,6 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { resolve } from 'path'
 import legacy from '@vitejs/plugin-legacy'
-import autoprefixer from 'autoprefixer'
-import tailwindcss from 'tailwindcss'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -13,7 +11,7 @@ export default defineConfig({
       targets: ['defaults', 'not IE 11'],
     }),
   ],
-  base: './', // This ensures assets are loaded correctly in production
+  base: '/',
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src'),
@@ -34,7 +32,6 @@ export default defineConfig({
     outDir: 'dist',
     assetsDir: 'assets',
     emptyOutDir: true,
-    // Improve chunking strategy
     rollupOptions: {
       output: {
         manualChunks: {
@@ -42,19 +39,9 @@ export default defineConfig({
           'router-vendor': ['react-router-dom'],
           'animation-vendor': ['framer-motion', 'gsap'],
         },
-        assetFileNames: (assetInfo) => {
-          let extType = assetInfo.name.split('.')[1];
-          if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType)) {
-            extType = 'img';
-          }
-          return `assets/${extType}/[name]-[hash][extname]`;
-        },
-        chunkFileNames: 'assets/js/[name]-[hash].js',
-        entryFileNames: 'assets/js/[name]-[hash].js',
       },
     },
-    // Enable source maps for production debugging if needed
-    sourcemap: false, // Disable sourcemap in production for better performance
+    sourcemap: false,
     minify: 'terser',
     terserOptions: {
       compress: {
@@ -64,18 +51,5 @@ export default defineConfig({
     },
     // Optimize chunk size
     chunkSizeWarningLimit: 1000,
-  },
-  // Add CSS optimization
-  css: {
-    postcss: {
-      plugins: [
-        tailwindcss,
-        autoprefixer,
-      ],
-    },
-    // Improve CSS handling
-    modules: {
-      generateScopedName: '[name]__[local]___[hash:base64:5]',
-    },
   },
 })
