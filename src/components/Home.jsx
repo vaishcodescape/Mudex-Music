@@ -82,7 +82,7 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-background/80 text-foreground overflow-hidden">
-      <div ref={particlesRef} className="fixed inset-0 pointer-events-none">
+      <div ref={particlesRef} className="fixed inset-0 pointer-events-none z-0">
         <style>
           {`
             .particle {
@@ -103,12 +103,23 @@ const Home = () => {
       <AnimatePresence>
         {isLoaded && (
           <motion.main
-            className="relative min-h-screen flex flex-col items-center justify-center px-6 -mt-20"
+            className="relative min-h-screen flex flex-col items-center justify-center px-6 pt-24"
             initial="hidden"
             animate="visible"
             variants={containerVariants}
           >
-            <motion.div className="container text-center">
+            {/* Large Centered Title */}
+            <motion.div
+              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none select-none"
+              variants={itemVariants}
+              style={{ zIndex: 5 }}
+            >
+              <h1 className="text-[12rem] font-bold opacity-10 whitespace-nowrap bg-clip-text text-transparent bg-gradient-to-r from-primary/20 via-primary/10 to-primary/20">
+                MUDEX MUSIC
+              </h1>
+            </motion.div>
+
+            <motion.div className="container relative z-10 text-center">
               {/* Centered Logo and Title */}
               <motion.div
                 className="mb-16"
@@ -116,7 +127,7 @@ const Home = () => {
               >
                 <div className="flex flex-col items-center justify-center">
                   <motion.div 
-                    className="w-40 h-40 mb-6"
+                    className="w-32 h-32 mb-6"
                     variants={itemVariants}
                   >
                     <Logo />
@@ -125,10 +136,10 @@ const Home = () => {
                     className="text-center"
                     variants={itemVariants}
                   >
-                    <h1 className="text-7xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary/80 to-primary">
+                    <h1 className="text-6xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary/80 to-primary">
                       Mudex Music
                     </h1>
-                    <p className="text-2xl text-muted-foreground mt-4 max-w-2xl mx-auto">
+                    <p className="text-xl text-muted-foreground mt-4 max-w-2xl mx-auto">
                       Your gateway to endless musical possibilities
                     </p>
                   </motion.div>
@@ -143,7 +154,7 @@ const Home = () => {
                 <Button
                   variant="glow"
                   size="lg"
-                  className="text-lg px-12 py-6 h-auto font-semibold"
+                  className="text-lg px-12 py-6 h-auto font-semibold relative z-20"
                 >
                   Start Listening
                 </Button>
@@ -151,7 +162,7 @@ const Home = () => {
                 <Button
                   variant="outline"
                   size="lg"
-                  className="text-lg px-12 py-6 h-auto font-semibold border-primary text-primary hover:bg-primary/10"
+                  className="text-lg px-12 py-6 h-auto font-semibold border-primary text-primary hover:bg-primary/10 relative z-20"
                 >
                   Learn More
                 </Button>
