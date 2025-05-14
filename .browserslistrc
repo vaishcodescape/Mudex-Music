@@ -1,18 +1,23 @@
-# Production environment targets
-[production]
+# Production targets
 >0.2%
 not dead
 not op_mini all
+last 2 versions
 
-# Development environment targets
+# Mobile browsers
+iOS >= 12
+Safari >= 12
+
+# Development targets (when NODE_ENV=development)
 [development]
 last 1 chrome version
 last 1 firefox version
 last 1 safari version
-last 1 edge version
-last 1 safari ios version
-last 1 opera version
+
+# Modern desktop browsers
+last 2 Chrome versions
+last 2 Firefox versions
+last 2 Edge versions
 
 # New configuration
-last 2 versions
 maintained node versions 

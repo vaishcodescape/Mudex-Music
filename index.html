@@ -3,8 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Mudex Music - Your Music Universe" />
+    <meta name="keywords" content="music, streaming, discover, artists" />
+    <meta property="og:title" content="Mudex Music" />
+    <meta property="og:description" content="Your Music Universe - Discover, stream, and share music" />
+    <meta property="og:type" content="website" />
     <title>Mudex Music</title>
+    
+    <!-- Preload critical assets -->
+    <link rel="modulepreload" href="/src/main.jsx" />
+    <link rel="preload" href="/src/index.css" as="style" />
+    
+    <!-- Prevent flash of unstyled content -->
+    <style>
+      body {
+        background-color: black;
+        margin: 0;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
