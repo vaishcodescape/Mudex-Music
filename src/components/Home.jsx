@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import Navbar from './Navbar';
 import { Button } from './ui/button';
+import Logo from './Logo';
 
 const Home = () => {
   const particlesRef = useRef(null);
@@ -100,54 +101,71 @@ const Home = () => {
 
       <Navbar />
 
-      <main className="relative pt-32 px-6">
+      <main className="relative min-h-screen flex flex-col items-center justify-center px-6 -mt-20">
         <motion.div
-          className="container"
+          className="container text-center"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
         >
+          {/* Centered Logo and Title */}
           <motion.div
-            className="text-center"
-            variants={itemVariants}
+            className="mb-16"
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            <h1 className="hero-text text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/80">
-              Your Music Universe
-            </h1>
-            <p className="hero-text text-xl text-muted-foreground mb-12 max-w-2xl mx-auto">
-              Discover, stream, and share a constantly expanding mix of music from emerging and major artists around the world.
-            </p>
-
-            <motion.div 
-              className="hero-text flex justify-center gap-6"
-              variants={itemVariants}
-            >
-              <Button
-                variant="glow"
-                size="lg"
-                className="font-semibold"
+            <div className="flex flex-col items-center justify-center">
+              <div className="w-40 h-40 mb-6">
+                <Logo />
+              </div>
+              <motion.div 
+                className="text-center"
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.3, duration: 0.5 }}
               >
-                Start Listening
-              </Button>
-              
-              <Button
-                variant="outline"
-                size="lg"
-                className="font-semibold border-primary text-primary hover:bg-primary/10"
-              >
-                Learn More
-              </Button>
-            </motion.div>
+                <h1 className="text-7xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary/80 to-primary">
+                  Mudex Music
+                </h1>
+                <p className="text-2xl text-muted-foreground mt-4 max-w-2xl mx-auto">
+                  Your gateway to endless musical possibilities
+                </p>
+              </motion.div>
+            </div>
           </motion.div>
 
+          {/* Action Buttons */}
+          <motion.div 
+            className="flex justify-center gap-6 mt-12"
+            variants={itemVariants}
+          >
+            <Button
+              variant="glow"
+              size="lg"
+              className="text-lg px-12 py-6 h-auto font-semibold"
+            >
+              Start Listening
+            </Button>
+            
+            <Button
+              variant="outline"
+              size="lg"
+              className="text-lg px-12 py-6 h-auto font-semibold border-primary text-primary hover:bg-primary/10"
+            >
+              Learn More
+            </Button>
+          </motion.div>
+
+          {/* Feature Cards */}
           <motion.div
-            className="mt-24 grid grid-cols-1 md:grid-cols-3 gap-8 text-center"
+            className="mt-32 grid grid-cols-1 md:grid-cols-3 gap-8 text-center"
             variants={containerVariants}
           >
             {['Discover', 'Stream', 'Connect'].map((feature, index) => (
               <motion.div 
                 key={feature}
-                className="hero-text p-8 rounded-lg backdrop-blur-lg bg-card/50 hover:bg-card/80 transition-colors border border-border/50"
+                className="p-8 rounded-lg backdrop-blur-lg bg-card/50 hover:bg-card/80 transition-colors border border-border/50"
                 variants={itemVariants}
                 whileHover={{ 
                   scale: 1.02,
