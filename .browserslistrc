@@ -11,4 +11,8 @@ last 1 firefox version
 last 1 safari version
 last 1 edge version
 last 1 safari ios version
-last 1 opera version 
+last 1 opera version
+
+# New configuration
+last 2 versions
+maintained node versions 
