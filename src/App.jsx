@@ -10,10 +10,14 @@ const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check for user in localStorage
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    try {
+      const storedUser = localStorage.getItem('user');
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+      }
+    } catch (error) {
+      console.error('Error parsing user from localStorage:', error);
+      localStorage.removeItem('user'); // Clear invalid data
     }
     setLoading(false);
   }, []);
@@ -32,16 +36,39 @@ const AuthProvider = ({ children }) => {
 // Route wrapper components
 const PrivateRoute = ({ children }) => {
   const location = useLocation();
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')));
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    try {
+      const storedUser = localStorage.getItem('user');
+      setUser(storedUser ? JSON.parse(storedUser) : null);
+    } catch (error) {
+      console.error('Error parsing user from localStorage:', error);
+      localStorage.removeItem('user');
+    }
+    setLoading(false);
+
     const handleStorageChange = () => {
-      setUser(JSON.parse(localStorage.getItem('user')));
+      try {
+        const storedUser = localStorage.getItem('user');
+        setUser(storedUser ? JSON.parse(storedUser) : null);
+      } catch (error) {
+        console.error('Error parsing user from localStorage:', error);
+      }
     };
 
     window.addEventListener('storage', handleStorageChange);
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="w-8 h-8 border-4 border-sky-400 border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
 
   if (!user) {
     return <Navigate to="/auth" state={{ from: location }} replace />;
@@ -52,16 +79,39 @@ const PrivateRoute = ({ children }) => {
 
 const PublicRoute = ({ children }) => {
   const location = useLocation();
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')));
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    try {
+      const storedUser = localStorage.getItem('user');
+      setUser(storedUser ? JSON.parse(storedUser) : null);
+    } catch (error) {
+      console.error('Error parsing user from localStorage:', error);
+      localStorage.removeItem('user');
+    }
+    setLoading(false);
+
     const handleStorageChange = () => {
-      setUser(JSON.parse(localStorage.getItem('user')));
+      try {
+        const storedUser = localStorage.getItem('user');
+        setUser(storedUser ? JSON.parse(storedUser) : null);
+      } catch (error) {
+        console.error('Error parsing user from localStorage:', error);
+      }
     };
 
     window.addEventListener('storage', handleStorageChange);
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="w-8 h-8 border-4 border-sky-400 border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
 
   if (user) {
     return <Navigate to={location.state?.from?.pathname || '/'} replace />;
