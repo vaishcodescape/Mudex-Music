@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "cross-env NODE_ENV=production vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "start": "vite",
@@ -13,7 +13,9 @@
     "prebuild": "npm run clean",
     "analyze": "vite-bundle-analyzer",
     "serve": "vite preview --port 3000",
-    "test": "vitest"
+    "test": "vitest",
+    "predeploy": "npm run build",
+    "deploy": "npm run build && npm run serve"
   },
   "dependencies": {
     "framer-motion": "^11.0.8",
@@ -38,6 +40,7 @@
     "postcss": "^8.4.35",
     "rimraf": "^5.0.10",
     "tailwindcss": "^3.4.1",
+    "terser": "^5.39.1",
     "vite": "^5.1.0",
     "vite-bundle-analyzer": "^0.8.3",
     "vitest": "^1.6.1"
