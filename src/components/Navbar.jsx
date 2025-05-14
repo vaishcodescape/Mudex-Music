@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import gsap from 'gsap';
-import Logo from './Logo';
 import { Button } from './ui/button';
+import Logo from './Logo';
 
 const Navbar = () => {
   const location = useLocation();
@@ -11,7 +10,6 @@ const Navbar = () => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    // Set loaded state immediately to trigger animations
     setIsLoaded(true);
   }, []);
 
@@ -35,17 +33,13 @@ const Navbar = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <Link to="/" className="flex items-center space-x-3">
-            <div className="w-10 h-10">
+          <Link to="/" className="flex items-center">
+            <div className="w-8 h-8">
               <Logo />
-            </div>
-            <div className="flex flex-col -space-y-1">
-              <span className="text-xl font-bold text-primary leading-none">Mudex</span>
-              <span className="text-sm font-medium text-muted-foreground">Music</span>
             </div>
           </Link>
         </motion.div>
-        
+
         <motion.div 
           className="flex items-center space-x-8"
           initial="hidden"

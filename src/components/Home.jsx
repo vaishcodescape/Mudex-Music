@@ -5,6 +5,84 @@ import Navbar from './Navbar';
 import { Button } from './ui/button';
 import Logo from './Logo';
 
+const ColorChangingHeading = () => {
+  return (
+    <motion.div
+      className="relative z-20"
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+    >
+      <motion.h1 
+        className="text-7xl font-bold tracking-tight"
+        style={{ textShadow: "0 0 30px rgba(56, 189, 248, 0.5)" }}
+      >
+        <motion.span
+          className="inline-block"
+          animate={{
+            color: [
+              "rgb(56, 189, 248)", // sky-400
+              "rgb(139, 92, 246)", // violet-500
+              "rgb(14, 165, 233)", // sky-600
+              "rgb(56, 189, 248)", // back to sky-400
+            ],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            repeatType: "reverse",
+            ease: "easeInOut",
+          }}
+        >
+          Mudex
+        </motion.span>{" "}
+        <motion.span
+          className="inline-block bg-clip-text text-transparent"
+          style={{
+            backgroundImage: "linear-gradient(to right, rgb(56, 189, 248), rgb(139, 92, 246))",
+            backgroundSize: "200% 100%",
+          }}
+          animate={{
+            backgroundPosition: ["0% 0%", "100% 0%", "0% 0%"],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            repeatType: "reverse",
+            ease: "easeInOut",
+          }}
+        >
+          Music
+        </motion.span>
+      </motion.h1>
+      <motion.div
+        className="mt-3 text-lg font-medium tracking-wide"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5, duration: 0.8 }}
+      >
+        <motion.span
+          className="bg-gradient-to-r from-sky-400/60 via-violet-400/60 to-sky-400/60 bg-clip-text text-transparent"
+          animate={{
+            backgroundPosition: ["0% 0%", "100% 0%", "0% 0%"],
+          }}
+          transition={{
+            duration: 6,
+            repeat: Infinity,
+            repeatType: "reverse",
+            ease: "easeInOut",
+          }}
+          style={{
+            backgroundSize: "200% 100%",
+          }}
+        >
+          Elevate the Underrated
+        </motion.span>
+      </motion.div>
+    </motion.div>
+  );
+};
+
 const Home = () => {
   const particlesRef = useRef(null);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -103,58 +181,57 @@ const Home = () => {
       <AnimatePresence>
         {isLoaded && (
           <motion.main
-            className="relative min-h-screen flex flex-col items-center justify-center px-6 pt-24"
+            className="relative min-h-screen flex flex-col items-center justify-center px-6"
             initial="hidden"
             animate="visible"
             variants={containerVariants}
           >
-            {/* Large Centered Title */}
+            {/* Background Title */}
             <motion.div
-              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none select-none"
+              className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none select-none"
               variants={itemVariants}
-              style={{ zIndex: 5 }}
+              style={{ zIndex: 0 }}
             >
-              <h1 className="text-[12rem] font-bold opacity-10 whitespace-nowrap bg-clip-text text-transparent bg-gradient-to-r from-primary/20 via-primary/10 to-primary/20">
+              <h1 className="text-[12rem] font-bold opacity-10 whitespace-nowrap bg-clip-text text-transparent bg-gradient-to-r from-primary/40 via-primary/30 to-primary/40">
                 MUDEX MUSIC
               </h1>
             </motion.div>
 
-            <motion.div className="container relative z-10 text-center">
-              {/* Centered Logo and Title */}
-              <motion.div
-                className="mb-16"
-                variants={itemVariants}
-              >
-                <div className="flex flex-col items-center justify-center">
+            <motion.div className="container relative z-10 text-center mt-0">
+              <div className="flex flex-col md:flex-row items-center justify-center gap-16 mb-20">
+                {/* Logo on the left */}
+                <motion.div
+                  className="relative"
+                  variants={itemVariants}
+                >
                   <motion.div 
-                    className="w-32 h-32 mb-6"
+                    className="w-48 h-48 relative"
                     variants={itemVariants}
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ type: "spring", stiffness: 300 }}
                   >
                     <Logo />
                   </motion.div>
-                  <motion.div 
-                    className="text-center"
-                    variants={itemVariants}
-                  >
-                    <h1 className="text-6xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary/80 to-primary">
-                      Mudex Music
-                    </h1>
-                    <p className="text-xl text-muted-foreground mt-4 max-w-2xl mx-auto">
-                      Your gateway to endless musical possibilities
-                    </p>
-                  </motion.div>
-                </div>
-              </motion.div>
+                </motion.div>
+
+                {/* Color Changing Heading */}
+                <motion.div
+                  variants={itemVariants}
+                  className="flex-1 min-w-[400px]"
+                >
+                  <ColorChangingHeading />
+                </motion.div>
+              </div>
 
               {/* Action Buttons */}
               <motion.div 
-                className="flex justify-center gap-6 mt-12"
+                className="flex justify-center gap-8 mt-16"
                 variants={itemVariants}
               >
                 <Button
                   variant="glow"
                   size="lg"
-                  className="text-lg px-12 py-6 h-auto font-semibold relative z-20"
+                  className="text-lg px-12 py-6 h-auto font-semibold relative"
                 >
                   Start Listening
                 </Button>
@@ -162,7 +239,7 @@ const Home = () => {
                 <Button
                   variant="outline"
                   size="lg"
-                  className="text-lg px-12 py-6 h-auto font-semibold border-primary text-primary hover:bg-primary/10 relative z-20"
+                  className="text-lg px-12 py-6 h-auto font-semibold border-primary text-primary hover:bg-primary/10 relative"
                 >
                   Learn More
                 </Button>
@@ -176,7 +253,7 @@ const Home = () => {
                 {['Discover', 'Stream', 'Connect'].map((feature, index) => (
                   <motion.div 
                     key={feature}
-                    className="p-8 rounded-lg backdrop-blur-lg bg-card/50 hover:bg-card/80 transition-colors border border-border/50"
+                    className="p-8 rounded-lg backdrop-blur-lg bg-card/50 hover:bg-card/80 transition-colors border border-border/50 relative"
                     variants={itemVariants}
                     whileHover={{ 
                       scale: 1.02,
