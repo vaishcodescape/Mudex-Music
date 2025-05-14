@@ -3,6 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FcGoogle } from 'react-icons/fc';
 import { useNavigate } from 'react-router-dom';
 import Logo from './Logo';
+import { Button } from './ui/button';
+import { Input } from './ui/input';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './ui/card';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form';
+import { Label } from './ui/label';
 
 const SoundWave = () => {
   const [bars] = useState(() => 
@@ -243,15 +248,7 @@ const Auth = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [formLoading, setFormLoading] = useState(true);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setFormLoading(false);
-    }, 1500);
-    return () => clearTimeout(timer);
-  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -259,220 +256,120 @@ const Auth = () => {
     setLoading(true);
 
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      if (!email.includes('@')) {
-        throw new Error('Invalid email address');
-      }
-      
-      if (!isSignIn && password.length < 6) {
-        throw new Error('Password must be at least 6 characters');
-      }
-
-      console.log('Login successful:', { email, ...(isSignIn ? {} : { password }) });
-      localStorage.setItem('user', JSON.stringify({ email }));
-      navigate('/');
+      // Add your authentication logic here
+      console.log('Authentication attempt with:', { email, password });
+      // For now, just simulate success
+      setTimeout(() => {
+        navigate('/dashboard');
+      }, 1500);
     } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleGoogleSignIn = async () => {
-    try {
-      setError('');
-      setLoading(true);
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      localStorage.setItem('user', JSON.stringify({ email: 'google@example.com' }));
-      navigate('/');
-    } catch (err) {
-      setError('Failed to sign in with Google');
-    } finally {
+      setError(err.message || 'Failed to authenticate');
       setLoading(false);
     }
   };
 
   return (
-    <motion.div 
-      className="min-h-screen relative overflow-hidden bg-gradient-to-br from-black via-gray-900 to-black flex items-center justify-center p-4"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 1 }}
-    >
-      {/* Background animation */}
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center relative overflow-hidden p-4">
       <BackgroundAnimation />
-      
-      {/* Sound wave animation */}
       <SoundWave />
-
-      <motion.div 
-        className="w-full max-w-md relative z-10"
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5 }}
-      >
-        {/* Color changing heading */}
+      
+      <div className="w-full max-w-md z-10">
         <ColorChangingHeading />
-
-        {/* Logo */}
-        <motion.div 
-          className="flex justify-center mb-8"
-          whileHover={{ scale: 1.05 }}
-          transition={{ type: "spring", stiffness: 300 }}
-        >
-          <Logo />
-        </motion.div>
         
-        <motion.div
-          className="bg-gray-900/40 backdrop-blur-md p-8 rounded-2xl shadow-2xl border border-sky-500/20"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <motion.h2 
-            className="text-4xl font-bold text-center mb-8 bg-clip-text text-transparent bg-gradient-to-r from-sky-400 to-sky-200"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-          >
-            {isSignIn ? 'Welcome Back' : 'Create Account'}
-          </motion.h2>
+        <Card className="backdrop-blur-lg bg-card/30 border-border/50">
+          <CardHeader>
+            <CardTitle className="text-2xl font-bold text-center">
+              {isSignIn ? 'Welcome Back!' : 'Create Account'}
+            </CardTitle>
+            <CardDescription className="text-center text-muted-foreground">
+              {isSignIn 
+                ? 'Sign in to continue your musical journey' 
+                : 'Join the community of music lovers'}
+            </CardDescription>
+          </CardHeader>
+          
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="your@email.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="bg-background/50"
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="bg-background/50"
+                />
+              </div>
 
-          <AnimatePresence mode="wait">
-            {error && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.3 }}
-                className="bg-red-500/10 border border-red-500 text-red-500 p-3 rounded-md mb-6"
-              >
-                {error}
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          <AnimatePresence mode="wait">
-            {formLoading ? (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <LoadingSkeleton isSignIn={isSignIn} />
-              </motion.div>
-            ) : (
-              <motion.form
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                onSubmit={handleSubmit}
-                className="space-y-6"
-              >
-                <motion.div>
-                  <label className="block text-sky-400 mb-2 font-medium" htmlFor="email">
-                    Email
-                  </label>
-                  <motion.input
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-4 py-3 rounded-lg bg-gray-800/50 text-white border border-gray-700 focus:border-sky-400 focus:ring-2 focus:ring-sky-400/20 focus:outline-none transition-all duration-300"
-                    required
-                    disabled={loading}
-                    whileFocus={{ scale: 1.02 }}
-                  />
-                </motion.div>
-
-                <AnimatePresence mode="wait">
-                  {!isSignIn && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <label className="block text-sky-400 mb-2 font-medium" htmlFor="password">
-                        Password
-                      </label>
-                      <motion.input
-                        id="password"
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="w-full px-4 py-3 rounded-lg bg-gray-800/50 text-white border border-gray-700 focus:border-sky-400 focus:ring-2 focus:ring-sky-400/20 focus:outline-none transition-all duration-300"
-                        required
-                        disabled={loading}
-                        whileFocus={{ scale: 1.02 }}
-                      />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
-                <motion.button
-                  whileHover={{ scale: loading ? 1 : 1.02, backgroundColor: 'rgb(56, 189, 248)' }}
-                  whileTap={{ scale: loading ? 1 : 0.98 }}
-                  className="w-full bg-sky-500 text-white py-3 rounded-lg hover:bg-sky-400 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-sm tracking-wide shadow-lg shadow-sky-500/20"
-                  type="submit"
-                  disabled={loading}
+              {error && (
+                <motion.p
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-red-500 text-sm text-center"
                 >
-                  {loading ? (
-                    <motion.div
-                      className="flex items-center justify-center"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                    >
-                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                      Loading...
-                    </motion.div>
-                  ) : (
-                    isSignIn ? 'Sign In' : 'Sign Up'
-                  )}
-                </motion.button>
+                  {error}
+                </motion.p>
+              )}
 
-                <div className="relative my-6">
-                  <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-gray-700/50"></div>
-                  </div>
-                  <div className="relative flex justify-center text-sm">
-                    <span className="px-2 bg-gray-900/50 text-gray-400">Or continue with</span>
-                  </div>
+              <Button
+                type="submit"
+                className="w-full"
+                variant="glow"
+                disabled={loading}
+              >
+                {loading ? 'Loading...' : (isSignIn ? 'Sign In' : 'Sign Up')}
+              </Button>
+
+              <div className="relative my-4">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-border/50"></div>
                 </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-card px-2 text-muted-foreground">Or continue with</span>
+                </div>
+              </div>
 
-                <motion.button
-                  whileHover={{ scale: loading ? 1 : 1.02 }}
-                  whileTap={{ scale: loading ? 1 : 0.98 }}
-                  type="button"
-                  onClick={handleGoogleSignIn}
-                  disabled={loading}
-                  className="w-full flex items-center justify-center gap-3 bg-white/90 backdrop-blur-sm text-gray-900 py-3 rounded-lg hover:bg-white transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed font-semibold shadow-lg"
-                >
-                  <FcGoogle className="text-xl" />
-                  <span>Google</span>
-                </motion.button>
-              </motion.form>
-            )}
-          </AnimatePresence>
-
-          <motion.p className="mt-6 text-center text-gray-400">
-            {isSignIn ? "Don't have an account? " : "Already have an account? "}
-            <motion.button
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full bg-background/50"
+                onClick={() => {/* Add Google sign in logic */}}
+              >
+                <FcGoogle className="mr-2 h-5 w-5" />
+                Google
+              </Button>
+            </form>
+          </CardContent>
+          
+          <CardFooter className="flex flex-col space-y-2">
+            <Button
+              variant="link"
+              className="text-primary"
               onClick={() => setIsSignIn(!isSignIn)}
-              className="text-sky-400 hover:text-sky-300 hover:underline transition-colors duration-300 font-medium"
-              disabled={loading}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
             >
-              {isSignIn ? 'Sign Up' : 'Sign In'}
-            </motion.button>
-          </motion.p>
-        </motion.div>
-      </motion.div>
-    </motion.div>
+              {isSignIn 
+                ? "Don't have an account? Sign Up" 
+                : "Already have an account? Sign In"}
+            </Button>
+          </CardFooter>
+        </Card>
+      </div>
+    </div>
   );
 };
 
