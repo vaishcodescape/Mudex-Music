@@ -136,31 +136,43 @@ const Home = () => {
                 }
 
                 /* Custom Scrollbar Styles */
+                html {
+                  scroll-behavior: smooth;
+                  overflow-y: scroll;
+                }
+                
+                /* For Webkit browsers (Chrome, Safari, newer versions of Edge) */
                 ::-webkit-scrollbar {
-                  width: 10px;
-                  background: hsl(var(--background));
+                  width: 8px;
+                  height: 8px;
                 }
 
                 ::-webkit-scrollbar-track {
-                  background: hsl(var(--background));
-                  border-radius: 5px;
+                  background: transparent;
                 }
 
+                
                 ::-webkit-scrollbar-thumb {
                   background: hsl(var(--primary) / 0.3);
-                  border-radius: 5px;
-                  border: 2px solid hsl(var(--background));
+                  border-radius: 4px;
                   transition: background-color 0.3s ease;
                 }
 
+                
                 ::-webkit-scrollbar-thumb:hover {
                   background: hsl(var(--primary) / 0.5);
                 }
-
-                /* Firefox Scrollbar */
+                
+                /* For Firefox */
                 * {
                   scrollbar-width: thin;
-                  scrollbar-color: hsl(var(--primary) / 0.3) hsl(var(--background));
+                  scrollbar-color: hsl(var(--primary) / 0.3) transparent;
+                }
+                
+                /* Smooth scrolling for the entire page */
+                body {
+                  overflow-y: auto;
+                  scrollbar-gutter: stable;
                 }
               `}
             </style>
