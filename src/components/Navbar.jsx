@@ -413,7 +413,7 @@ const Navbar = () => {
               whileTap={{ scale: 0.97 }}
             >
               <FaGithub className="mr-2 h-4 w-4 flex-shrink-0" />
-              <span className="hidden sm:inline">Star on GitHub</span>
+              <span className="hidden sm:inline">GitHub</span>
               <span className="sm:hidden">GitHub</span>
             </Button>
           </motion.div>
