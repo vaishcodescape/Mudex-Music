@@ -293,7 +293,7 @@ const Navbar = () => {
                       }}
                     >
                       <FaGithub className="mr-2 h-5 w-5" />
-                      <span>Star on GitHub</span>
+                      <span>GitHub</span>
                     </motion.button>
                     
                     {!isAuthPage && isLoaded && (
