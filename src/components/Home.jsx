@@ -65,6 +65,7 @@ const Home = () => {
     // Wait for exit animation
     await new Promise(resolve => setTimeout(resolve, 800));
     navigate('/auth');
+    window.location.reload();
   };
 
   const containerVariants = {
@@ -72,15 +73,17 @@ const Home = () => {
     visible: { 
       opacity: 1,
       transition: {
-        duration: 0.8,
-        staggerChildren: 0.2,
-        when: "beforeChildren"
+        duration: 1.2,
+        staggerChildren: 0.3,
+        when: "beforeChildren",
+        ease: "easeOut"
       }
     },
     exit: {
       opacity: 0,
       transition: {
-        duration: 0.8
+        duration: 0.6,
+        ease: "easeIn"
       }
     }
   };
@@ -91,8 +94,20 @@ const Home = () => {
       y: 0, 
       opacity: 1,
       transition: {
-        duration: 0.5,
+        duration: 0.8,
         ease: [0.6, 0.01, -0.05, 0.95]
+      }
+    }
+  };
+
+  const featureCardVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: {
+        duration: 0.8,
+        ease: "easeOut"
       }
     }
   };
@@ -102,10 +117,10 @@ const Home = () => {
       {!isNavigating ? (
         <motion.div 
           className="min-h-screen bg-gradient-to-br from-background to-background/80 text-foreground overflow-x-hidden"
-          initial="hidden"
-          animate="visible"
-          exit="exit"
-          variants={containerVariants}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 1 }}
         >
           <div ref={particlesRef} className="fixed inset-0 pointer-events-none z-0">
             <style>
@@ -138,6 +153,7 @@ const Home = () => {
                   className="relative min-h-[calc(100vh-80px)] flex flex-col items-center justify-center px-6"
                   initial="hidden"
                   animate="visible"
+                  exit="exit"
                   variants={containerVariants}
                 >
                   {/* Main Content */}
@@ -149,6 +165,9 @@ const Home = () => {
                     <motion.div
                       variants={itemVariants}
                       className="relative self-start ml-12"
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.8, delay: 0.2 }}
                     >
                       <motion.div 
                         className="w-24 h-24"
@@ -163,6 +182,9 @@ const Home = () => {
                     <motion.div 
                       className="flex justify-center gap-8 mt-8"
                       variants={itemVariants}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.8, delay: 0.4 }}
                     >
                       <Button
                         variant="glow"
@@ -186,12 +208,22 @@ const Home = () => {
                     <motion.div
                       className="w-full grid grid-cols-1 md:grid-cols-3 gap-8 text-center mt-16"
                       variants={containerVariants}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.8, delay: 0.6 }}
                     >
                       {['Discover', 'Stream', 'Connect'].map((feature, index) => (
                         <motion.div 
                           key={feature}
                           className="p-8 rounded-lg backdrop-blur-lg bg-card/50 hover:bg-card/80 transition-colors border border-border/50 relative"
-                          variants={itemVariants}
+                          variants={featureCardVariants}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ 
+                            duration: 0.8, 
+                            delay: 0.8 + (index * 0.2),
+                            ease: "easeOut"
+                          }}
                           whileHover={{ 
                             scale: 1.02,
                             boxShadow: '0 0 20px hsl(var(--primary) / 0.2)'
