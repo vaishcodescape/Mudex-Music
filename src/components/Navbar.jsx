@@ -158,7 +158,6 @@ const Navbar = () => {
   const navItems = [
     { id: 'home', label: 'Home', href: '/', icon: FaHome },
     { id: 'features', label: 'Features', href: '#features', icon: FaStar },
-    { id: 'pricing', label: 'Pricing', href: '#pricing', icon: FaTags },
     { id: 'about', label: 'About', href: '#about', icon: FaInfoCircle },
   ];
 

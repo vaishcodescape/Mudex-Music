@@ -307,9 +307,9 @@ const Home = () => {
                         className="text-lg px-12 py-6 h-auto font-semibold relative"
                         onClick={handleNavigation}
                       >
-                        Start Your Free Trial
+                        Start Listening
                       </Button>
-                      <p className="text-sm text-muted-foreground mt-4">No credit card required</p>
+                      <p className="text-sm text-muted-foreground mt-4">Listen to Music like Never Before</p>
                     </motion.section>
                   </motion.div>
                 </motion.main>
