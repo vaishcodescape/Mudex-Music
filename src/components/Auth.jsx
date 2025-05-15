@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -103,6 +103,53 @@ const Auth = () => {
     }
   };
 
+  // Animation variants for transitions
+  const headingVariants = {
+    enter: (isSigningIn) => ({
+      x: isSigningIn ? 100 : -100,
+      opacity: 0
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+      transition: {
+        x: { type: "spring", stiffness: 300, damping: 30 },
+        opacity: { duration: 0.2 }
+      }
+    },
+    exit: (isSigningIn) => ({
+      x: isSigningIn ? -100 : 100,
+      opacity: 0,
+      transition: {
+        x: { type: "spring", stiffness: 300, damping: 30 },
+        opacity: { duration: 0.2 }
+      }
+    })
+  };
+  
+  // Password field animation variants
+  const passwordVariants = {
+    hidden: { opacity: 0, height: 0, marginBottom: 0 },
+    visible: { 
+      opacity: 1, 
+      height: "auto", 
+      marginBottom: 16,
+      transition: {
+        height: { type: "spring", stiffness: 300, damping: 30 },
+        opacity: { duration: 0.3 }
+      }
+    },
+    exit: { 
+      opacity: 0, 
+      height: 0, 
+      marginBottom: 0,
+      transition: {
+        height: { type: "spring", stiffness: 300, damping: 30 },
+        opacity: { duration: 0.2 }
+      }
+    }
+  };
+
   const toggleMode = () => {
     if (isLoading || isGoogleLoading) return;
     setIsSignIn(!isSignIn);
@@ -135,8 +182,17 @@ const Auth = () => {
         exit={{ opacity: 0, y: -20, scale: 0.98 }}
         transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
       >
-        <div className="px-6 py-8 sm:px-8 sm:py-10">
-          <div className="text-center mb-6 sm:mb-8">
+        <div className="px-6 py-8 sm:px-8 sm:py-10 overflow-hidden">
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div 
+              className="text-center mb-6 sm:mb-8"
+              key={isSignIn ? "signin-header" : "signup-header"}
+              custom={isSignIn}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              variants={headingVariants}
+            >
             <h2 
               ref={headingRef}
               className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-primary to-cyan-400 bg-clip-text text-transparent"
@@ -146,18 +202,20 @@ const Auth = () => {
             <p className="mt-2 text-sm sm:text-base text-muted-foreground">
               {isSignIn ? 'Sign in to your account to continue' : 'Enter your details to get started'}
             </p>
-          </div>
+          </motion.div>
+          </AnimatePresence>
 
-          <Button
-            variant="outline"
-            type="button"
-            className="w-full py-3 px-4 text-sm sm:text-base border border-border/50 bg-background/70 sm:bg-background/50 hover:bg-foreground/5 transition-colors active:scale-95 touch-manipulation"
-            onClick={handleGoogleAuth}
-            disabled={isGoogleLoading || isLoading}
-            onTouchStart={handleTouchStart}
-            onTouchEnd={handleTouchEnd}
-            onTouchCancel={handleTouchEnd}
-          >
+          <div>
+            <Button
+              variant="outline"
+              type="button"
+              className="w-full py-3 px-4 text-sm sm:text-base border border-border/50 bg-background/70 sm:bg-background/50 hover:bg-foreground/5 transition-colors active:scale-95 touch-manipulation"
+              onClick={handleGoogleAuth}
+              disabled={isGoogleLoading || isLoading}
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
+              onTouchCancel={handleTouchEnd}
+            >
             {isGoogleLoading ? (
               <>
                 <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-foreground" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -172,7 +230,8 @@ const Auth = () => {
                 <span>Continue with Google</span>
               </>
             )}
-          </Button>
+            </Button>
+          </div>
 
           <div className="relative my-6">
             <div className="absolute inset-0 flex items-center">
@@ -208,56 +267,72 @@ const Auth = () => {
                 />
               </div>
 
-              <div>
-                <div className="flex items-center justify-between mb-1.5">
-                  <label htmlFor="password" className="block text-sm font-medium text-foreground/80">
-                    Password
-                  </label>
-                  {isSignIn && (
-                    <button
-                      type="button"
-                      className="text-xs font-medium text-primary hover:text-primary/80 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2 rounded px-1.5 py-0.5"
-                      disabled={isLoading || isGoogleLoading}
-                    >
-                      Forgot password?
-                    </button>
-                  )}
-                </div>
-                <Input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete={isSignIn ? 'current-password' : 'new-password'}
-                  required
-                  minLength={8}
-                  value={formData.password}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 text-sm sm:text-base bg-background/70 sm:bg-background/50 border-border/50 focus:border-primary/70 focus:ring-1 focus:ring-primary/30 transition-colors"
-                  placeholder="••••••••"
-                  disabled={isLoading || isGoogleLoading}
-                />
-              </div>
-
-              {!isSignIn && (
-                <div>
-                  <label htmlFor="confirmPassword" className="block text-sm font-medium text-foreground/80 mb-1.5">
-                    Confirm password
-                  </label>
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.div
+                  key={isSignIn ? "signin-password" : "signup-password"}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  variants={passwordVariants}
+                >
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label htmlFor="password" className="block text-sm font-medium text-foreground/80">
+                      Password
+                    </label>
+                    {isSignIn && (
+                      <button
+                        type="button"
+                        className="text-xs font-medium text-primary hover:text-primary/80 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2 rounded px-1.5 py-0.5"
+                        disabled={isLoading || isGoogleLoading}
+                      >
+                        Forgot password?
+                      </button>
+                    )}
+                  </div>
                   <Input
-                    id="confirmPassword"
-                    name="confirmPassword"
+                    id="password"
+                    name="password"
                     type="password"
-                    autoComplete="new-password"
+                    autoComplete={isSignIn ? 'current-password' : 'new-password'}
                     required
                     minLength={8}
-                    value={formData.confirmPassword}
+                    value={formData.password}
                     onChange={handleInputChange}
                     className="w-full px-4 py-3 text-sm sm:text-base bg-background/70 sm:bg-background/50 border-border/50 focus:border-primary/70 focus:ring-1 focus:ring-primary/30 transition-colors"
                     placeholder="••••••••"
                     disabled={isLoading || isGoogleLoading}
                   />
-                </div>
-              )}
+                </motion.div>
+              </AnimatePresence>
+
+              <AnimatePresence>
+                {!isSignIn && (
+                  <motion.div
+                    key="confirm-password"
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                    variants={passwordVariants}
+                  >
+                    <label htmlFor="confirmPassword" className="block text-sm font-medium text-foreground/80 mb-1.5">
+                      Confirm password
+                    </label>
+                    <Input
+                      id="confirmPassword"
+                      name="confirmPassword"
+                      type="password"
+                      autoComplete="new-password"
+                      required
+                      minLength={8}
+                      value={formData.confirmPassword}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 text-sm sm:text-base bg-background/70 sm:bg-background/50 border-border/50 focus:border-primary/70 focus:ring-1 focus:ring-primary/30 transition-colors"
+                      placeholder="••••••••"
+                      disabled={isLoading || isGoogleLoading}
+                    />
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
             <Button
