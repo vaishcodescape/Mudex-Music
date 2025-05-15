@@ -112,6 +112,48 @@ const Home = () => {
     }
   };
 
+  // Add global styles when component mounts
+  React.useEffect(() => {
+    // Add smooth scroll and scrollbar styles to the document
+    const style = document.createElement('style');
+    style.textContent = `
+      html {
+        scroll-behavior: smooth;
+        scrollbar-width: thin;
+        scrollbar-color: hsl(var(--primary) / 0.3) transparent;
+      }
+      /* For Webkit browsers */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: hsl(var(--primary) / 0.3);
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: hsl(var(--primary) / 0.5);
+      }
+      body {
+        overflow-y: auto;
+        scrollbar-gutter: stable;
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Force scroll to top on mount
+    window.scrollTo(0, 0);
+    
+    return () => {
+      // Clean up the style element
+      document.head.removeChild(style);
+    };
+  }, []);
+
   return (
     <AnimatePresence mode="wait">
       {!isNavigating ? (
@@ -120,60 +162,20 @@ const Home = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 1 }}
+          transition={{ duration: 0.8, ease: "easeInOut" }}
+          style={{ opacity: 1 }} // Ensure opacity is always 1 when mounted
         >
           <div ref={particlesRef} className="fixed inset-0 pointer-events-none z-0">
-            <style>
-              {`
-                .particle {
-                  position: absolute;
-                  width: 4px;
-                  height: 4px;
-                  background: hsl(var(--primary));
-                  border-radius: 50%;
-                  will-change: transform, opacity;
-                  pointer-events: none;
-                }
-
-                /* Custom Scrollbar Styles */
-                html {
-                  scroll-behavior: smooth;
-                  overflow-y: scroll;
-                }
-                
-                /* For Webkit browsers (Chrome, Safari, newer versions of Edge) */
-                ::-webkit-scrollbar {
-                  width: 8px;
-                  height: 8px;
-                }
-
-                ::-webkit-scrollbar-track {
-                  background: transparent;
-                }
-
-                
-                ::-webkit-scrollbar-thumb {
-                  background: hsl(var(--primary) / 0.3);
-                  border-radius: 4px;
-                  transition: background-color 0.3s ease;
-                }
-
-                
-                ::-webkit-scrollbar-thumb:hover {
-                  background: hsl(var(--primary) / 0.5);
-                }
-                
-                /* For Firefox */
-                * {
-                  scrollbar-width: thin;
-                  scrollbar-color: hsl(var(--primary) / 0.3) transparent;
-                }
-                
-                /* Smooth scrolling for the entire page */
-                body {
-                  overflow-y: auto;
-                  scrollbar-gutter: stable;
-                }
+            <style jsx global>{`
+              .particle {
+                position: absolute;
+                width: 4px;
+                height: 4px;
+                background: hsl(var(--primary));
+                border-radius: 50%;
+                will-change: transform, opacity;
+                pointer-events: none;
+              }
               `}
             </style>
           </div>
