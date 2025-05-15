@@ -240,20 +240,20 @@ const Navbar = () => {
                 animate="visible"
                 exit="exit"
                 variants={mobileMenuVariants}
-                className="md:hidden absolute top-full left-0 right-0 bg-background/95 backdrop-blur-lg border-b border-border/20 shadow-xl z-50"
+                className="md:hidden absolute top-full left-0 right-0 bg-background/95 backdrop-blur-lg border-b border-border/20 shadow-xl z-50 py-4"
                 ref={mobileMenuRef}
                 style={{
                   WebkitOverflowScrolling: 'touch',
                   WebkitTapHighlightColor: 'transparent',
                 }}
               >
-                <div className="px-2 pt-2 pb-4 space-y-1 sm:px-3">
+                <div className="px-4 space-y-1">
                   {navItems.map((item, index) => (
                     <motion.a
                       key={item.id}
                       href={item.href}
                       variants={mobileItemVariants}
-                      className="flex items-center px-4 py-4 text-base font-medium text-foreground/90 hover:text-primary hover:bg-foreground/5 rounded-lg mx-2 transition-colors"
+                      className="flex items-center px-4 py-3 text-base font-medium text-foreground/90 hover:text-primary hover:bg-foreground/5 rounded-lg transition-colors"
                       whileTap={{ scale: 0.98 }}
                       onClick={closeMobileMenu}
                       style={{
@@ -265,24 +265,24 @@ const Navbar = () => {
                     </motion.a>
                   ))}
                   
-                  <div className="pt-2 pb-1 border-t border-border/20 mx-2 mt-3">
-                    <motion.button
+                  <div className="pt-2 border-t border-border/20 mt-3 space-y-2">
+                    <motion.a 
+                      href="#discover"
                       variants={mobileItemVariants}
-                      className="w-full flex items-center justify-center px-4 py-3.5 border border-transparent rounded-lg text-base font-medium text-foreground bg-primary/10 hover:bg-primary/20 active:bg-primary/30 transition-colors"
+                      className="flex items-center px-4 py-3 text-base font-medium text-foreground/90 hover:text-primary hover:bg-foreground/5 rounded-lg transition-colors"
                       whileTap={{ scale: 0.98 }}
-                      onClick={() => {
-                        handleNavigation();
-                        closeMobileMenu();
-                      }}
+                      onClick={closeMobileMenu}
                       style={{
                         WebkitTapHighlightColor: 'transparent',
                       }}
                     >
-                      Get Started
-                    </motion.button>
+                      <FaStar className="mr-3 h-5 w-5 flex-shrink-0" />
+                      Discover
+                    </motion.a>
+                    
                     <motion.button
                       variants={mobileItemVariants}
-                      className="mt-3 w-full flex items-center justify-center px-4 py-3.5 border border-border/30 rounded-lg text-base font-medium text-foreground bg-transparent hover:bg-foreground/5 active:bg-foreground/10 transition-colors"
+                      className="w-full flex items-center justify-center px-4 py-3 rounded-lg text-base font-medium text-foreground bg-primary/10 hover:bg-primary/20 active:bg-primary/30 transition-colors"
                       whileTap={{ scale: 0.98 }}
                       onClick={(e) => {
                         handleGithubClick(e);
@@ -295,6 +295,23 @@ const Navbar = () => {
                       <FaGithub className="mr-2 h-5 w-5" />
                       <span>Star on GitHub</span>
                     </motion.button>
+                    
+                    {!isAuthPage && isLoaded && (
+                      <motion.button
+                        variants={mobileItemVariants}
+                        className="w-full flex items-center justify-center px-4 py-3 rounded-lg text-base font-semibold text-background bg-primary hover:bg-primary/90 active:bg-primary/80 transition-colors shadow-md shadow-primary/20"
+                        whileTap={{ scale: 0.98 }}
+                        onClick={() => {
+                          handleNavigation();
+                          closeMobileMenu();
+                        }}
+                        style={{
+                          WebkitTapHighlightColor: 'transparent',
+                        }}
+                      >
+                        Sign In
+                      </motion.button>
+                    )}
                   </div>
                 </div>
               </motion.div>
@@ -422,85 +439,7 @@ const Navbar = () => {
           </AnimatePresence>
         </motion.div>
 
-        {/* Mobile Navigation Button */}
-        <motion.button
-          className="md:hidden p-2 text-muted-foreground hover:text-foreground"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          whileTap={{ scale: 0.95 }}
-        >
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            {isMobileMenuOpen ? (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            ) : (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            )}
-          </svg>
-        </motion.button>
 
-        {/* Mobile Menu */}
-        <AnimatePresence>
-          {isMobileMenuOpen && (
-            <motion.div
-              className="absolute top-full left-0 right-0 bg-background/95 backdrop-blur-lg border-b border-border/20 p-4 md:hidden"
-              initial="hidden"
-              animate="visible"
-              exit="exit"
-              variants={mobileMenuVariants}
-            >
-              <div className="flex flex-col space-y-4">
-                <a 
-                  href="#features"
-                  className="text-muted-foreground hover:text-foreground transition-colors py-2"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Features
-                </a>
-                <a 
-                  href="#discover"
-                  className="text-muted-foreground hover:text-foreground transition-colors py-2"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Discover
-                </a>
-                <button
-                  onClick={(e) => {
-                    handleGithubClick(e);
-                    setIsMobileMenuOpen(false);
-                  }}
-                  className="text-muted-foreground hover:text-foreground transition-colors flex items-center py-2"
-                >
-                  <FaGithub className="w-5 h-5 mr-2" />
-                  GitHub
-                </button>
-                {!isAuthPage && isLoaded && (
-                  <Button
-                    variant="glow"
-                    size="sm"
-                    className="font-semibold w-full"
-                    onClick={handleNavigation}
-                  >
-                    Sign In
-                  </Button>
-                )}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </div>
     </motion.nav>
   );
