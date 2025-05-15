@@ -21,6 +21,7 @@ const Navbar = () => {
     setIsMobileMenuOpen(false);
     await new Promise(resolve => setTimeout(resolve, 100));
     navigate('/auth');
+    window.location.reload();
   };
 
   const handleGithubClick = (e) => {
