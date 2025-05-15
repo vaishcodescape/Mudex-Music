@@ -7,6 +7,7 @@ import { Button } from './ui/button';
 import Logo from './Logo';
 import ColorChangingTitle from './ColorChangingTitle';
 import { FaGithub } from 'react-icons/fa';
+import Scrollbar from './ui/Scrollbar';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -71,11 +72,9 @@ const Home = () => {
   // Animation variants for scroll-triggered elements
   const scrollVariants = {
     offscreen: {
-      opacity: 0,
-      y: 50,
+      y: 20,
     },
     onscreen: {
-      opacity: 1,
       y: 0,
       transition: {
         type: 'spring',
@@ -105,10 +104,9 @@ const Home = () => {
   };
 
   const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
+    hidden: { y: 20 },
     visible: { 
       y: 0, 
-      opacity: 1,
       transition: {
         duration: 0.8,
         ease: [0.6, 0.01, -0.05, 0.95]
@@ -125,9 +123,8 @@ const Home = () => {
   const featuresInView = useInView(featuresRef, { once: true, amount: 0.2 });
 
   const featureCardVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { y: 20 },
     visible: { 
-      opacity: 1, 
       y: 0,
       transition: {
         duration: 0.8,
@@ -136,82 +133,24 @@ const Home = () => {
     }
   };
 
-  // State for scroll position
-  const [scrollY, setScrollY] = useState(0);
-  const [opacity, setOpacity] = useState(1);
-
-  // Add global styles and scroll event listener when component mounts
-  React.useEffect(() => {
-    // Add smooth scroll and scrollbar styles to the document
-    const style = document.createElement('style');
-    style.textContent = `
-      html {
-        scroll-behavior: smooth;
-        scrollbar-width: thin;
-        scrollbar-color: hsl(var(--primary) / 0.6) hsl(var(--background));
-      }
-      /* For Webkit browsers */
-      ::-webkit-scrollbar {
-        width: 10px;
-        height: 10px;
-      }
-      ::-webkit-scrollbar-track {
-        background: hsl(var(--background));
-        border-radius: 5px;
-      }
-      ::-webkit-scrollbar-thumb {
-        background: hsl(var(--primary) / 0.6);
-        border-radius: 5px;
-        border: 2px solid hsl(var(--background));
-        transition: all 0.3s ease;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: hsl(var(--primary) / 0.8);
-      }
-      body {
-        overflow-y: auto;
-        scrollbar-gutter: stable both-edges;
-      }
-    `;
-    document.head.appendChild(style);
-
-    // Handle scroll event for opacity effect
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      setScrollY(currentScrollY);
-      
-      // Calculate opacity based on scroll position
-      const newOpacity = Math.max(0, 1 - (currentScrollY / 300));
-      setOpacity(Math.min(1, Math.max(0.9, newOpacity))); // Keep opacity between 0.9 and 1
-    };
-
-    // Add scroll event listener
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    
-    // Force scroll to top on mount
+  // Scroll to top on mount
+  useEffect(() => {
     window.scrollTo(0, 0);
-    
-    return () => {
-      // Clean up
-      window.removeEventListener('scroll', handleScroll);
-      document.head.removeChild(style);
-    };
   }, []);
 
   return (
     <AnimatePresence mode="wait">
       {!isNavigating ? (
         <motion.div 
-          className="min-h-screen bg-gradient-to-br from-background to-background/80 text-foreground overflow-x-hidden"
+          className="fixed inset-0 flex flex-col"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.8, ease: "easeInOut" }}
-          style={{ 
-            opacity: opacity,
-            transition: 'opacity 0.3s ease-out'
-          }}
         >
+          <div className="fixed inset-0 bg-gradient-to-br from-background to-background/80 -z-10" />
+          <Scrollbar>
+            <div className="min-h-screen w-full">
           <div ref={particlesRef} className="fixed inset-0 pointer-events-none z-0">
             <style jsx global>{`
               .particle {
@@ -239,7 +178,7 @@ const Home = () => {
                 )}
                 
                 <motion.main
-                  className="relative min-h-[calc(100vh-80px)] flex flex-col items-center justify-center px-6"
+                  className="relative min-h-[calc(100vh-80px)] flex flex-col items-center px-6 py-16"
                   initial="hidden"
                   animate="visible"
                   exit="exit"
@@ -247,34 +186,17 @@ const Home = () => {
                 >
                   {/* Main Content */}
                   <motion.div 
-                    className="container max-w-4xl mx-auto relative z-10 flex flex-col items-center justify-center gap-16"
+                    className="w-full max-w-4xl mx-auto relative z-10 flex flex-col items-center gap-16"
                     variants={containerVariants}
                   >
-                    {/* Logo */}
-                    <motion.div
-                      variants={itemVariants}
-                      className="relative self-start ml-12"
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ duration: 0.8, delay: 0.2 }}
-                    >
-                      <motion.div 
-                        className="w-24 h-24"
-                        whileHover={{ scale: 1.05 }}
-                        transition={{ type: "spring", stiffness: 300 }}
-                      >
-                        <Logo />
-                      </motion.div>
-                    </motion.div>
-
                     {/* Action Buttons */}
                     <motion.div 
                       ref={buttonsRef}
-                      className="flex justify-center gap-8 mt-8"
+                      className="flex flex-wrap justify-center gap-8 mt-8 w-full"
                       initial="offscreen"
-                      animate={buttonsInView ? "onscreen" : "offscreen"}
-                      variants={scrollVariants}
+                      whileInView="onscreen"
                       viewport={{ once: true, amount: 0.3 }}
+                      variants={scrollVariants}
                     >
                       <Button
                         variant="glow"
@@ -297,51 +219,113 @@ const Home = () => {
                     {/* Feature Cards */}
                     <motion.div
                       ref={featuresRef}
-                      className="w-full grid grid-cols-1 md:grid-cols-3 gap-8 text-center mt-16"
+                      className="w-full grid grid-cols-1 md:grid-cols-3 gap-8 text-center mt-16 px-4"
                       initial="offscreen"
-                      animate={featuresInView ? "onscreen" : "offscreen"}
+                      whileInView="onscreen"
+                      viewport={{ once: true, amount: 0.1 }}
                       variants={scrollVariants}
-                      viewport={{ once: true, amount: 0.2 }}
                     >
                       {['Discover', 'Stream', 'Connect'].map((feature, index) => (
                         <motion.div 
                           key={feature}
-                          className="p-8 rounded-lg backdrop-blur-lg bg-card/50 hover:bg-card/80 transition-all duration-300 border border-border/50 relative"
+                          className="p-8 rounded-lg backdrop-blur-lg bg-card/50 hover:bg-card/80 transition-all duration-300 border border-border/50 relative h-full"
                           variants={{
-                            offscreen: { opacity: 0, y: 30 },
+                            offscreen: { y: 30 },
                             onscreen: { 
-                              opacity: 1, 
                               y: 0,
-                              transition: {
-                                delay: index * 0.15,
-                                duration: 0.6
-                              }
+                              transition: { 
+                                type: 'spring', 
+                                bounce: 0.3, 
+                                duration: 0.8,
+                                delay: index * 0.1
+                              } 
                             }
                           }}
-                          whileHover={{ 
-                            scale: 1.03,
-                            boxShadow: '0 10px 30px -10px hsl(var(--primary) / 0.3)',
-                            transition: { duration: 0.3 }
-                          }}
+                          whileHover={{ y: -5, boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1)' }}
                         >
-                          <h3 className="text-2xl font-semibold text-primary mb-4">{feature}</h3>
-                          <p className="text-muted-foreground">Experience music like never before with our powerful {feature.toLowerCase()} features.</p>
+                          <h3 className="text-xl font-bold mb-3">{feature}</h3>
+                          <p className="text-muted-foreground">
+                            {feature === 'Discover' && 'Find new music tailored to your taste'}
+                            {feature === 'Stream' && 'High-quality audio streaming anywhere'}
+                            {feature === 'Connect' && 'Share and connect with other music lovers'}
+                          </p>
                         </motion.div>
                       ))}
                     </motion.div>
+
+                    {/* Additional Sections */}
+                    <motion.section 
+                      className="w-full mt-32 py-20 px-4 text-center"
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, margin: "-100px" }}
+                      transition={{ duration: 0.6 }}
+                    >
+                      <h2 className="text-3xl md:text-4xl font-bold mb-6">Your Music, Your Way</h2>
+                      <p className="text-muted-foreground max-w-3xl mx-auto mb-12">
+                        Experience music like never before with our intuitive interface and powerful features.
+                        Create playlists, discover new artists, and take your music with you wherever you go.
+                      </p>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-12">
+                        {[
+                          { icon: '🎵', title: 'Unlimited Songs', desc: 'Access millions of tracks' },
+                          { icon: '🎧', title: 'High Quality', desc: 'Premium audio quality' },
+                          { icon: '📱', title: 'Cross Platform', desc: 'Available on all devices' },
+                          { icon: '🔒', title: 'Ad-Free', desc: 'Uninterrupted listening' }
+                        ].map((item, i) => (
+                          <motion.div 
+                            key={i}
+                            className="p-6 rounded-xl bg-card/30 backdrop-blur-sm border border-border/30 hover:bg-card/50 transition-colors"
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: "-50px" }}
+                            transition={{ duration: 0.5, delay: i * 0.1 }}
+                          >
+                            <div className="text-4xl mb-4">{item.icon}</div>
+                            <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
+                            <p className="text-muted-foreground text-sm">{item.desc}</p>
+                          </motion.div>
+                        ))}
+                      </div>
+                    </motion.section>
+
+                    <motion.section 
+                      className="w-full py-20 px-4 text-center bg-gradient-to-br from-card/20 to-transparent rounded-2xl my-16"
+                      initial={{ opacity: 0, y: 40 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, margin: "-100px" }}
+                      transition={{ duration: 0.8 }}
+                    >
+                      <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Get Started?</h2>
+                      <p className="text-muted-foreground max-w-2xl mx-auto mb-8">
+                        Join thousands of music lovers already enjoying the best listening experience.
+                      </p>
+                      <Button 
+                        variant="glow"
+                        size="lg"
+                        className="text-lg px-12 py-6 h-auto font-semibold relative"
+                        onClick={handleNavigation}
+                      >
+                        Start Your Free Trial
+                      </Button>
+                      <p className="text-sm text-muted-foreground mt-4">No credit card required</p>
+                    </motion.section>
                   </motion.div>
                 </motion.main>
               </>
             )}
           </AnimatePresence>
-        </motion.div>
-      ) : (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-background flex items-center justify-center"
-        >
+              </div>
+            </Scrollbar>
+          </motion.div>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-background flex items-center justify-center"
+          >
           <motion.div
             animate={{ 
               scale: [1, 1.2, 1],
