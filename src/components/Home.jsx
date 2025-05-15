@@ -134,6 +134,34 @@ const Home = () => {
                   will-change: transform, opacity;
                   pointer-events: none;
                 }
+
+                /* Custom Scrollbar Styles */
+                ::-webkit-scrollbar {
+                  width: 10px;
+                  background: hsl(var(--background));
+                }
+
+                ::-webkit-scrollbar-track {
+                  background: hsl(var(--background));
+                  border-radius: 5px;
+                }
+
+                ::-webkit-scrollbar-thumb {
+                  background: hsl(var(--primary) / 0.3);
+                  border-radius: 5px;
+                  border: 2px solid hsl(var(--background));
+                  transition: background-color 0.3s ease;
+                }
+
+                ::-webkit-scrollbar-thumb:hover {
+                  background: hsl(var(--primary) / 0.5);
+                }
+
+                /* Firefox Scrollbar */
+                * {
+                  scrollbar-width: thin;
+                  scrollbar-color: hsl(var(--primary) / 0.3) hsl(var(--background));
+                }
               `}
             </style>
           </div>
