@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useInView } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
 import Navbar from './Navbar';
@@ -68,14 +68,30 @@ const Home = () => {
     window.location.reload();
   };
 
+  // Animation variants for scroll-triggered elements
+  const scrollVariants = {
+    offscreen: {
+      opacity: 0,
+      y: 50,
+    },
+    onscreen: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        type: 'spring',
+        bounce: 0.3,
+        duration: 0.8
+      }
+    }
+  };
+
+  // Animation for the main container
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: { 
       opacity: 1,
       transition: {
-        duration: 1.2,
-        staggerChildren: 0.3,
-        when: "beforeChildren",
+        duration: 0.8,
         ease: "easeOut"
       }
     },
@@ -99,6 +115,14 @@ const Home = () => {
       }
     }
   };
+  
+  // Create refs for scroll-triggered elements
+  const buttonsRef = useRef(null);
+  const featuresRef = useRef(null);
+  
+  // Check if elements are in view
+  const buttonsInView = useInView(buttonsRef, { once: true, amount: 0.3 });
+  const featuresInView = useInView(featuresRef, { once: true, amount: 0.2 });
 
   const featureCardVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -112,7 +136,11 @@ const Home = () => {
     }
   };
 
-  // Add global styles when component mounts
+  // State for scroll position
+  const [scrollY, setScrollY] = useState(0);
+  const [opacity, setOpacity] = useState(1);
+
+  // Add global styles and scroll event listener when component mounts
   React.useEffect(() => {
     // Add smooth scroll and scrollbar styles to the document
     const style = document.createElement('style');
@@ -120,36 +148,52 @@ const Home = () => {
       html {
         scroll-behavior: smooth;
         scrollbar-width: thin;
-        scrollbar-color: hsl(var(--primary) / 0.3) transparent;
+        scrollbar-color: hsl(var(--primary) / 0.6) hsl(var(--background));
       }
       /* For Webkit browsers */
       ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
+        width: 10px;
+        height: 10px;
       }
       ::-webkit-scrollbar-track {
-        background: transparent;
+        background: hsl(var(--background));
+        border-radius: 5px;
       }
       ::-webkit-scrollbar-thumb {
-        background: hsl(var(--primary) / 0.3);
-        border-radius: 4px;
-        transition: background-color 0.3s ease;
+        background: hsl(var(--primary) / 0.6);
+        border-radius: 5px;
+        border: 2px solid hsl(var(--background));
+        transition: all 0.3s ease;
       }
       ::-webkit-scrollbar-thumb:hover {
-        background: hsl(var(--primary) / 0.5);
+        background: hsl(var(--primary) / 0.8);
       }
       body {
         overflow-y: auto;
-        scrollbar-gutter: stable;
+        scrollbar-gutter: stable both-edges;
       }
     `;
     document.head.appendChild(style);
 
+    // Handle scroll event for opacity effect
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      setScrollY(currentScrollY);
+      
+      // Calculate opacity based on scroll position
+      const newOpacity = Math.max(0, 1 - (currentScrollY / 300));
+      setOpacity(Math.min(1, Math.max(0.9, newOpacity))); // Keep opacity between 0.9 and 1
+    };
+
+    // Add scroll event listener
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
     // Force scroll to top on mount
     window.scrollTo(0, 0);
     
     return () => {
-      // Clean up the style element
+      // Clean up
+      window.removeEventListener('scroll', handleScroll);
       document.head.removeChild(style);
     };
   }, []);
@@ -163,7 +207,10 @@ const Home = () => {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.8, ease: "easeInOut" }}
-          style={{ opacity: 1 }} // Ensure opacity is always 1 when mounted
+          style={{ 
+            opacity: opacity,
+            transition: 'opacity 0.3s ease-out'
+          }}
         >
           <div ref={particlesRef} className="fixed inset-0 pointer-events-none z-0">
             <style jsx global>{`
@@ -222,11 +269,12 @@ const Home = () => {
 
                     {/* Action Buttons */}
                     <motion.div 
+                      ref={buttonsRef}
                       className="flex justify-center gap-8 mt-8"
-                      variants={itemVariants}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.8, delay: 0.4 }}
+                      initial="offscreen"
+                      animate={buttonsInView ? "onscreen" : "offscreen"}
+                      variants={scrollVariants}
+                      viewport={{ once: true, amount: 0.3 }}
                     >
                       <Button
                         variant="glow"
@@ -248,27 +296,32 @@ const Home = () => {
 
                     {/* Feature Cards */}
                     <motion.div
+                      ref={featuresRef}
                       className="w-full grid grid-cols-1 md:grid-cols-3 gap-8 text-center mt-16"
-                      variants={containerVariants}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.8, delay: 0.6 }}
+                      initial="offscreen"
+                      animate={featuresInView ? "onscreen" : "offscreen"}
+                      variants={scrollVariants}
+                      viewport={{ once: true, amount: 0.2 }}
                     >
                       {['Discover', 'Stream', 'Connect'].map((feature, index) => (
                         <motion.div 
                           key={feature}
-                          className="p-8 rounded-lg backdrop-blur-lg bg-card/50 hover:bg-card/80 transition-colors border border-border/50 relative"
-                          variants={featureCardVariants}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ 
-                            duration: 0.8, 
-                            delay: 0.8 + (index * 0.2),
-                            ease: "easeOut"
+                          className="p-8 rounded-lg backdrop-blur-lg bg-card/50 hover:bg-card/80 transition-all duration-300 border border-border/50 relative"
+                          variants={{
+                            offscreen: { opacity: 0, y: 30 },
+                            onscreen: { 
+                              opacity: 1, 
+                              y: 0,
+                              transition: {
+                                delay: index * 0.15,
+                                duration: 0.6
+                              }
+                            }
                           }}
                           whileHover={{ 
-                            scale: 1.02,
-                            boxShadow: '0 0 20px hsl(var(--primary) / 0.2)'
+                            scale: 1.03,
+                            boxShadow: '0 10px 30px -10px hsl(var(--primary) / 0.3)',
+                            transition: { duration: 0.3 }
                           }}
                         >
                           <h3 className="text-2xl font-semibold text-primary mb-4">{feature}</h3>
