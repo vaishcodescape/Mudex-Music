@@ -259,7 +259,7 @@ const Auth = () => {
                   value={formData.email}
                   onChange={handleInputChange}
                   className="w-full px-4 py-3 text-sm sm:text-base bg-background/70 sm:bg-background/50 border-border/50 focus:border-primary/70 focus:ring-1 focus:ring-primary/30 transition-colors"
-                  placeholder="domain@example.com"
+                  placeholder="name@domain.com"
                   inputMode="email"
                   autoCapitalize="none"
                   autoCorrect="off"
