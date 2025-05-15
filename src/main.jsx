@@ -50,7 +50,7 @@ window.onerror = function(message, source, lineno, colno, error) {
 root.render(
   <React.StrictMode>
     <ErrorBoundary>
-      <App />
+    <App />
     </ErrorBoundary>
   </React.StrictMode>
 )
