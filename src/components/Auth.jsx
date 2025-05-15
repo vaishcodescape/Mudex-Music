@@ -122,21 +122,27 @@ const Auth = () => {
   return (
     <motion.div
       key={location.key}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0 }}
-      className="min-h-screen flex items-center justify-center bg-background p-4"
+      transition={{ duration: 0.3 }}
+      className="min-h-screen flex items-center justify-center bg-background px-4 py-8 sm:p-4"
     >
       <motion.div
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className="w-full max-w-md space-y-8 bg-card/30 backdrop-blur-xl p-8 rounded-lg shadow-lg border border-border/50"
+        transition={{ 
+          type: "spring",
+          stiffness: 300,
+          damping: 30,
+          delay: 0.2
+        }}
+        className="w-full max-w-md space-y-6 sm:space-y-8 bg-card/30 backdrop-blur-xl p-6 sm:p-8 rounded-lg shadow-lg border border-border/50"
       >
         <div className="text-center">
           <h2 
             ref={headingRef}
-            className="text-4xl font-bold tracking-tight transition-colors duration-500"
+            className="text-3xl sm:text-4xl font-bold tracking-tight transition-colors duration-500"
           >
             {isSignIn ? 'Welcome Back' : 'Create Account'}
           </h2>
@@ -150,25 +156,25 @@ const Auth = () => {
         <Button
           type="button"
           variant="outline"
-          className="w-full bg-white/5 hover:bg-white/10 border-border"
+          className="w-full bg-white/5 hover:bg-white/10 border-border text-sm sm:text-base"
           size="lg"
           onClick={handleGoogleAuth}
           disabled={isGoogleLoading || isLoading}
         >
           {isGoogleLoading ? (
             <div className="flex items-center justify-center">
-              <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin mr-2" />
+              <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-primary border-t-transparent rounded-full animate-spin mr-2" />
               Connecting to Google...
             </div>
           ) : (
             <div className="flex items-center justify-center">
-              <FcGoogle className="w-5 h-5 mr-2" />
+              <FcGoogle className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
               Continue with Google
             </div>
           )}
         </Button>
 
-        <div className="relative">
+        <div className="relative py-2 sm:py-4">
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-border"></div>
           </div>
@@ -185,9 +191,9 @@ const Auth = () => {
             exit={{ opacity: 0, x: isSignIn ? 20 : -20 }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
             onSubmit={handleSubmit}
-            className="space-y-6"
+            className="space-y-4 sm:space-y-6"
           >
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-foreground">
                   Email address
@@ -198,7 +204,7 @@ const Auth = () => {
                   type="email"
                   autoComplete="email"
                   required
-                  className="mt-1"
+                  className="mt-1 text-base sm:text-lg"
                   placeholder="Enter your email"
                   value={formData.email}
                   onChange={handleInputChange}
@@ -216,7 +222,7 @@ const Auth = () => {
                   type="password"
                   autoComplete={isSignIn ? "current-password" : "new-password"}
                   required
-                  className="mt-1"
+                  className="mt-1 text-base sm:text-lg"
                   placeholder="Enter your password"
                   value={formData.password}
                   onChange={handleInputChange}
@@ -240,7 +246,7 @@ const Auth = () => {
                     type="password"
                     autoComplete="new-password"
                     required
-                    className="mt-1"
+                    className="mt-1 text-base sm:text-lg"
                     placeholder="Confirm your password"
                     value={formData.confirmPassword}
                     onChange={handleInputChange}
@@ -252,13 +258,12 @@ const Auth = () => {
 
             <Button
               type="submit"
-              className="w-full bg-gradient-to-r from-blue-500 via-cyan-500 to-indigo-500 hover:opacity-90"
-              size="lg"
+              className="w-full bg-gradient-to-r from-blue-500 via-cyan-500 to-indigo-500 hover:opacity-90 text-sm sm:text-base h-10 sm:h-12"
               disabled={isLoading || isGoogleLoading}
             >
               {isLoading ? (
                 <div className="flex items-center justify-center">
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                  <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
                   {isSignIn ? 'Signing in...' : 'Signing up...'}
                 </div>
               ) : (
