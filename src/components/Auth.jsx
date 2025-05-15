@@ -147,35 +147,33 @@ const Auth = () => {
           </p>
         </div>
 
-        <div>
-          <Button
-            type="button"
-            variant="outline"
-            className="w-full bg-white/5 hover:bg-white/10 border-border"
-            size="lg"
-            onClick={handleGoogleAuth}
-            disabled={isGoogleLoading || isLoading}
-          >
-            {isGoogleLoading ? (
-              <div className="flex items-center justify-center">
-                <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin mr-2" />
-                Connecting to Google...
-              </div>
-            ) : (
-              <div className="flex items-center justify-center">
-                <FcGoogle className="w-5 h-5 mr-2" />
-                Continue with Google
-              </div>
-            )}
-          </Button>
+        <Button
+          type="button"
+          variant="outline"
+          className="w-full bg-white/5 hover:bg-white/10 border-border"
+          size="lg"
+          onClick={handleGoogleAuth}
+          disabled={isGoogleLoading || isLoading}
+        >
+          {isGoogleLoading ? (
+            <div className="flex items-center justify-center">
+              <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin mr-2" />
+              Connecting to Google...
+            </div>
+          ) : (
+            <div className="flex items-center justify-center">
+              <FcGoogle className="w-5 h-5 mr-2" />
+              Continue with Google
+            </div>
+          )}
+        </Button>
 
-          <div className="relative my-6">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-border"></div>
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">Or continue with email</span>
-            </div>
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-border"></div>
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-background px-2 text-muted-foreground">Or continue with email</span>
           </div>
         </div>
 
@@ -252,23 +250,21 @@ const Auth = () => {
               )}
             </div>
 
-            <div>
-              <Button
-                type="submit"
-                className="w-full bg-gradient-to-r from-blue-500 via-cyan-500 to-indigo-500 hover:opacity-90"
-                size="lg"
-                disabled={isLoading || isGoogleLoading}
-              >
-                {isLoading ? (
-                  <div className="flex items-center justify-center">
-                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                    {isSignIn ? 'Signing in...' : 'Signing up...'}
-                  </div>
-                ) : (
-                  isSignIn ? 'Sign in' : 'Sign up'
-                )}
-              </Button>
-            </div>
+            <Button
+              type="submit"
+              className="w-full bg-gradient-to-r from-blue-500 via-cyan-500 to-indigo-500 hover:opacity-90"
+              size="lg"
+              disabled={isLoading || isGoogleLoading}
+            >
+              {isLoading ? (
+                <div className="flex items-center justify-center">
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                  {isSignIn ? 'Signing in...' : 'Signing up...'}
+                </div>
+              ) : (
+                isSignIn ? 'Sign in' : 'Sign up'
+              )}
+            </Button>
           </motion.form>
         </AnimatePresence>
 

@@ -1,16 +1,7 @@
 import { motion } from 'framer-motion';
 import React from 'react';
-import { Button } from './ui/button';
-import { FaGithub } from 'react-icons/fa';
 
 const ColorChangingTitle = () => {
-  const handleGithubClick = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const url = 'https://github.com/vaishcodescape/Mudex-Music.git';
-    window.open(url, '_blank', 'noopener=yes,noreferrer=yes');
-  };
-
   return (
     <motion.div 
       className="fixed inset-0 flex flex-col items-center justify-center bg-transparent"
@@ -97,23 +88,6 @@ const ColorChangingTitle = () => {
             Elevate the Underrated
           </motion.span>
         </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6, duration: 0.5 }}
-          className="mt-8"
-        >
-          <Button
-            variant="outline"
-            size="lg"
-            className="relative z-50 bg-background/20 hover:bg-background/40 transition-colors flex items-center gap-2 border-sky-400/50 cursor-pointer select-none"
-            onClick={handleGithubClick}
-          >
-            <FaGithub className="w-5 h-5" />
-            <span>View on GitHub</span>
-          </Button>
-        </motion.div>
       </div>
     </motion.div>
   );

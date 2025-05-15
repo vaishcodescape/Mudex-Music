@@ -9,7 +9,7 @@ const AppRoutes = () => {
 
   return (
     <AnimatePresence mode="wait" initial={false}>
-      <Routes location={location} key={location.key}>
+      <Routes location={location} key={location.pathname}>
         <Route path="/" element={<Home />} />
         <Route path="/auth" element={<Auth />} />
       </Routes>

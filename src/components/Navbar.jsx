@@ -15,6 +15,11 @@ const Navbar = () => {
     setIsLoaded(true);
   }, []);
 
+  const handleGithubClick = (e) => {
+    e.preventDefault();
+    window.open('https://github.com/vaishcodescape/Mudex-Music.git', '_blank', 'noopener=yes,noreferrer=yes');
+  };
+
   const navItemVariants = {
     hidden: { y: -20, opacity: 0 },
     visible: { 
@@ -74,6 +79,16 @@ const Navbar = () => {
           >
             Discover
           </motion.a>
+
+          <motion.button
+            onClick={handleGithubClick}
+            className="text-muted-foreground hover:text-foreground transition-colors flex items-center"
+            variants={navItemVariants}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <FaGithub className="w-5 h-5" />
+          </motion.button>
 
           <AnimatePresence>
             {!isAuthPage && isLoaded && (
