@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaUser } from 'react-icons/fa';
 import { toast } from 'sonner';
 
 // Get initials from name or email
@@ -61,6 +60,7 @@ export const AuthContext = createContext({
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [authTransition, setAuthTransition] = useState(false);
   const navigate = useNavigate();
 
   // Initialize user with default data based on account type
@@ -83,21 +83,30 @@ export const AuthProvider = ({ children }) => {
 
   // Check for existing session on initial load
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      try {
-        const parsedUser = JSON.parse(storedUser);
-        setUser(initializeUser(parsedUser));
-      } catch (error) {
-        console.error('Failed to parse user data', error);
-        localStorage.removeItem('user');
+    const checkAuth = async () => {
+      const storedUser = localStorage.getItem('user');
+      if (storedUser) {
+        try {
+          const parsedUser = JSON.parse(storedUser);
+          setUser(initializeUser(parsedUser));
+        } catch (error) {
+          console.error('Failed to parse user data', error);
+          localStorage.removeItem('user');
+        }
       }
-    }
-    setLoading(false);
+      
+      // Add a small delay to ensure smooth transition
+      await new Promise(resolve => setTimeout(resolve, 300));
+      setLoading(false);
+    };
+    
+    checkAuth();
   }, [initializeUser]);
 
   const login = async (userData) => {
     try {
+      setAuthTransition(true);
+      
       // In a real app, you would make an API call to your backend to authenticate
       // For now, we'll simulate a successful login
       const userWithAvatar = initializeUser(userData);
@@ -109,10 +118,13 @@ export const AuthProvider = ({ children }) => {
         description: `Welcome back, ${userWithAvatar.name || 'User'}!`,
       });
       
+      // Add a small delay before navigation for smoother transition
+      await new Promise(resolve => setTimeout(resolve, 200));
+      
       // Navigate after state is updated
       navigate('/discover');
       
-      return { success: true, user: userWithAvatar };
+      return { success: true, user: userWithAvatar, toastShown: true };
     } catch (error) {
       console.error('Login error:', error);
       const errorMessage = error.message || 'Failed to log in';
@@ -120,11 +132,15 @@ export const AuthProvider = ({ children }) => {
         description: errorMessage,
       });
       return { success: false, error: errorMessage };
+    } finally {
+      setAuthTransition(false);
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
     try {
+      setAuthTransition(true);
+      
       const userName = user?.name || 'User';
       setUser(null);
       localStorage.removeItem('user');
@@ -134,8 +150,11 @@ export const AuthProvider = ({ children }) => {
         description: 'You have been signed out.',
       });
       
+      // Add a small delay before navigation for smoother transition
+      await new Promise(resolve => setTimeout(resolve, 200));
+      
       navigate('/');
-      return { success: true };
+      return { success: true, toastShown: true };
     } catch (error) {
       console.error('Logout error:', error);
       const errorMessage = error.message || 'Failed to log out';
@@ -143,6 +162,8 @@ export const AuthProvider = ({ children }) => {
         description: errorMessage,
       });
       return { success: false, error: errorMessage };
+    } finally {
+      setAuthTransition(false);
     }
   };
 
@@ -168,7 +189,8 @@ export const AuthProvider = ({ children }) => {
         login,
         logout,
         updateProfile,
-        loading
+        loading,
+        authTransition
       }}
     >
       {!loading && children}

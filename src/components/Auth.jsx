@@ -27,6 +27,7 @@ const Auth = () => {
   // State for loading indicators
   const [isLoading, setIsLoading] = useState(false); // For regular form submission
   const [isGoogleLoading, setIsGoogleLoading] = useState(false); // For Google authentication
+  const [pageLoading, setPageLoading] = useState(true); // For initial page load
   
   // Toggle between sign-in and sign-up modes - initialize based on URL query param if present
   const [isSignIn, setIsSignIn] = useState(() => {
@@ -90,9 +91,14 @@ const Auth = () => {
     }
   }, [location.key]);
   
-  // Mark component as mounted after initial render
+  // Mark component as mounted after initial render and handle initial loading
   useEffect(() => {
     setIsMounted(true);
+    // Add a small delay to ensure smooth transition
+    const timer = setTimeout(() => {
+      setPageLoading(false);
+    }, 300);
+    return () => clearTimeout(timer);
   }, []);
 
   /**
@@ -101,7 +107,7 @@ const Auth = () => {
    * Only starts animation after component is mounted
    */
   useEffect(() => {
-    if (!isMounted) return;
+    if (!isMounted || pageLoading) return;
     
     const colors = ['#3b82f6', '#06b6d4', '#6366f1'];
     let currentIndex = 0;
@@ -124,7 +130,7 @@ const Auth = () => {
     // Small delay to ensure DOM is ready
     const timer = setTimeout(() => {
       animateColor();
-    }, 100);
+    }, 300);
 
     return () => {
       clearTimeout(timer);
@@ -154,34 +160,35 @@ const Auth = () => {
    * In a real app, this would integrate with Google OAuth
    */
   const handleGoogleAuth = async () => {
-    // Prevent multiple simultaneous auth attempts
-    if (isGoogleLoading || isLoading) return;
+    if (isLoading || isGoogleLoading) return;
     
     setIsGoogleLoading(true);
     
     try {
-      // In a real app, this would integrate with Google OAuth
-      // For now, we'll simulate a successful login with a Google user
+      // Simulate API call with a shorter delay for better UX
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
+      // Create mock user data for Google auth
       const userData = {
-        id: `google-user-${Date.now()}`,
-        email: 'user@gmail.com',
-        name: 'Google User',
-        accountType: 'listener', // Default to listener for Google sign-in
-        createdAt: new Date().toISOString()
+        email: 'user@example.com',
+        name: 'Demo User',
+        accountType: accountType,
+        // In a real app, this would come from Google
+        avatar: 'https://lh3.googleusercontent.com/a/default-user=s128'
       };
       
-      // Call the login function from our auth context
+      // Call login function from auth context
       const result = await login(userData);
       
-      if (!result.success) {
-        showError(result.error || 'Google authentication failed');
-        throw new Error(result.error || 'Google authentication failed');
+      // Only show success message if not handled by the login function
+      if (result && result.success && !result.toastShown) {
+        showSuccess('Signed in with Google!');
       }
       
-      // The login function will handle navigation
+      // Navigate is handled by the login function
     } catch (error) {
-      console.error('Google authentication error:', error);
-      alert(error.message || 'Google authentication failed. Please try again.');
+      console.error('Google auth error:', error);
+      showError(error.message || 'Failed to sign in with Google');
     } finally {
       setIsGoogleLoading(false);
     }
@@ -193,55 +200,58 @@ const Auth = () => {
    */
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
     if (isLoading || isGoogleLoading) return;
     
-    // If on account type selection, move to details
-    if (!isSignIn && signupStep === 1) {
-      setSignupStep(2);
-      return;
-    }
-    
     // Basic validation
-    if (!formData.email || !formData.password) {
-      alert('Please fill in all fields');
+    if (!formData.email) {
+      showError('Please enter your email');
       return;
     }
     
-    if (!isSignIn && formData.password !== formData.confirmPassword) {
-      alert('Passwords do not match');
+    if (!formData.password) {
+      showError('Please enter your password');
       return;
+    }
+    
+    // Additional validation for sign up
+    if (!isSignIn) {
+      if (formData.password.length < 8) {
+        showError('Password must be at least 8 characters');
+        return;
+      }
+      
+      if (formData.password !== formData.confirmPassword) {
+        showError('Passwords do not match');
+        return;
+      }
     }
     
     setIsLoading(true);
     
     try {
-      // In a real app, you would make an API call to your backend
-      // For now, we'll simulate an API call with a delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Simulate API call with a shorter delay for better UX
+      await new Promise(resolve => setTimeout(resolve, 800));
       
-      // Create user object with account type
+      // Create user data object
       const userData = {
-        id: `demo-user-${Date.now()}`,
-        name: formData.name || formData.email.split('@')[0],
         email: formData.email,
-        accountType: isSignIn ? 'listener' : accountType, // Use 'listener' as default for sign in
-        createdAt: new Date().toISOString()
+        name: formData.email.split('@')[0], // Use part of email as name
+        accountType: accountType
       };
       
-      // Call the login function from our auth context
+      // Call login function from auth context
       const result = await login(userData);
       
-      if (!result.success) {
-        showError(result.error || 'Authentication failed');
-        throw new Error(result.error || 'Authentication failed');
+      // Only show success message if not handled by the login function
+      if (result && result.success && !result.toastShown) {
+        showSuccess(isSignIn ? 'Signed in successfully!' : 'Account created successfully!');
       }
       
-      showSuccess(isSignIn ? 'Welcome back!' : 'Account created successfully!');
-      
-      // The login function will handle navigation
-    } catch (err) {
-      console.error('Authentication error:', err);
-      alert(err.message || 'Failed to sign in. Please try again.');
+      // Navigation is handled by the login function
+    } catch (error) {
+      console.error('Auth error:', error);
+      showError(error.message || `Failed to ${isSignIn ? 'sign in' : 'create account'}`);
     } finally {
       setIsLoading(false);
     }
@@ -343,18 +353,30 @@ const Auth = () => {
     </div>
   );
 
+  // If page is loading, show a loading state
+  if (pageLoading) {
+    return (
+      <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-background to-background/80 p-4 sm:p-6 overflow-hidden">
+        <div className="w-full max-w-md bg-card/80 backdrop-blur-md shadow-xl rounded-xl overflow-hidden border border-border/40 flex items-center justify-center p-8">
+          <div className="flex flex-col items-center">
+            <svg className="animate-spin h-10 w-10 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <p className="mt-4 text-sm text-muted-foreground">Loading authentication...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted/30 p-4">
+    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-background to-background/80 p-4 sm:p-6 overflow-hidden">
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ 
-          type: "spring", 
-          stiffness: 300, 
-          damping: 25,
-          duration: 0.3
-        }}
-        className="w-full max-w-md bg-card rounded-2xl shadow-xl overflow-hidden border border-border"
+        transition={{ duration: 0.4, ease: 'easeOut' }}
+        className="w-full max-w-md bg-card/80 backdrop-blur-md shadow-xl rounded-xl overflow-hidden border border-border/40"
       >
         <div className="px-6 py-8 sm:px-8 sm:py-10 overflow-hidden">
           <AnimatePresence mode="wait" initial={isMounted}>
@@ -404,29 +426,33 @@ const Auth = () => {
 
           <div>
             <Button
-              variant="outline"
               type="button"
-              className="w-full py-3 px-4 text-sm sm:text-base border border-border/50 bg-background/70 sm:bg-background/50 hover:bg-foreground/5 transition-colors active:scale-95 touch-manipulation"
               onClick={handleGoogleAuth}
-              disabled={isGoogleLoading || isLoading}
-              onTouchStart={handleTouchStart}
-              onTouchEnd={handleTouchEnd}
-              onTouchCancel={handleTouchEnd}
+              variant="outline"
+              className="w-full py-3 px-4 text-sm sm:text-base font-medium border border-border/60 hover:bg-background/50 hover:border-border transition-colors mb-6 flex items-center justify-center gap-2"
+              disabled={isLoading || isGoogleLoading}
             >
-              {isGoogleLoading ? (
-                <>
-                  <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-foreground" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                  Signing in...
-                </>
-              ) : (
-                <>
-                  <FcGoogle className="h-5 w-5 mr-2 flex-shrink-0" />
-                  <span>Continue with Google</span>
-                </>
-              )}
+              <motion.div
+                initial={{ opacity: 1 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="flex items-center justify-center w-full gap-2"
+              >
+                {isGoogleLoading ? (
+                  <>
+                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Signing in with Google...
+                  </>
+                ) : (
+                  <>
+                    <FcGoogle className="h-5 w-5" />
+                    Continue with Google
+                  </>
+                )}
+              </motion.div>
             </Button>
           </div>
 
@@ -584,17 +610,24 @@ const Auth = () => {
               onTouchEnd={handleTouchEnd}
               onTouchCancel={handleTouchEnd}
             >
-              {isLoading ? (
-                <>
-                  <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                  {isSignIn ? 'Signing in...' : 'Creating account...'}
-                </>
-              ) : (
-                <>{isSignIn ? 'Sign in' : 'Sign up'}</>
-              )}
+              <motion.div
+                initial={{ opacity: 1 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="flex items-center justify-center w-full"
+              >
+                {isLoading ? (
+                  <>
+                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    {isSignIn ? 'Signing in...' : 'Creating account...'}
+                  </>
+                ) : (
+                  <>{isSignIn ? 'Sign in' : 'Sign up'}</>
+                )}
+              </motion.div>
             </Button>
           </form>
 
