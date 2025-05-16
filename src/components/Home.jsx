@@ -273,7 +273,7 @@ const Home = () => {
                         {[
                           { icon: '🎵', title: 'Unlimited Songs', desc: 'Access millions of tracks' },
                           { icon: '🎧', title: 'High Quality', desc: 'Premium audio quality' },
-                          { icon: '📱', title: 'Cross Platform', desc: 'Available on all devices' },
+                          { icon: '📱', title: 'Cross Platform', desc: 'Coming Soon!' },
                           { icon: '🔒', title: 'Ad-Free', desc: 'Uninterrupted listening' }
                         ].map((item, i) => (
                           <motion.div 
