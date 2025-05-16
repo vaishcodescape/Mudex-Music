@@ -1,11 +1,144 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence, useAnimation } from 'framer-motion';
+import { motion, AnimatePresence, useAnimation, AnimatePresence as DropdownAnimatePresence } from 'framer-motion';
 import { Button } from './ui/button';
-import { FaGithub, FaBars, FaTimes, FaHome, FaInfoCircle, FaTags, FaStar } from 'react-icons/fa';
-import { useClickAway } from 'react-use';
+import { FaGithub, FaBars, FaTimes, FaHome, FaInfoCircle, FaTags, FaStar, FaUser, FaCog, FaChevronDown, FaUserCircle } from 'react-icons/fa';
+import ProfilePicture from './ProfilePicture';
+import { useClickAway, useToggle } from 'react-use';
+import { useAuth } from '../contexts/AuthContext';
 import Logo from './Logo';
 import { useWindowSize } from '../hooks/useWindowSize';
+
+const UserDropdown = () => {
+  const [isOpen, toggle] = useToggle(false);
+  const dropdownRef = useRef(null);
+  const navigate = useNavigate();
+  const { user, logout, updateProfile } = useAuth();
+  
+  const handleProfilePictureUpdate = async (newAvatarUrl) => {
+    try {
+      await updateProfile({ avatar: newAvatarUrl });
+    } catch (error) {
+      console.error('Failed to update profile picture:', error);
+    }
+  };
+
+  useClickAway(dropdownRef, () => {
+    if (isOpen) toggle(false);
+  });
+
+  const handleNavigation = (path) => {
+    toggle(false);
+    navigate(path);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      toggle(false);
+      navigate('/');
+    } catch (error) {
+      console.error('Failed to log out', error);
+    }
+  };
+
+  const menuItems = [
+    {
+      label: 'Profile',
+      icon: <FaUser className="mr-3 h-4 w-4 text-muted-foreground" />,
+      onClick: () => handleNavigation('/profile')
+    },
+    {
+      label: 'Settings',
+      icon: <FaCog className="mr-3 h-4 w-4 text-muted-foreground" />,
+      onClick: () => handleNavigation('/settings')
+    },
+    'divider',
+    {
+      label: 'Sign Out',
+      className: 'text-red-500 hover:bg-destructive/10',
+      icon: null,
+      onClick: handleLogout
+    }
+  ];
+
+  return (
+    <div className="relative" ref={dropdownRef}>
+      <div className="flex items-center space-x-2">
+        <button
+          onClick={() => navigate('/profile')}
+          className="focus:outline-none group"
+          aria-label="Go to profile"
+        >
+          <div className="relative">
+            <ProfilePicture 
+              src={user?.avatar}
+              name={user?.name || 'User'}
+              size="sm"
+              className="border-2 border-transparent group-hover:border-primary/50 transition-all"
+            />
+          </div>
+        </button>
+        <button
+          onClick={() => toggle()}
+          className="focus:outline-none text-muted-foreground hover:text-foreground transition-colors"
+          aria-expanded={isOpen}
+          aria-haspopup="true"
+        >
+          <FaChevronDown className={`h-3 w-3 transition-transform ${isOpen ? 'transform rotate-180' : ''}`} />
+        </button>
+      </div>
+
+      <DropdownAnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
+            transition={{ duration: 0.15, ease: 'easeOut' }}
+            className="absolute right-0 mt-2 w-56 rounded-lg bg-popover shadow-lg border border-border overflow-hidden z-50"
+          >
+            <div className="p-2">
+              <div className="flex items-center px-3 py-3 mb-1 space-x-3">
+                <div className="relative group">
+                  <ProfilePicture 
+                    src={user?.avatar}
+                    name={user?.name || 'User'}
+                    size="lg"
+                    editable={true}
+                    onUpdate={handleProfilePictureUpdate}
+                    className="border-2 border-transparent group-hover:border-primary/50 transition-all"
+                  />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-sm font-medium text-foreground truncate">{user?.name || 'User'}</p>
+                  <p className="text-xs text-muted-foreground truncate">{user?.email || 'user@example.com'}</p>
+                </div>
+              </div>
+              
+              <div className="space-y-1">
+                {menuItems.map((item, index) => (
+                  item === 'divider' ? (
+                    <div key={index} className="border-t border-border/20 my-1" />
+                  ) : (
+                    <button
+                      key={item.label}
+                      onClick={item.onClick}
+                      className={`w-full flex items-center px-3 py-2 text-sm rounded-md text-left hover:bg-accent hover:text-accent-foreground transition-colors ${item.className || ''}`}
+                    >
+                      {item.icon}
+                      <span>{item.label}</span>
+                    </button>
+                  )
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </DropdownAnimatePresence>
+    </div>
+  );
+};
 
 const Navbar = () => {
   const location = useLocation();
@@ -19,6 +152,7 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const mobileMenuRef = useRef(null);
   const lastScrollY = useRef(0);
+  const { isAuthenticated, logout } = useAuth();
   
   // Close mobile menu when clicking outside or scrolling
   useClickAway(mobileMenuRef, (event) => {
@@ -76,7 +210,15 @@ const Navbar = () => {
     setIsMobileMenuOpen(false);
     await new Promise(resolve => setTimeout(resolve, 100));
     navigate('/auth');
-    window.location.reload();
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      setIsMobileMenuOpen(false);
+    } catch (error) {
+      console.error('Failed to log out', error);
+    }
   };
 
   const handleGithubClick = (e) => {
@@ -161,6 +303,9 @@ const Navbar = () => {
     { id: 'about', label: 'About', href: '/about', icon: FaInfoCircle },
     { id: 'discover', label: 'Discover', href: '/discover', icon: FaTags },
   ];
+  
+  // Get auth state and functions from context
+  const { user } = useAuth();
 
   return (
     <motion.nav 
@@ -438,15 +583,20 @@ const Navbar = () => {
                 initial="hidden"
                 animate="visible"
                 exit="hidden"
+                className="flex items-center"
               >
-                <Button
-                  variant="glow"
-                  size="sm"
-                  className="font-semibold"
-                  onClick={handleNavigation}
-                >
-                  Sign In
-                </Button>
+                {isAuthenticated ? (
+                  <UserDropdown />
+                ) : (
+                  <Button
+                    variant="glow"
+                    size="sm"
+                    className="font-semibold"
+                    onClick={handleNavigation}
+                  >
+                    Sign In
+                  </Button>
+                )}
               </motion.div>
             )}
           </AnimatePresence>

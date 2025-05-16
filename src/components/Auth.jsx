@@ -12,13 +12,17 @@ import { motion, AnimatePresence } from 'framer-motion'; // For animations
 import { Button } from './ui/button'; // UI component
 import { Input } from './ui/input'; // UI component
 import { useNavigate, useLocation } from 'react-router-dom'; // For navigation
+import { useAuth } from '../contexts/AuthContext'; // For authentication
+import { useToast } from '../contexts/ToastContext'; // For toast notifications
 import { FcGoogle } from 'react-icons/fc'; // Google icon
 import gsap from 'gsap'; // For advanced animations
 
 const Auth = () => {
-  // Hooks for navigation and location
+  // Hooks for navigation, location and auth
   const navigate = useNavigate();
   const location = useLocation();
+  const { login } = useAuth();
+  const { showSuccess, showError } = useToast();
   
   // State for loading indicators
   const [isLoading, setIsLoading] = useState(false); // For regular form submission
@@ -45,6 +49,10 @@ const Auth = () => {
   // Reference for heading element (used for GSAP animations)
   const headingRef = useRef(null);
   
+  // Form steps for signup flow
+  const [signupStep, setSignupStep] = useState(1); // 1: Account type, 2: Details
+  const [accountType, setAccountType] = useState('listener');
+
   // Form data state
   const [formData, setFormData] = useState({
     email: '',
@@ -121,110 +129,103 @@ const Auth = () => {
     // Prevent multiple simultaneous auth attempts
     if (isGoogleLoading || isLoading) return;
     
-    // Set loading state
     setIsGoogleLoading(true);
     
     try {
-      // Simulate authentication delay (1.5 seconds)
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      console.log('Authenticating with Google');
+      // In a real app, this would integrate with Google OAuth
+      // For now, we'll simulate a successful login with a Google user
+      const userData = {
+        id: `google-user-${Date.now()}`,
+        email: 'user@gmail.com',
+        name: 'Google User',
+        accountType: 'listener', // Default to listener for Google sign-in
+        createdAt: new Date().toISOString()
+      };
       
-      // Redirect to the discovery page after successful authentication
-      navigate('/discover', { replace: true });
+      // Call the login function from our auth context
+      const result = await login(userData);
+      
+      if (!result.success) {
+        showError(result.error || 'Google authentication failed');
+        throw new Error(result.error || 'Google authentication failed');
+      }
+      
+      // The login function will handle navigation
     } catch (error) {
       console.error('Google authentication error:', error);
-      // In a real app, would show error message to user
+      alert(error.message || 'Google authentication failed. Please try again.');
     } finally {
-      // Reset loading state regardless of outcome
       setIsGoogleLoading(false);
     }
   };
 
   /**
    * Handle form submission for email/password authentication
-   * Validates form data, simulates authentication process, and redirects to discovery page
-   * @param {Event} e - The form submission event
+   * Validates form data, handles authentication, and redirects to discovery page
    */
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // Prevent submission if already loading
     if (isLoading || isGoogleLoading) return;
     
-    // Validate passwords match in sign-up mode
-    if (!isSignIn && formData.password !== formData.confirmPassword) {
-      alert("Passwords don't match!");
+    // If on account type selection, move to details
+    if (!isSignIn && signupStep === 1) {
+      setSignupStep(2);
       return;
     }
     
-    // Set loading state
+    // Basic validation
+    if (!formData.email || !formData.password) {
+      alert('Please fill in all fields');
+      return;
+    }
+    
+    if (!isSignIn && formData.password !== formData.confirmPassword) {
+      alert('Passwords do not match');
+      return;
+    }
+    
     setIsLoading(true);
     
     try {
-      // Simulate authentication delay (2 seconds)
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      console.log('Authenticating with:', formData.email);
+      // In a real app, you would make an API call to your backend
+      // For now, we'll simulate an API call with a delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Redirect to the discovery page after successful authentication
-      navigate('/discover', { replace: true });
-    } catch (error) {
-      console.error('Authentication error:', error);
-      // In a real app, would show error message to user
+      // Create user object with account type
+      const userData = {
+        id: `demo-user-${Date.now()}`,
+        name: formData.name || formData.email.split('@')[0],
+        email: formData.email,
+        accountType: isSignIn ? 'listener' : accountType, // Use 'listener' as default for sign in
+        createdAt: new Date().toISOString()
+      };
+      
+      // Call the login function from our auth context
+      const result = await login(userData);
+      
+      if (!result.success) {
+        showError(result.error || 'Authentication failed');
+        throw new Error(result.error || 'Authentication failed');
+      }
+      
+      showSuccess(isSignIn ? 'Welcome back!' : 'Account created successfully!');
+      
+      // The login function will handle navigation
+    } catch (err) {
+      console.error('Authentication error:', err);
+      alert(err.message || 'Failed to sign in. Please try again.');
     } finally {
-      // Reset loading state regardless of outcome
       setIsLoading(false);
     }
   };
 
   /**
-   * Animation variants for Framer Motion transitions
+   * Handle account type selection
+   * @param {string} type - The selected account type
    */
-  
-  // Heading animation variants - controls the slide and fade effect when toggling between sign-in/sign-up
-  const headingVariants = {
-    enter: (isSigningIn) => ({
-      x: isSigningIn ? 100 : -100, // Slide in from right or left depending on direction
-      opacity: 0
-    }),
-    center: {
-      x: 0,
-      opacity: 1,
-      transition: {
-        x: { type: "spring", stiffness: 300, damping: 30 }, // Springy animation
-        opacity: { duration: 0.2 } // Fade in quickly
-      }
-    },
-    exit: (isSigningIn) => ({
-      x: isSigningIn ? -100 : 100, // Slide out to left or right depending on direction
-      opacity: 0,
-      transition: {
-        x: { type: "spring", stiffness: 300, damping: 30 },
-        opacity: { duration: 0.2 }
-      }
-    })
-  };
-  
-  // Password confirmation field animation variants - controls the appearance/disappearance
-  const passwordVariants = {
-    hidden: { opacity: 0, height: 0, marginBottom: 0 }, // Initial/hidden state
-    visible: { 
-      opacity: 1, 
-      height: "auto", 
-      marginBottom: 16,
-      transition: {
-        height: { type: "spring", stiffness: 300, damping: 30 }, // Springy height animation
-        opacity: { duration: 0.3 } // Fade in
-      }
-    },
-    exit: { 
-      opacity: 0, 
-      height: 0, 
-      marginBottom: 0,
-      transition: {
-        height: { type: "spring", stiffness: 300, damping: 30 },
-        opacity: { duration: 0.2 } // Fade out
-      }
-    }
+  const handleAccountTypeSelect = (type) => {
+    setAccountType(type);
+    setSignupStep(2);
   };
 
   /**
@@ -244,14 +245,56 @@ const Auth = () => {
     e.currentTarget.classList.remove('scale-95');
   };
 
+  // Render account type selection
+  const renderAccountTypeStep = () => (
+    <div className="p-8 text-center">
+      <h2 className="text-2xl font-bold mb-6">Choose Account Type</h2>
+      <p className="text-muted-foreground mb-8">Select the type of account you'd like to create</p>
+      
+      <div className="grid gap-4">
+        <button
+          onClick={() => handleAccountTypeSelect('listener')}
+          className={`p-6 rounded-xl border-2 transition-all duration-200 flex flex-col items-center ${
+            accountType === 'listener' 
+              ? 'border-primary bg-primary/5' 
+              : 'border-border hover:border-primary/50 hover:bg-primary/5'
+          }`}
+        >
+          <div className="w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center mb-3">
+            <svg className="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+            </svg>
+          </div>
+          <h3 className="font-semibold text-lg">Listener</h3>
+          <p className="text-sm text-muted-foreground mt-1">Enjoy music, create playlists, follow artists</p>
+        </button>
+        
+        <button
+          onClick={() => handleAccountTypeSelect('artist')}
+          className={`p-6 rounded-xl border-2 transition-all duration-200 flex flex-col items-center ${
+            accountType === 'artist' 
+              ? 'border-primary bg-primary/5' 
+              : 'border-border hover:border-primary/50 hover:bg-primary/5'
+          }`}
+        >
+          <div className="w-16 h-16 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center mb-3">
+            <svg className="w-8 h-8 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            </svg>
+          </div>
+          <h3 className="font-semibold text-lg">Artist</h3>
+          <p className="text-sm text-muted-foreground mt-1">Upload your music, grow your audience</p>
+        </button>
+      </div>
+    </div>
+  );
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted/20 p-4 sm:p-6">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted/30 p-4">
       <motion.div 
-        className="w-full max-w-md bg-background/90 sm:bg-background/80 backdrop-blur-lg rounded-2xl shadow-2xl overflow-hidden border border-border/20"
-        initial={{ opacity: 0, y: 20, scale: 0.98 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        exit={{ opacity: 0, y: -20, scale: 0.98 }}
-        transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="w-full max-w-md bg-card rounded-2xl shadow-xl overflow-hidden border border-border"
       >
         <div className="px-6 py-8 sm:px-8 sm:py-10 overflow-hidden">
           <AnimatePresence mode="wait" initial={false}>
@@ -262,19 +305,42 @@ const Auth = () => {
               initial="enter"
               animate="center"
               exit="exit"
-              variants={headingVariants}
+              variants={{
+                enter: (isSigningIn) => ({
+                  x: isSigningIn ? 100 : -100, // Slide in from right or left depending on direction
+                  opacity: 0
+                }),
+                center: {
+                  x: 0,
+                  opacity: 1,
+                  transition: {
+                    x: { type: "spring", stiffness: 300, damping: 30 }, // Springy animation
+                    opacity: { duration: 0.2 } // Fade in quickly
+                  }
+                },
+                exit: (isSigningIn) => ({
+                  x: isSigningIn ? -100 : 100, // Slide out to left or right depending on direction
+                  opacity: 0,
+                  transition: {
+                    x: { type: "spring", stiffness: 300, damping: 30 },
+                    opacity: { duration: 0.2 }
+                  }
+                })
+              }}
             >
-            <h2 
-              ref={headingRef}
-              className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-primary to-cyan-400 bg-clip-text text-transparent"
-            >
-              {isSignIn ? 'Welcome back' : 'Create an account'}
-            </h2>
-            <p className="mt-2 text-sm sm:text-base text-muted-foreground">
-              {isSignIn ? 'Sign in to your account to continue' : 'Enter your details to get started'}
-            </p>
-          </motion.div>
+              <h2 
+                ref={headingRef}
+                className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-primary to-cyan-400 bg-clip-text text-transparent"
+              >
+                {isSignIn ? 'Welcome back' : 'Create an account'}
+              </h2>
+              <p className="mt-2 text-sm sm:text-base text-muted-foreground">
+                {isSignIn ? 'Sign in to your account to continue' : 'Enter your details to get started'}
+              </p>
+            </motion.div>
           </AnimatePresence>
+
+          {signupStep === 1 && !isSignIn && renderAccountTypeStep()}
 
           <div>
             <Button
@@ -287,20 +353,20 @@ const Auth = () => {
               onTouchEnd={handleTouchEnd}
               onTouchCancel={handleTouchEnd}
             >
-            {isGoogleLoading ? (
-              <>
-                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-foreground" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Signing in...
-              </>
-            ) : (
-              <>
-                <FcGoogle className="h-5 w-5 mr-2 flex-shrink-0" />
-                <span>Continue with Google</span>
-              </>
-            )}
+              {isGoogleLoading ? (
+                <>
+                  <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-foreground" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Signing in...
+                </>
+              ) : (
+                <>
+                  <FcGoogle className="h-5 w-5 mr-2 flex-shrink-0" />
+                  <span>Continue with Google</span>
+                </>
+              )}
             </Button>
           </div>
 
@@ -344,7 +410,27 @@ const Auth = () => {
                   initial="hidden"
                   animate="visible"
                   exit="exit"
-                  variants={passwordVariants}
+                  variants={{
+                    hidden: { opacity: 0, height: 0, marginBottom: 0 }, // Initial/hidden state
+                    visible: { 
+                      opacity: 1, 
+                      height: "auto", 
+                      marginBottom: 16,
+                      transition: {
+                        height: { type: "spring", stiffness: 300, damping: 30 }, // Springy height animation
+                        opacity: { duration: 0.3 } // Fade in
+                      }
+                    },
+                    exit: { 
+                      opacity: 0, 
+                      height: 0, 
+                      marginBottom: 0,
+                      transition: {
+                        height: { type: "spring", stiffness: 300, damping: 30 },
+                        opacity: { duration: 0.2 } // Fade out
+                      }
+                    }
+                  }}
                 >
                   <div className="flex items-center justify-between mb-1.5">
                     <label htmlFor="password" className="block text-sm font-medium text-foreground/80">
@@ -383,7 +469,27 @@ const Auth = () => {
                     initial="hidden"
                     animate="visible"
                     exit="exit"
-                    variants={passwordVariants}
+                    variants={{
+                      hidden: { opacity: 0, height: 0, marginBottom: 0 }, // Initial/hidden state
+                      visible: { 
+                        opacity: 1, 
+                        height: "auto", 
+                        marginBottom: 16,
+                        transition: {
+                          height: { type: "spring", stiffness: 300, damping: 30 }, // Springy height animation
+                          opacity: { duration: 0.3 } // Fade in
+                        }
+                      },
+                      exit: { 
+                        opacity: 0, 
+                        height: 0, 
+                        marginBottom: 0,
+                        transition: {
+                          height: { type: "spring", stiffness: 300, damping: 30 },
+                          opacity: { duration: 0.2 } // Fade out
+                        }
+                      }
+                    }}
                   >
                     <label htmlFor="confirmPassword" className="block text-sm font-medium text-foreground/80 mb-1.5">
                       Confirm password
@@ -432,14 +538,17 @@ const Auth = () => {
             {isSignIn ? "Don't have an account?" : 'Already have an account?'}{' '}
             <button
               type="button"
-              onClick={toggleMode}
-              className="font-medium text-primary hover:text-primary/80 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2 rounded px-1 py-0.5 -mx-1"
+              onClick={(e) => {
+                e.preventDefault();
+                setSignupStep(1);
+                toggleMode();
+              }}
               disabled={isLoading || isGoogleLoading}
+              className="ml-1 text-primary hover:underline focus:outline-none"
             >
               {isSignIn ? 'Sign up' : 'Sign in'}
             </button>
           </p>
-          
           <button 
             type="button"
             onClick={handleBack}

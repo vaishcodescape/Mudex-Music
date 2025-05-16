@@ -35,6 +35,7 @@
     "react-icons": "^5.0.1",
     "react-router-dom": "^6.22.2",
     "react-use": "^17.6.0",
+    "sonner": "^2.0.3",
     "tailwind-merge": "^3.3.0",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.24.4"
@@ -42,7 +43,7 @@
   "devDependencies": {
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
-    "@vitejs/plugin-legacy": "^5.4.3",
+    "@vitejs/plugin-legacy": "^6.1.1",
     "@vitejs/plugin-react": "^4.4.1",
     "autoprefixer": "^10.4.17",
     "compression": "^1.8.0",
@@ -56,9 +57,9 @@
     "rimraf": "^5.0.10",
     "tailwindcss": "^3.4.1",
     "terser": "^5.39.1",
-    "vite": "^5.1.0",
+    "vite": "^6.3.5",
     "vite-bundle-analyzer": "^0.8.3",
-    "vitest": "^1.6.1"
+    "vitest": "^3.1.3"
   },
   "engines": {
     "node": ">=14.0.0",

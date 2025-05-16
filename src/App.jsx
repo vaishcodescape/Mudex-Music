@@ -12,6 +12,11 @@ import React, { useState, useEffect } from 'react';
 // Routing imports
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 
+// Auth Context
+import { AuthProvider } from './contexts/AuthContext';
+import { ToastProvider } from './contexts/ToastContext';
+import { Toaster } from 'sonner';
+
 // Animation imports
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -25,6 +30,7 @@ import About from './components/About';
 import Features from './components/Features';
 import Discover from './components/Discover';
 import LearnMore from './components/LearnMore';
+import Profile from './components/Profile';
 
 // UI components
 import HomeButton from './components/HomeButton';
@@ -76,7 +82,7 @@ const pageTransitionVariants = {
  * @returns {number} - The index of the page in the routes array, or -1 if not found
  */
 const getPageIndex = (pathname) => {
-  const routes = ['/', '/features', '/about', '/discover', '/learn-more', '/auth'];
+  const routes = ['/', '/features', '/about', '/discover', '/learn-more', '/auth', '/profile'];
   return routes.indexOf(pathname);
 };
 
@@ -142,6 +148,7 @@ const AppRoutes = () => {
               <Route path="/features" element={<Features />} />
               <Route path="/discover" element={<Discover />} />
               <Route path="/learn-more" element={<LearnMore />} />
+              <Route path="/profile" element={<Profile />} />
             </Routes>
           </motion.div>
         </AnimatePresence>
@@ -161,12 +168,17 @@ const AppRoutes = () => {
  * 
  * @returns {JSX.Element} The complete application with routing
  */
-function App() {
+const App = () => {
   return (
     <Router>
-      <AppRoutes />
+      <ToastProvider>
+        <AuthProvider>
+          <AppRoutes />
+          <Toaster position="top-center" richColors closeButton />
+        </AuthProvider>
+      </ToastProvider>
     </Router>
   );
-}
+};
 
 export default App;
