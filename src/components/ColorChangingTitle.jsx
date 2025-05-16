@@ -4,7 +4,7 @@ import React from 'react';
 const ColorChangingTitle = () => {
   return (
     <motion.div 
-      className="fixed inset-0 flex flex-col items-center justify-center bg-transparent"
+      className="w-full flex flex-col items-center justify-center min-h-[70vh] bg-transparent pointer-events-none z-10"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}

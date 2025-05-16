@@ -141,83 +141,77 @@ const Home = () => {
     <AnimatePresence mode="wait">
       {!isNavigating ? (
         <motion.div 
-          className="fixed inset-0 flex flex-col"
+          className="flex flex-col min-h-screen w-full"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.8, ease: "easeInOut" }}
         >
           <div className="fixed inset-0 bg-gradient-to-br from-background to-background/80 -z-10" />
-          <div className="min-h-screen w-full overflow-y-auto">
-            <div ref={particlesRef} className="fixed inset-0 pointer-events-none z-0">
-              <style jsx global>{`
-                .particle {
-                  position: absolute;
-                  width: 4px;
-                  height: 4px;
-                  background: hsl(var(--primary));
-                  border-radius: 50%;
-                  will-change: transform, opacity;
-                  pointer-events: none;
-                }
-              `}</style>
-            </div>
+          <div ref={particlesRef} className="fixed inset-0 pointer-events-none z-0">
+            <style jsx global>{`
+              .particle {
+                position: absolute;
+                width: 4px;
+                height: 4px;
+                background: hsl(var(--primary));
+                border-radius: 50%;
+                will-change: transform, opacity;
+                pointer-events: none;
+              }
+            `}</style>
+          </div>
 
-            <Navbar />
+          <Navbar />
 
-          <AnimatePresence>
-            {isLoaded && (
-              <>
-                {isLoaded && (
-                  <AnimatePresence mode="wait">
-                    <ColorChangingTitle />
-                  </AnimatePresence>
-                )}
+          {isLoaded && (
+            <>
+              <div className="relative overflow-visible flex flex-col items-center">
+                <ColorChangingTitle />
                 
-                <motion.main
-                  className="relative min-h-[calc(100vh-80px)] flex flex-col items-center px-6 py-16"
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                  variants={containerVariants}
+                <motion.div 
+                  className="flex flex-wrap justify-center gap-8 mt-8 w-full z-20"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.8 }}
                 >
+                  <Button
+                    variant="glow"
+                    size="lg"
+                    className="text-lg px-12 py-6 h-auto font-semibold relative"
+                    onClick={handleNavigation}
+                  >
+                    Start Listening
+                  </Button>
+                  
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="text-lg px-12 py-6 h-auto font-semibold border-primary text-primary hover:bg-primary/10 relative"
+                    onClick={() => navigate('/learn-more')}
+                  >
+                    Learn More
+                  </Button>
+                </motion.div>
+              </div>
+              
+              <motion.main
+                className="relative mt-32 flex flex-col items-center px-6 pt-0 pb-16"
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                variants={containerVariants}
+              >
                   {/* Main Content */}
                   <motion.div 
                     className="w-full max-w-4xl mx-auto relative z-10 flex flex-col items-center gap-16"
                     variants={containerVariants}
                   >
-                    {/* Action Buttons */}
-                    <motion.div 
-                      ref={buttonsRef}
-                      className="flex flex-wrap justify-center gap-8 mt-8 w-full"
-                      initial="offscreen"
-                      whileInView="onscreen"
-                      viewport={{ once: true, amount: 0.3 }}
-                      variants={scrollVariants}
-                    >
-                      <Button
-                        variant="glow"
-                        size="lg"
-                        className="text-lg px-12 py-6 h-auto font-semibold relative"
-                        onClick={handleNavigation}
-                      >
-                        Start Listening
-                      </Button>
-                      
-                      <Button
-                        variant="outline"
-                        size="lg"
-                        className="text-lg px-12 py-6 h-auto font-semibold border-primary text-primary hover:bg-primary/10 relative"
-                        onClick={() => navigate('/learn-more')}
-                      >
-                        Learn More
-                      </Button>
-                    </motion.div>
 
                     {/* Feature Cards */}
                     <motion.div
                       ref={featuresRef}
-                      className="w-full grid grid-cols-1 md:grid-cols-3 gap-8 text-center mt-16 px-4"
+                      className="w-full grid grid-cols-1 md:grid-cols-3 gap-8 text-center mt-24 px-4"
                       initial="offscreen"
                       whileInView="onscreen"
                       viewport={{ once: true, amount: 0.1 }}
@@ -226,22 +220,51 @@ const Home = () => {
                       {['Discover', 'Stream', 'Connect'].map((feature, index) => (
                         <motion.div 
                           key={feature}
-                          className={`p-8 rounded-lg backdrop-blur-lg bg-card/50 hover:bg-card/80 transition-all duration-300 border border-border/50 relative h-full ${feature === 'Discover' ? 'cursor-pointer' : ''}`}
+                          className={`p-8 rounded-lg backdrop-blur-lg bg-card/30 hover:bg-card/70 transition-all duration-500 border border-border/30 hover:border-primary/60 relative h-full overflow-hidden ${feature === 'Discover' ? 'cursor-pointer' : ''}`}
                           variants={{
-                            offscreen: { y: 30 },
+                            offscreen: { y: 30, opacity: 0 },
                             onscreen: { 
                               y: 0,
+                              opacity: 1,
                               transition: { 
                                 type: 'spring', 
                                 bounce: 0.3, 
                                 duration: 0.8,
-                                delay: index * 0.1
+                                delay: index * 0.2
                               } 
                             }
                           }}
-                          whileHover={{ y: -5, boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1)' }}
+                          whileHover={{ 
+                            y: -5, 
+                            boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 0 0 2px rgba(56, 189, 248, 0.3)',
+                            backgroundColor: 'rgba(30, 41, 59, 0.8)'
+                          }}
                           onClick={() => feature === 'Discover' ? navigate('/auth') : null}
                         >
+                          <motion.div 
+                            className="absolute -bottom-20 -right-20 w-40 h-40 rounded-full bg-primary/10"
+                            animate={{ 
+                              scale: [1, 1.2, 1],
+                              opacity: [0.1, 0.3, 0.1]
+                            }}
+                            transition={{ 
+                              duration: 4, 
+                              repeat: Infinity,
+                              delay: index * 0.7
+                            }}
+                          />
+                          <motion.div 
+                            className="absolute -top-10 -left-10 w-20 h-20 rounded-full bg-primary/5"
+                            animate={{ 
+                              scale: [1, 1.5, 1],
+                              opacity: [0.1, 0.2, 0.1]
+                            }}
+                            transition={{ 
+                              duration: 5, 
+                              repeat: Infinity,
+                              delay: index * 0.3
+                            }}
+                          />
                           <h3 className="text-xl font-bold mb-3">{feature}</h3>
                           <p className="text-muted-foreground">
                             {feature === 'Discover' && 'Find new music tailored to your taste'}
@@ -257,7 +280,7 @@ const Home = () => {
 
                     {/* Additional Sections */}
                     <motion.section 
-                      className="w-full mt-32 py-20 px-4 text-center"
+                      className="w-full mt-20 py-16 px-4 text-center"
                       initial={{ opacity: 0, y: 20 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true, margin: "-100px" }}
@@ -276,14 +299,31 @@ const Home = () => {
                           { icon: '📱', title: 'Cross Platform', desc: 'Coming Soon!' },
                           { icon: '🔒', title: 'Ad-Free', desc: 'Uninterrupted listening' }
                         ].map((item, i) => (
-                          <motion.div 
+                           <motion.div 
                             key={i}
-                            className="p-6 rounded-xl bg-card/30 backdrop-blur-sm border border-border/30 hover:bg-card/50 transition-colors"
+                            className="p-6 rounded-xl bg-card/30 backdrop-blur-sm border border-border/30 hover:bg-card/70 hover:border-primary/60 transition-all duration-500 relative overflow-hidden"
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true, margin: "-50px" }}
                             transition={{ duration: 0.5, delay: i * 0.1 }}
+                            whileHover={{ 
+                              y: -5, 
+                              boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 0 0 2px rgba(56, 189, 248, 0.3)',
+                              backgroundColor: 'rgba(30, 41, 59, 0.8)'
+                            }}
                           >
+                            <motion.div 
+                              className="absolute -bottom-20 -right-20 w-40 h-40 rounded-full bg-primary/10"
+                              animate={{ 
+                                scale: [1, 1.2, 1],
+                                opacity: [0.1, 0.3, 0.1]
+                              }}
+                              transition={{ 
+                                duration: 4, 
+                                repeat: Infinity,
+                                delay: i * 0.7
+                              }}
+                            />
                             <div className="text-4xl mb-4">{item.icon}</div>
                             <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
                             <p className="text-muted-foreground text-sm">{item.desc}</p>
@@ -315,10 +355,8 @@ const Home = () => {
                     </motion.section>
                   </motion.div>
                 </motion.main>
-              </>
-            )}
-          </AnimatePresence>
-          </div>
+            </>
+          )}
           </motion.div>
         ) : (
           <motion.div

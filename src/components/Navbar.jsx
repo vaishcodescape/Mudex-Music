@@ -302,7 +302,6 @@ const Navbar = () => {
     { name: 'Features', path: '/features', icon: <FaStar className="h-4 w-4" /> },
     { name: 'About', path: '/about', icon: <FaInfoCircle className="h-4 w-4" /> },
     { name: 'Discover', path: '/discover', icon: <FaTags className="h-4 w-4" /> },
-    { name: 'Artists', path: '/artist/1', icon: <FaUser className="h-4 w-4" /> },
   ];
   
   // Get auth state and functions from context
@@ -394,36 +393,23 @@ const Navbar = () => {
                 }}
               >
                 <div className="px-4 space-y-1">
-                  {navItems.map((item, index) => (
+                  {navLinks.map((item, index) => (
                     <motion.div
-                      key={item.id}
+                      key={item.name}
                       variants={mobileItemVariants}
                       whileTap={{ scale: 0.98 }}
                       style={{
                         WebkitTapHighlightColor: 'transparent',
                       }}
                     >
-                      {item.id === 'discover' ? (
-                        <div
-                          className="flex items-center px-4 py-3 text-base font-medium text-foreground/90 hover:text-primary hover:bg-foreground/5 rounded-lg transition-colors cursor-pointer"
-                          onClick={() => {
-                            closeMobileMenu();
-                            navigate('/auth');
-                          }}
-                        >
-                          <item.icon className="mr-3 h-5 w-5 flex-shrink-0" />
-                          {item.label}
-                        </div>
-                      ) : (
-                        <Link
-                          to={item.href}
-                          className="flex items-center px-4 py-3 text-base font-medium text-foreground/90 hover:text-primary hover:bg-foreground/5 rounded-lg transition-colors"
-                          onClick={closeMobileMenu}
-                        >
-                          <item.icon className="mr-3 h-5 w-5 flex-shrink-0" />
-                          {item.label}
-                        </Link>
-                      )}
+                      <Link
+                        to={item.path}
+                        className="flex items-center px-4 py-3 text-base font-medium text-foreground/90 hover:text-primary hover:bg-foreground/5 rounded-lg transition-colors"
+                        onClick={closeMobileMenu}
+                      >
+                        {item.icon}
+                        <span className="ml-3">{item.name}</span>
+                      </Link>
                     </motion.div>
                   ))}
                   
@@ -522,41 +508,27 @@ const Navbar = () => {
             }
           }}
         >
-          {navItems.map((item, index) => (
+          {navLinks.map((item, index) => (
             <motion.div
-              key={item.id}
+              key={item.name}
               custom={index}
               variants={navItemVariants}
               whileHover="hover"
               whileTap="tap"
             >
-              {item.id === 'discover' ? (
-                <div
-                  className={`text-sm md:text-[0.9375rem] font-medium px-3.5 py-2.5 rounded-lg transition-colors inline-block cursor-pointer ${
-                    'text-muted-foreground hover:text-foreground hover:bg-foreground/5'
-                  }`}
-                  style={{
-                    WebkitTapHighlightColor: 'transparent',
-                  }}
-                  onClick={() => navigate('/auth')}
-                >
-                  {item.label}
-                </div>
-              ) : (
-                <Link
-                  to={item.href}
-                  className={`text-sm md:text-[0.9375rem] font-medium px-3.5 py-2.5 rounded-lg transition-colors inline-block ${
-                    location.pathname === item.href 
-                      ? 'text-primary bg-primary/10' 
-                      : 'text-muted-foreground hover:text-foreground hover:bg-foreground/5'
-                  }`}
-                  style={{
-                    WebkitTapHighlightColor: 'transparent',
-                  }}
-                >
-                  {item.label}
-                </Link>
-              )}
+              <Link
+                to={item.path}
+                className={`text-sm md:text-[0.9375rem] font-medium px-3.5 py-2.5 rounded-lg transition-colors inline-block ${
+                  location.pathname === item.path 
+                    ? 'text-primary bg-primary/10' 
+                    : 'text-muted-foreground hover:text-foreground hover:bg-foreground/5'
+                }`}
+                style={{
+                  WebkitTapHighlightColor: 'transparent',
+                }}
+              >
+                {item.name}
+              </Link>
             </motion.div>
           ))}
           

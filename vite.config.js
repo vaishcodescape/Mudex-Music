@@ -24,14 +24,14 @@ export default defineConfig({
   },
   server: {
     host: true, // Expose to all network interfaces
-    port: 3000,
-    strictPort: true,
+    port: 3001,
+    strictPort: false, // Allow fallback to another port if 3001 is in use
     // Handle history API fallback for SPA routing
     historyApiFallback: true,
   },
   preview: {
-    port: 3000,
-    strictPort: true,
+    port: 3001,
+    strictPort: false,
   },
   build: {
     outDir: 'dist',
