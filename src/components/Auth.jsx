@@ -252,39 +252,65 @@ const Auth = () => {
       <p className="text-muted-foreground mb-8">Select the type of account you'd like to create</p>
       
       <div className="grid gap-4">
-        <button
+        <motion.button
           onClick={() => handleAccountTypeSelect('listener')}
-          className={`p-6 rounded-xl border-2 transition-all duration-200 flex flex-col items-center ${
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          className={`p-6 rounded-xl border-2 transition-all duration-300 flex flex-col items-center relative overflow-hidden group ${
             accountType === 'listener' 
-              ? 'border-primary bg-primary/5' 
-              : 'border-border hover:border-primary/50 hover:bg-primary/5'
+              ? 'border-primary bg-primary/5 shadow-lg' 
+              : 'border-border hover:border-primary/50 hover:bg-primary/5 hover:shadow-md'
           }`}
         >
-          <div className="w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center mb-3">
-            <svg className="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="relative z-10 w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center mb-3 transition-transform duration-300 group-hover:scale-110">
+            <motion.svg 
+              className="w-8 h-8 text-blue-500" 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+              whileHover={{ rotate: 5, scale: 1.1 }}
+              transition={{ type: 'spring', stiffness: 300 }}
+            >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-            </svg>
+            </motion.svg>
           </div>
-          <h3 className="font-semibold text-lg">Listener</h3>
-          <p className="text-sm text-muted-foreground mt-1">Enjoy music, create playlists, follow artists</p>
-        </button>
+          <h3 className="font-semibold text-lg relative z-10">Listener</h3>
+          <p className="text-sm text-muted-foreground mt-1 relative z-10">Enjoy music, create playlists, follow artists</p>
+          <div className={`absolute bottom-0 left-0 right-0 h-1 bg-blue-500 transform origin-left transition-transform duration-300 ${
+            accountType === 'listener' ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
+          }`} />
+        </motion.button>
         
-        <button
+        <motion.button
           onClick={() => handleAccountTypeSelect('artist')}
-          className={`p-6 rounded-xl border-2 transition-all duration-200 flex flex-col items-center ${
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          className={`p-6 rounded-xl border-2 transition-all duration-300 flex flex-col items-center relative overflow-hidden group ${
             accountType === 'artist' 
-              ? 'border-primary bg-primary/5' 
-              : 'border-border hover:border-primary/50 hover:bg-primary/5'
+              ? 'border-primary bg-primary/5 shadow-lg' 
+              : 'border-border hover:border-primary/50 hover:bg-primary/5 hover:shadow-md'
           }`}
         >
-          <div className="w-16 h-16 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center mb-3">
-            <svg className="w-8 h-8 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="relative z-10 w-16 h-16 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center mb-3 transition-transform duration-300 group-hover:scale-110">
+            <motion.svg 
+              className="w-8 h-8 text-purple-500" 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+              whileHover={{ rotate: 5, scale: 1.1 }}
+              transition={{ type: 'spring', stiffness: 300 }}
+            >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-            </svg>
+            </motion.svg>
           </div>
-          <h3 className="font-semibold text-lg">Artist</h3>
-          <p className="text-sm text-muted-foreground mt-1">Upload your music, grow your audience</p>
-        </button>
+          <h3 className="font-semibold text-lg relative z-10">Artist</h3>
+          <p className="text-sm text-muted-foreground mt-1 relative z-10">Upload your music, grow your audience</p>
+          <div className={`absolute bottom-0 left-0 right-0 h-1 bg-purple-500 transform origin-left transition-transform duration-300 ${
+            accountType === 'artist' ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
+          }`} />
+        </motion.button>
       </div>
     </div>
   );
