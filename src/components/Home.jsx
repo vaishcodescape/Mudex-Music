@@ -326,31 +326,78 @@ const Home = () => {
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-background flex items-center justify-center"
           >
-          <motion.div
-            animate={{ 
-              scale: [1, 1.2, 1],
-              rotate: [0, 360]
-            }}
-            transition={{ 
-              duration: 2,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-            className="relative"
-          >
-            <div className="w-32 h-32 relative">
-              <div className="absolute inset-0 rounded-full border-4 border-sky-400/20 border-t-sky-400 animate-spin"></div>
-              <div className="absolute inset-3 rounded-full border-4 border-sky-400/20 border-t-sky-400 animate-spin-slow"></div>
-              <motion.div 
-                className="absolute inset-0 flex items-center justify-center"
-                animate={{ opacity: [0.5, 1, 0.5] }}
-                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-              >
-                <div className="w-16 h-16 bg-gradient-to-r from-blue-500 via-cyan-500 to-indigo-500 rounded-full blur-xl"></div>
-              </motion.div>
+            <div className="relative w-32 h-32">
+              {/* Using the SVG favicon as loading icon with animations */}
+              <svg width="100%" height="100%" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+                {/* Animated outer circle (dark teal) */}
+                <motion.circle 
+                  cx="120" 
+                  cy="120" 
+                  r="90" 
+                  fill="#1a3040" 
+                  animate={{ 
+                    r: [90, 95, 90],
+                    opacity: [0.8, 1, 0.8]
+                  }}
+                  transition={{ 
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                />
+                
+                {/* Animated middle circle (darker teal) with reverse rotation */}
+                <motion.circle 
+                  cx="120" 
+                  cy="120" 
+                  r="70" 
+                  fill="#0a2030" 
+                  animate={{ 
+                    rotate: [0, -360]
+                  }}
+                  transition={{ 
+                    duration: 8,
+                    repeat: Infinity,
+                    ease: "linear"
+                  }}
+                  style={{ transformOrigin: 'center' }}
+                />
+                
+                {/* Animated inner circle (blue) with pulsing effect */}
+                <motion.circle 
+                  cx="120" 
+                  cy="120" 
+                  r="50" 
+                  fill="#2196F3" 
+                  animate={{ 
+                    r: [50, 55, 50],
+                    fill: ['#2196F3', '#64B5F6', '#2196F3']
+                  }}
+                  transition={{ 
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                />
+                
+                {/* Animated center dot (black) */}
+                <motion.circle 
+                  cx="120" 
+                  cy="120" 
+                  r="10" 
+                  fill="#000" 
+                  animate={{ 
+                    r: [10, 12, 10]
+                  }}
+                  transition={{ 
+                    duration: 1.5,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                />
+              </svg>
             </div>
           </motion.div>
-        </motion.div>
       )}
     </AnimatePresence>
   );
