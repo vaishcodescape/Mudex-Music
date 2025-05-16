@@ -4,7 +4,7 @@ import React from 'react';
 const ColorChangingTitle = () => {
   return (
     <motion.div 
-      className="w-full flex flex-col items-center justify-center min-h-[70vh] bg-transparent pointer-events-none z-10"
+      className="w-full flex flex-col items-center justify-center min-h-[60vh] md:min-h-[70vh] px-4 bg-transparent pointer-events-none z-10"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -12,7 +12,7 @@ const ColorChangingTitle = () => {
     >
       <div className="relative flex flex-col items-center justify-center">
         <motion.h1 
-          className="text-7xl font-bold tracking-tight flex items-center gap-4 select-none"
+          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight flex flex-wrap justify-center items-center gap-2 md:gap-4 select-none"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
@@ -65,7 +65,7 @@ const ColorChangingTitle = () => {
         </motion.h1>
 
         <motion.p
-          className="mt-4 text-lg font-medium select-none"
+          className="mt-3 md:mt-4 text-base sm:text-lg font-medium select-none"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6, duration: 0.5 }}
