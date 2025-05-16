@@ -43,9 +43,26 @@ const About = () => {
           animate="visible"
           variants={fadeInUp}
         >
-          <div className="flex justify-center mb-6">
-            <Logo size={80} animated={true} />
-          </div>
+          <motion.div 
+            className="flex justify-center mb-8"
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ 
+              scale: 1, 
+              opacity: 1,
+              y: [0, -10, 0],
+              transition: { 
+                scale: { duration: 0.5 },
+                opacity: { duration: 0.5 },
+                y: { 
+                  repeat: Infinity, 
+                  duration: 3,
+                  ease: "easeInOut" 
+                }
+              }
+            }}
+          >
+            <Logo size={120} animated={true} />
+          </motion.div>
           <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
             About Mudex Music
           </h1>
