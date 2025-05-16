@@ -1,25 +1,61 @@
+/**
+ * Auth Component
+ * 
+ * This component handles user authentication including sign-in and sign-up functionality.
+ * It provides a form for email/password authentication and Google authentication option.
+ * Features smooth animations for transitions between sign-in and sign-up modes.
+ */
+
+// Import necessary dependencies
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Button } from './ui/button';
-import { Input } from './ui/input';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { FcGoogle } from 'react-icons/fc';
-import gsap from 'gsap';
+import { motion, AnimatePresence } from 'framer-motion'; // For animations
+import { Button } from './ui/button'; // UI component
+import { Input } from './ui/input'; // UI component
+import { useNavigate, useLocation } from 'react-router-dom'; // For navigation
+import { FcGoogle } from 'react-icons/fc'; // Google icon
+import gsap from 'gsap'; // For advanced animations
 
 const Auth = () => {
+  // Hooks for navigation and location
   const navigate = useNavigate();
   const location = useLocation();
-  const [isLoading, setIsLoading] = useState(false);
-  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  
+  // State for loading indicators
+  const [isLoading, setIsLoading] = useState(false); // For regular form submission
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false); // For Google authentication
+  
+  // Toggle between sign-in and sign-up modes
   const [isSignIn, setIsSignIn] = useState(true);
+  
+  /**
+   * Toggle between sign-in and sign-up modes
+   * This triggers the animation transitions between forms
+   * Also resets password fields while preserving email
+   */
+  const toggleMode = () => {
+    if (isLoading || isGoogleLoading) return;
+    setIsSignIn(!isSignIn);
+    setFormData({
+      email: formData.email,
+      password: '',
+      confirmPassword: ''
+    });
+  };
+  
+  // Reference for heading element (used for GSAP animations)
   const headingRef = useRef(null);
+  
+  // Form data state
   const [formData, setFormData] = useState({
     email: '',
     password: '',
     confirmPassword: ''
   });
 
-  // Reset form state when location changes
+  /**
+   * Reset form state when location changes
+   * This ensures a clean form when navigating back to the auth page
+   */
   useEffect(() => {
     setIsLoading(false);
     setIsGoogleLoading(false);
@@ -30,6 +66,10 @@ const Auth = () => {
     });
   }, [location.key]);
 
+  /**
+   * Animate heading text color with gradient effect
+   * Uses GSAP for smooth color transitions in the heading
+   */
   useEffect(() => {
     const colors = ['#3b82f6', '#06b6d4', '#6366f1'];
     let currentIndex = 0;
@@ -59,6 +99,11 @@ const Auth = () => {
     };
   }, []);
 
+  /**
+   * Handle form input changes
+   * Updates the form data state when user types in any input field
+   * @param {Event} e - The input change event
+   */
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -67,58 +112,90 @@ const Auth = () => {
     }));
   };
 
+  /**
+   * Handle Google authentication
+   * Simulates authentication process with Google and redirects to discovery page
+   * In a real app, this would integrate with Google OAuth
+   */
   const handleGoogleAuth = async () => {
+    // Prevent multiple simultaneous auth attempts
     if (isGoogleLoading || isLoading) return;
+    
+    // Set loading state
     setIsGoogleLoading(true);
+    
     try {
+      // Simulate authentication delay (1.5 seconds)
       await new Promise(resolve => setTimeout(resolve, 1500));
       console.log('Authenticating with Google');
-      navigate('/', { replace: true });
+      
+      // Redirect to the discovery page after successful authentication
+      navigate('/discover', { replace: true });
     } catch (error) {
       console.error('Google authentication error:', error);
+      // In a real app, would show error message to user
     } finally {
+      // Reset loading state regardless of outcome
       setIsGoogleLoading(false);
     }
   };
 
+  /**
+   * Handle form submission for email/password authentication
+   * Validates form data, simulates authentication process, and redirects to discovery page
+   * @param {Event} e - The form submission event
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Prevent submission if already loading
     if (isLoading || isGoogleLoading) return;
     
+    // Validate passwords match in sign-up mode
     if (!isSignIn && formData.password !== formData.confirmPassword) {
       alert("Passwords don't match!");
       return;
     }
     
+    // Set loading state
     setIsLoading(true);
     
     try {
+      // Simulate authentication delay (2 seconds)
       await new Promise(resolve => setTimeout(resolve, 2000));
       console.log('Authenticating with:', formData.email);
-      navigate('/', { replace: true });
+      
+      // Redirect to the discovery page after successful authentication
+      navigate('/discover', { replace: true });
     } catch (error) {
       console.error('Authentication error:', error);
+      // In a real app, would show error message to user
     } finally {
+      // Reset loading state regardless of outcome
       setIsLoading(false);
     }
   };
 
-  // Animation variants for transitions
+  /**
+   * Animation variants for Framer Motion transitions
+   */
+  
+  // Heading animation variants - controls the slide and fade effect when toggling between sign-in/sign-up
   const headingVariants = {
     enter: (isSigningIn) => ({
-      x: isSigningIn ? 100 : -100,
+      x: isSigningIn ? 100 : -100, // Slide in from right or left depending on direction
       opacity: 0
     }),
     center: {
       x: 0,
       opacity: 1,
       transition: {
-        x: { type: "spring", stiffness: 300, damping: 30 },
-        opacity: { duration: 0.2 }
+        x: { type: "spring", stiffness: 300, damping: 30 }, // Springy animation
+        opacity: { duration: 0.2 } // Fade in quickly
       }
     },
     exit: (isSigningIn) => ({
-      x: isSigningIn ? -100 : 100,
+      x: isSigningIn ? -100 : 100, // Slide out to left or right depending on direction
       opacity: 0,
       transition: {
         x: { type: "spring", stiffness: 300, damping: 30 },
@@ -127,16 +204,16 @@ const Auth = () => {
     })
   };
   
-  // Password field animation variants
+  // Password confirmation field animation variants - controls the appearance/disappearance
   const passwordVariants = {
-    hidden: { opacity: 0, height: 0, marginBottom: 0 },
+    hidden: { opacity: 0, height: 0, marginBottom: 0 }, // Initial/hidden state
     visible: { 
       opacity: 1, 
       height: "auto", 
       marginBottom: 16,
       transition: {
-        height: { type: "spring", stiffness: 300, damping: 30 },
-        opacity: { duration: 0.3 }
+        height: { type: "spring", stiffness: 300, damping: 30 }, // Springy height animation
+        opacity: { duration: 0.3 } // Fade in
       }
     },
     exit: { 
@@ -145,21 +222,15 @@ const Auth = () => {
       marginBottom: 0,
       transition: {
         height: { type: "spring", stiffness: 300, damping: 30 },
-        opacity: { duration: 0.2 }
+        opacity: { duration: 0.2 } // Fade out
       }
     }
   };
 
-  const toggleMode = () => {
-    if (isLoading || isGoogleLoading) return;
-    setIsSignIn(!isSignIn);
-    setFormData({
-      email: formData.email,
-      password: '',
-      confirmPassword: ''
-    });
-  };
-
+  /**
+   * Navigate back to home page when back button is clicked
+   * Prevents navigation during loading states
+   */
   const handleBack = () => {
     if (isLoading || isGoogleLoading) return;
     navigate('/', { replace: true });
@@ -383,4 +454,5 @@ const Auth = () => {
   );
 };
 
+// Export the Auth component as the default export
 export default Auth;

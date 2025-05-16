@@ -157,8 +157,9 @@ const Navbar = () => {
   // Navigation items data
   const navItems = [
     { id: 'home', label: 'Home', href: '/', icon: FaHome },
-    { id: 'features', label: 'Features', href: '#features', icon: FaStar },
-    { id: 'about', label: 'About', href: '#about', icon: FaInfoCircle },
+    { id: 'features', label: 'Features', href: '/features', icon: FaStar },
+    { id: 'about', label: 'About', href: '/about', icon: FaInfoCircle },
+    { id: 'discover', label: 'Discover', href: '/discover', icon: FaTags },
   ];
 
   return (
@@ -248,36 +249,40 @@ const Navbar = () => {
               >
                 <div className="px-4 space-y-1">
                   {navItems.map((item, index) => (
-                    <motion.a
+                    <motion.div
                       key={item.id}
-                      href={item.href}
                       variants={mobileItemVariants}
-                      className="flex items-center px-4 py-3 text-base font-medium text-foreground/90 hover:text-primary hover:bg-foreground/5 rounded-lg transition-colors"
                       whileTap={{ scale: 0.98 }}
-                      onClick={closeMobileMenu}
                       style={{
                         WebkitTapHighlightColor: 'transparent',
                       }}
                     >
-                      <item.icon className="mr-3 h-5 w-5 flex-shrink-0" />
-                      {item.label}
-                    </motion.a>
+                      {item.id === 'discover' ? (
+                        <div
+                          className="flex items-center px-4 py-3 text-base font-medium text-foreground/90 hover:text-primary hover:bg-foreground/5 rounded-lg transition-colors cursor-pointer"
+                          onClick={() => {
+                            closeMobileMenu();
+                            navigate('/auth');
+                          }}
+                        >
+                          <item.icon className="mr-3 h-5 w-5 flex-shrink-0" />
+                          {item.label}
+                        </div>
+                      ) : (
+                        <Link
+                          to={item.href}
+                          className="flex items-center px-4 py-3 text-base font-medium text-foreground/90 hover:text-primary hover:bg-foreground/5 rounded-lg transition-colors"
+                          onClick={closeMobileMenu}
+                        >
+                          <item.icon className="mr-3 h-5 w-5 flex-shrink-0" />
+                          {item.label}
+                        </Link>
+                      )}
+                    </motion.div>
                   ))}
                   
                   <div className="pt-2 border-t border-border/20 mt-3 space-y-2">
-                    <motion.a 
-                      href="#discover"
-                      variants={mobileItemVariants}
-                      className="flex items-center px-4 py-3 text-base font-medium text-foreground/90 hover:text-primary hover:bg-foreground/5 rounded-lg transition-colors"
-                      whileTap={{ scale: 0.98 }}
-                      onClick={closeMobileMenu}
-                      style={{
-                        WebkitTapHighlightColor: 'transparent',
-                      }}
-                    >
-                      <FaStar className="mr-3 h-5 w-5 flex-shrink-0" />
-                      Discover
-                    </motion.a>
+                    {/* Removed duplicate Discover link as it's now in the main navItems array */}
                     
                     <motion.button
                       variants={mobileItemVariants}
@@ -372,35 +377,44 @@ const Navbar = () => {
           }}
         >
           {navItems.map((item, index) => (
-            <motion.a
+            <motion.div
               key={item.id}
-              href={item.href}
               custom={index}
               variants={navItemVariants}
-              className={`text-sm md:text-[0.9375rem] font-medium px-3.5 py-2.5 rounded-lg transition-colors ${
-                location.pathname === item.href 
-                  ? 'text-primary bg-primary/10' 
-                  : 'text-muted-foreground hover:text-foreground hover:bg-foreground/5'
-              }`}
               whileHover="hover"
               whileTap="tap"
-              style={{
-                WebkitTapHighlightColor: 'transparent',
-              }}
-          >
-              {item.label}
-            </motion.a>
+            >
+              {item.id === 'discover' ? (
+                <div
+                  className={`text-sm md:text-[0.9375rem] font-medium px-3.5 py-2.5 rounded-lg transition-colors inline-block cursor-pointer ${
+                    'text-muted-foreground hover:text-foreground hover:bg-foreground/5'
+                  }`}
+                  style={{
+                    WebkitTapHighlightColor: 'transparent',
+                  }}
+                  onClick={() => navigate('/auth')}
+                >
+                  {item.label}
+                </div>
+              ) : (
+                <Link
+                  to={item.href}
+                  className={`text-sm md:text-[0.9375rem] font-medium px-3.5 py-2.5 rounded-lg transition-colors inline-block ${
+                    location.pathname === item.href 
+                      ? 'text-primary bg-primary/10' 
+                      : 'text-muted-foreground hover:text-foreground hover:bg-foreground/5'
+                  }`}
+                  style={{
+                    WebkitTapHighlightColor: 'transparent',
+                  }}
+                >
+                  {item.label}
+                </Link>
+              )}
+            </motion.div>
           ))}
           
-          <motion.a 
-            href="#discover"
-            className="text-muted-foreground hover:text-foreground transition-colors"
-            variants={navItemVariants}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Discover
-          </motion.a>
+          {/* Removed duplicate Discover link as it's now in the main navItems array */}
 
           <motion.div variants={navItemVariants} className="hidden sm:block">
             <Button 

@@ -1,0 +1,54 @@
+.page-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.page-transition-container {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+  will-change: transform;
+  overflow-y: auto;
+}
+
+html, body {
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(59, 130, 246, 0.5);
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(59, 130, 246, 0.7);
+}
+
+/* Firefox scrollbar styling */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(59, 130, 246, 0.5) rgba(0, 0, 0, 0.05);
+}
+
+/* Fix for iOS momentum scrolling */
+@supports (-webkit-overflow-scrolling: touch) {
+  .page-wrapper,
+  .page-transition-container {
+    -webkit-overflow-scrolling: touch;
+  }
+}

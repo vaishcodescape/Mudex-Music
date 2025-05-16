@@ -7,7 +7,6 @@ import { Button } from './ui/button';
 import Logo from './Logo';
 import ColorChangingTitle from './ColorChangingTitle';
 import { FaGithub } from 'react-icons/fa';
-import Scrollbar from './ui/Scrollbar';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -149,24 +148,22 @@ const Home = () => {
           transition={{ duration: 0.8, ease: "easeInOut" }}
         >
           <div className="fixed inset-0 bg-gradient-to-br from-background to-background/80 -z-10" />
-          <Scrollbar>
-            <div className="min-h-screen w-full">
-          <div ref={particlesRef} className="fixed inset-0 pointer-events-none z-0">
-            <style jsx global>{`
-              .particle {
-                position: absolute;
-                width: 4px;
-                height: 4px;
-                background: hsl(var(--primary));
-                border-radius: 50%;
-                will-change: transform, opacity;
-                pointer-events: none;
-              }
-              `}
-            </style>
-          </div>
+          <div className="min-h-screen w-full overflow-y-auto">
+            <div ref={particlesRef} className="fixed inset-0 pointer-events-none z-0">
+              <style jsx global>{`
+                .particle {
+                  position: absolute;
+                  width: 4px;
+                  height: 4px;
+                  background: hsl(var(--primary));
+                  border-radius: 50%;
+                  will-change: transform, opacity;
+                  pointer-events: none;
+                }
+              `}</style>
+            </div>
 
-          <Navbar />
+            <Navbar />
 
           <AnimatePresence>
             {isLoaded && (
@@ -211,6 +208,7 @@ const Home = () => {
                         variant="outline"
                         size="lg"
                         className="text-lg px-12 py-6 h-auto font-semibold border-primary text-primary hover:bg-primary/10 relative"
+                        onClick={() => navigate('/learn-more')}
                       >
                         Learn More
                       </Button>
@@ -228,7 +226,7 @@ const Home = () => {
                       {['Discover', 'Stream', 'Connect'].map((feature, index) => (
                         <motion.div 
                           key={feature}
-                          className="p-8 rounded-lg backdrop-blur-lg bg-card/50 hover:bg-card/80 transition-all duration-300 border border-border/50 relative h-full"
+                          className={`p-8 rounded-lg backdrop-blur-lg bg-card/50 hover:bg-card/80 transition-all duration-300 border border-border/50 relative h-full ${feature === 'Discover' ? 'cursor-pointer' : ''}`}
                           variants={{
                             offscreen: { y: 30 },
                             onscreen: { 
@@ -242,6 +240,7 @@ const Home = () => {
                             }
                           }}
                           whileHover={{ y: -5, boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1)' }}
+                          onClick={() => feature === 'Discover' ? navigate('/auth') : null}
                         >
                           <h3 className="text-xl font-bold mb-3">{feature}</h3>
                           <p className="text-muted-foreground">
@@ -249,6 +248,9 @@ const Home = () => {
                             {feature === 'Stream' && 'High-quality audio streaming anywhere'}
                             {feature === 'Connect' && 'Share and connect with other music lovers'}
                           </p>
+                          {feature === 'Discover' && (
+                            <div className="mt-4 text-xs text-primary/80">Click to sign in and discover music</div>
+                          )}
                         </motion.div>
                       ))}
                     </motion.div>
@@ -316,8 +318,7 @@ const Home = () => {
               </>
             )}
           </AnimatePresence>
-              </div>
-            </Scrollbar>
+          </div>
           </motion.div>
         ) : (
           <motion.div

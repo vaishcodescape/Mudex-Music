@@ -3,13 +3,21 @@ import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 
+// Create a clean copy of browser globals to avoid any whitespace issues
+const browserGlobals = {};
+Object.keys(globals.browser).forEach(key => {
+  // Remove any leading or trailing whitespace in keys
+  const cleanKey = key.trim();
+  browserGlobals[cleanKey] = globals.browser[key];
+});
+
 export default [
   { ignores: ['dist'] },
   {
     files: ['**/*.{js,jsx}'],
     languageOptions: {
       ecmaVersion: 2020,
-      globals: globals.browser,
+      globals: browserGlobals,
       parserOptions: {
         ecmaVersion: 'latest',
         ecmaFeatures: { jsx: true },
