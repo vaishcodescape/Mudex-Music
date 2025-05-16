@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="240" height="240" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+  <!-- Outer circle (dark teal) -->
+  <circle cx="120" cy="120" r="90" fill="#1a3040" />
+  
+  <!-- Middle circle (darker teal) -->
+  <circle cx="120" cy="120" r="70" fill="#0a2030" />
+  
+  <!-- Inner circle (blue) -->
+  <circle cx="120" cy="120" r="50" fill="#2196F3" />
+  
+  <!-- Center dot (black) -->
+  <circle cx="120" cy="120" r="10" fill="#000" />
+</svg>
