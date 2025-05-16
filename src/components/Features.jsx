@@ -84,7 +84,8 @@ const Features = () => {
     {
       icon: <FaMusic className="h-6 w-6 text-primary" />,
       title: "Exclusive Content",
-      description: "Access exclusive tracks, albums, and artist interviews not available elsewhere."
+      subheading: "Empowering Independent Artists",
+      description: "Access exclusive tracks, albums, and artist interviews not available elsewhere. Join a platform where emerging talent gets the spotlight it deserves.",
     },
     {
       icon: <MdOfflineShare className="h-6 w-6 text-primary" />,
