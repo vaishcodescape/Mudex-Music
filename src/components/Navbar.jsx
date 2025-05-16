@@ -297,11 +297,12 @@ const Navbar = () => {
   };
 
   // Navigation items data
-  const navItems = [
-    { id: 'home', label: 'Home', href: '/', icon: FaHome },
-    { id: 'features', label: 'Features', href: '/features', icon: FaStar },
-    { id: 'about', label: 'About', href: '/about', icon: FaInfoCircle },
-    { id: 'discover', label: 'Discover', href: '/discover', icon: FaTags },
+  const navLinks = [
+    { name: 'Home', path: '/', icon: <FaHome className="h-4 w-4" /> },
+    { name: 'Features', path: '/features', icon: <FaStar className="h-4 w-4" /> },
+    { name: 'About', path: '/about', icon: <FaInfoCircle className="h-4 w-4" /> },
+    { name: 'Discover', path: '/discover', icon: <FaTags className="h-4 w-4" /> },
+    { name: 'Artists', path: '/artist/1', icon: <FaUser className="h-4 w-4" /> },
   ];
   
   // Get auth state and functions from context

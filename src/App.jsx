@@ -31,6 +31,7 @@ import Features from './components/Features';
 import Discover from './components/Discover';
 import LearnMore from './components/LearnMore';
 import Profile from './components/Profile';
+import ArtistProfile from './components/ArtistProfile';
 
 // UI components
 import HomeButton from './components/HomeButton';
@@ -82,7 +83,7 @@ const pageTransitionVariants = {
  * @returns {number} - The index of the page in the routes array, or -1 if not found
  */
 const getPageIndex = (pathname) => {
-  const routes = ['/', '/features', '/about', '/discover', '/learn-more', '/auth', '/profile'];
+  const routes = ['/', '/features', '/about', '/discover', '/learn-more', '/auth', '/profile', '/artist/:id'];
   return routes.indexOf(pathname);
 };
 
@@ -149,6 +150,7 @@ const AppRoutes = () => {
               <Route path="/discover" element={<Discover />} />
               <Route path="/learn-more" element={<LearnMore />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/artist/:id" element={<ArtistProfile />} />
             </Routes>
           </motion.div>
         </AnimatePresence>
