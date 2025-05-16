@@ -7,7 +7,7 @@
  */
 
 // Import necessary dependencies
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion'; // For animations
 import { Button } from './ui/button'; // UI component
 import { Input } from './ui/input'; // UI component
@@ -28,8 +28,15 @@ const Auth = () => {
   const [isLoading, setIsLoading] = useState(false); // For regular form submission
   const [isGoogleLoading, setIsGoogleLoading] = useState(false); // For Google authentication
   
-  // Toggle between sign-in and sign-up modes
-  const [isSignIn, setIsSignIn] = useState(true);
+  // Toggle between sign-in and sign-up modes - initialize based on URL query param if present
+  const [isSignIn, setIsSignIn] = useState(() => {
+    // Check if there's a mode parameter in the URL
+    const params = new URLSearchParams(location.search);
+    return params.get('mode') !== 'signup';
+  });
+  
+  // State to track component mount status
+  const [isMounted, setIsMounted] = useState(false);
   
   /**
    * Toggle between sign-in and sign-up modes
@@ -72,13 +79,30 @@ const Auth = () => {
       password: '',
       confirmPassword: ''
     });
+    
+    // Check if there's a mode parameter in the URL
+    const params = new URLSearchParams(location.search);
+    const mode = params.get('mode');
+    if (mode === 'signup' && isSignIn) {
+      setIsSignIn(false);
+    } else if (mode === 'signin' && !isSignIn) {
+      setIsSignIn(true);
+    }
   }, [location.key]);
+  
+  // Mark component as mounted after initial render
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   /**
    * Animate heading text color with gradient effect
    * Uses GSAP for smooth color transitions in the heading
+   * Only starts animation after component is mounted
    */
   useEffect(() => {
+    if (!isMounted) return;
+    
     const colors = ['#3b82f6', '#06b6d4', '#6366f1'];
     let currentIndex = 0;
     let animation;
@@ -97,15 +121,19 @@ const Auth = () => {
       });
     };
 
-    animateColor();
+    // Small delay to ensure DOM is ready
+    const timer = setTimeout(() => {
+      animateColor();
+    }, 100);
 
     return () => {
+      clearTimeout(timer);
       if (animation) {
         animation.kill();
       }
       gsap.killTweensOf(headingRef.current);
     };
-  }, []);
+  }, [isMounted]);
 
   /**
    * Handle form input changes
@@ -320,10 +348,16 @@ const Auth = () => {
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
+        transition={{ 
+          type: "spring", 
+          stiffness: 300, 
+          damping: 25,
+          duration: 0.3
+        }}
         className="w-full max-w-md bg-card rounded-2xl shadow-xl overflow-hidden border border-border"
       >
         <div className="px-6 py-8 sm:px-8 sm:py-10 overflow-hidden">
-          <AnimatePresence mode="wait" initial={false}>
+          <AnimatePresence mode="wait" initial={isMounted}>
             <motion.div 
               className="text-center mb-6 sm:mb-8"
               key={isSignIn ? "signin-header" : "signup-header"}
@@ -333,23 +367,23 @@ const Auth = () => {
               exit="exit"
               variants={{
                 enter: (isSigningIn) => ({
-                  x: isSigningIn ? 100 : -100, // Slide in from right or left depending on direction
+                  x: isSigningIn ? 50 : -50, // Reduced slide distance for better performance
                   opacity: 0
                 }),
                 center: {
                   x: 0,
                   opacity: 1,
                   transition: {
-                    x: { type: "spring", stiffness: 300, damping: 30 }, // Springy animation
-                    opacity: { duration: 0.2 } // Fade in quickly
+                    x: { type: "spring", stiffness: 400, damping: 35 }, // Optimized spring animation
+                    opacity: { duration: 0.15 } // Faster fade in
                   }
                 },
                 exit: (isSigningIn) => ({
-                  x: isSigningIn ? -100 : 100, // Slide out to left or right depending on direction
+                  x: isSigningIn ? -50 : 50, // Reduced slide distance for better performance
                   opacity: 0,
                   transition: {
-                    x: { type: "spring", stiffness: 300, damping: 30 },
-                    opacity: { duration: 0.2 }
+                    x: { type: "spring", stiffness: 400, damping: 35 },
+                    opacity: { duration: 0.15 }
                   }
                 })
               }}
@@ -430,7 +464,7 @@ const Auth = () => {
                 />
               </div>
 
-              <AnimatePresence mode="wait" initial={false}>
+              <AnimatePresence mode="wait" initial={isMounted}>
                 <motion.div
                   key={isSignIn ? "signin-password" : "signup-password"}
                   initial="hidden"
@@ -443,8 +477,8 @@ const Auth = () => {
                       height: "auto", 
                       marginBottom: 16,
                       transition: {
-                        height: { type: "spring", stiffness: 300, damping: 30 }, // Springy height animation
-                        opacity: { duration: 0.3 } // Fade in
+                        height: { type: "tween", duration: 0.2 }, // Simpler animation for better performance
+                        opacity: { duration: 0.2 } // Faster fade in
                       }
                     },
                     exit: { 
@@ -452,8 +486,8 @@ const Auth = () => {
                       height: 0, 
                       marginBottom: 0,
                       transition: {
-                        height: { type: "spring", stiffness: 300, damping: 30 },
-                        opacity: { duration: 0.2 } // Fade out
+                        height: { type: "tween", duration: 0.15 }, // Simpler animation for better performance
+                        opacity: { duration: 0.15 } // Faster fade out
                       }
                     }
                   }}
@@ -479,7 +513,7 @@ const Auth = () => {
                 </motion.div>
               </AnimatePresence>
 
-              <AnimatePresence>
+              <AnimatePresence initial={isMounted}>
                 {!isSignIn && (
                   <motion.div
                     key="confirm-password"
@@ -493,8 +527,8 @@ const Auth = () => {
                         height: "auto", 
                         marginBottom: 16,
                         transition: {
-                          height: { type: "spring", stiffness: 300, damping: 30 }, // Springy height animation
-                          opacity: { duration: 0.3 } // Fade in
+                          height: { type: "tween", duration: 0.2 }, // Simpler animation for better performance
+                          opacity: { duration: 0.2 } // Faster fade in
                         }
                       },
                       exit: { 
@@ -502,8 +536,8 @@ const Auth = () => {
                         height: 0, 
                         marginBottom: 0,
                         transition: {
-                          height: { type: "spring", stiffness: 300, damping: 30 },
-                          opacity: { duration: 0.2 } // Fade out
+                          height: { type: "tween", duration: 0.15 }, // Simpler animation for better performance
+                          opacity: { duration: 0.15 } // Faster fade out
                         }
                       }
                     }}
