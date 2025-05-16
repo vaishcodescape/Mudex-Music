@@ -462,15 +462,6 @@ const Auth = () => {
                     <label htmlFor="password" className="block text-sm font-medium text-foreground/80">
                       Password
                     </label>
-                    {isSignIn && (
-                      <button
-                        type="button"
-                        className="text-xs font-medium text-primary hover:text-primary/80 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2 rounded px-1.5 py-0.5"
-                        disabled={isLoading || isGoogleLoading}
-                      >
-                        Forgot password?
-                      </button>
-                    )}
                   </div>
                   <Input
                     id="password"
@@ -537,6 +528,19 @@ const Auth = () => {
                 )}
               </AnimatePresence>
             </div>
+
+            {isSignIn && (
+              <div className="mb-4 text-right">
+                <button
+                  type="button"
+                  onClick={() => navigate('/forgot-password')}
+                  className="text-xs sm:text-sm text-primary hover:underline focus:outline-none"
+                  disabled={isLoading || isGoogleLoading}
+                >
+                  Forgot password?
+                </button>
+              </div>
+            )}
 
             <Button
               type="submit"

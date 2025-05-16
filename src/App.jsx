@@ -32,6 +32,7 @@ import Discover from './components/Discover';
 import LearnMore from './components/LearnMore';
 import Profile from './components/Profile';
 import ArtistProfile from './components/ArtistProfile';
+import ForgotPassword from './components/ForgotPassword';
 
 // UI components
 import HomeButton from './components/HomeButton';
@@ -83,7 +84,7 @@ const pageTransitionVariants = {
  * @returns {number} - The index of the page in the routes array, or -1 if not found
  */
 const getPageIndex = (pathname) => {
-  const routes = ['/', '/features', '/about', '/discover', '/learn-more', '/auth', '/profile', '/artist/:id'];
+  const routes = ['/', '/features', '/about', '/discover', '/learn-more', '/auth', '/forgot-password', '/profile', '/artist/:id'];
   return routes.indexOf(pathname);
 };
 
@@ -101,7 +102,7 @@ const AppRoutes = () => {
   // Determine UI states based on current route
   const showHomeButton = location.pathname !== '/'; // Show home button on all pages except home
   const isHomePage = location.pathname === '/'; // Check if we're on the home page
-  const isAuthPage = location.pathname === '/auth'; // Check if we're on the auth page
+  const isAuthPage = location.pathname === '/auth' || location.pathname === '/forgot-password'; // Check if we're on auth-related pages
   
   // State to track previous path for determining transition direction
   const [previousPath, setPreviousPath] = useState(location.pathname);
@@ -145,6 +146,7 @@ const AppRoutes = () => {
             <Routes location={location}>
               <Route path="/" element={<Home />} />
               <Route path="/auth" element={<Auth />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/about" element={<About />} />
               <Route path="/features" element={<Features />} />
               <Route path="/discover" element={<Discover />} />
