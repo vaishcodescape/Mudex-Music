@@ -1,8 +1,10 @@
 export default function Home() {
   return (
-    <div className="min-h-screen grid grid-rows-[auto_1fr_auto] display-flex flex-col items-center justify-center text-center">
+
+    <div className="flex flex-col items-center justify-center min-h-screen bg-black-100">
       <h1>Mudex Music</h1>
-      <p>Elevate the Underrated</p>
-    </div>
+      <h2>Elevate the Underrated</h2>
+      <p>In Production ...</p>
+      </div>
   );
 }
