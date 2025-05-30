@@ -143,18 +143,32 @@ export default function Home() {
           <p className="text-xl text-sky-200/70 mb-8">
             Join thousands of music lovers who are already using Mudex Music
           </p>
-          <motion.div
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="inline-block"
-          >
-            <Link
-              href="/learn"
-              className="bg-gradient-to-r from-sky-500 to-purple-500 text-white px-8 py-4 rounded-lg text-lg font-medium hover:from-sky-600 hover:to-purple-600 transition-colors"
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="inline-block"
             >
-              Learn More
-            </Link>
-          </motion.div>
+              <Link
+                href="/sign-up"
+                className="bg-gradient-to-r from-sky-500 to-purple-500 text-white px-8 py-4 rounded-lg text-lg font-medium hover:from-sky-600 hover:to-purple-600 transition-colors"
+              >
+                Get Started Now
+              </Link>
+            </motion.div>
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="inline-block"
+            >
+              <Link
+                href="/learn"
+                className="border border-sky-500 text-sky-400 px-8 py-4 rounded-lg text-lg font-medium hover:bg-sky-500/10 transition-colors"
+              >
+                Learn More
+              </Link>
+            </motion.div>
+          </div>
         </motion.section>
       </div>
     </main>

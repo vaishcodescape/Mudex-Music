@@ -1,5 +1,5 @@
 {
-  "name": "music",
+  "name": "mudex-music",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -12,8 +12,10 @@
     "@motionone/dom": "^10.18.0",
     "framer-motion": "^12.15.0",
     "gsap": "^3.13.0",
+    "lucide-react": "^0.511.0",
     "motion": "^12.14.0",
     "next": "15.3.2",
+    "next-auth": "^4.24.11",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

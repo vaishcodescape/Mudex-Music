@@ -1,4 +1,3 @@
-
 import Link from 'next/link';
 import { FooterLink } from '@/types';
 
@@ -13,25 +12,25 @@ const links: FooterLink[] = [
 
 export default function Footer() {
   return (
-    <footer className="bg-black text-white py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+    <footer className="w-full bg-gradient-to-t from-black/80 via-sky-950/60 to-white/10 backdrop-blur-xl border-t border-sky-500/20 rounded-t-2xl shadow-2xl text-white py-12 mt-16">
+      <div className="max-w-3xl mx-auto px-4 sm:px-8 flex flex-col items-center">
+        <div className="w-full flex flex-col items-center gap-8">
           {links.map((section) => (
-            <div key={section.title}>
-              <h3 className="text-sm font-semibold text-sky-400 uppercase tracking-wider mb-4">
+            <div key={section.title} className="w-full flex flex-col items-center">
+              <h3 className="text-base font-semibold text-sky-400 uppercase tracking-wider mb-3 text-center">
                 {section.title}
               </h3>
-              <ul className="space-y-3">
+              <ul className="flex flex-col items-center gap-2">
                 {section.links.map((link) => (
                   <li key={link.name}>
                     <Link
                       href={link.href}
-                      className="flex items-center text-sky-200/70 hover:text-sky-400 transition-colors"
+                      className="flex items-center text-sky-200/80 hover:text-sky-400 transition-colors text-base"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
                       <svg
-                        className="h-5 w-5 mr-2"
+                        className="h-5 w-5 mr-2 text-sky-400"
                         fill="currentColor"
                         viewBox="0 0 24 24"
                         aria-hidden="true"
@@ -50,8 +49,8 @@ export default function Footer() {
             </div>
           ))}
         </div>
-        <div className="mt-12 pt-8 border-t border-sky-500/20">
-          <p className="text-sky-200/50 text-sm text-center">
+        <div className="w-full mt-12 pt-8 border-t border-sky-500/20 flex flex-col items-center">
+          <p className="text-sky-200/60 text-sm text-center">
             © {new Date().getFullYear()} Mudex Music. All rights reserved.
           </p>
         </div>
