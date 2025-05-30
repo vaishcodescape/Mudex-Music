@@ -25,9 +25,9 @@ export default function SearchBar() {
     await new Promise(resolve => setTimeout(resolve, 300));
     
     const mockResults: SearchResult[] = [
-      { id: '1', title: 'Bohemian Rhapsody', type: 'track' },
-      { id: '2', title: 'Queen', type: 'artist' },
-      { id: '3', title: 'Classic Rock Hits', type: 'playlist' },
+      { id: '1', title: 'Bohemian Rhapsody', type: 'track' as const },
+      { id: '2', title: 'Queen', type: 'artist' as const },
+      { id: '3', title: 'Classic Rock Hits', type: 'playlist' as const },
     ].filter(item => 
       item.title.toLowerCase().includes(searchQuery.toLowerCase())
     );
