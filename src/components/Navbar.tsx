@@ -11,6 +11,7 @@ const links = [
   { name: 'Discover', href: '/discover' },
   { name: 'Library', href: '/library' },
   { name: 'Profile', href: '/profile' },
+  { name: 'Community', href: '/community' },
 ];
 
 export default function Navbar() {
