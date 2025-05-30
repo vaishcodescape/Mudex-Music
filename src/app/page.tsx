@@ -35,11 +35,11 @@ const features: Feature[] = [
 ];
 
 const featuresList = [
-  'Access to millions of tracks',
+  'Access to tracks from the rising stars of the music industry',
   'Ad-free experience',
   'Offline listening',
   'High-quality audio streaming',
-  'Cross-platform support',
+  'Aritifical Intelligence powered music discovery',
   'Regular content updates',
 ];
 
