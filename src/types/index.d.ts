@@ -6,6 +6,10 @@ declare global {
   }
 }
 
+export interface RootLayoutProps {
+  children: ReactNode;
+}
+
 export interface Feature {
   title: string;
   description: string;
