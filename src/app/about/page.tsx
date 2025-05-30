@@ -48,7 +48,7 @@ export default function About() {
             About Mudex Music
           </h1>
           <p className="text-xl text-sky-200/70 max-w-2xl mx-auto">
-            We're on a mission to revolutionize the way you discover and experience music
+            We&apos;re on a mission to revolutionize the way you discover and experience music
           </p>
         </motion.section>
 
