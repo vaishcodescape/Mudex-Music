@@ -55,18 +55,19 @@ function SettingsContent() {
 
   const [activeSection, setActiveSection] = useState<'profile' | 'account' | 'notifications' | 'privacy'>('profile');
 
-  const handleProfileUpdate = () => {
-    // Handle profile update
-    console.log('Updating profile:', profileData);
+  const handleUpdateProfile = () => {
+    // In a real app, this would update the backend
+    alert('Profile updated successfully!');
   };
 
   const handlePasswordChange = () => {
-    if (passwordData.newPassword !== passwordData.confirmPassword) {
-      alert('New passwords do not match');
-      return;
-    }
-    // Handle password change
-    console.log('Changing password');
+    // In a real app, this would update the backend
+    alert('Password changed successfully!');
+    setPasswordData({
+      currentPassword: '',
+      newPassword: '',
+      confirmPassword: ''
+    });
   };
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -197,7 +198,7 @@ function SettingsContent() {
                   </div>
 
                   <button
-                    onClick={handleProfileUpdate}
+                    onClick={handleUpdateProfile}
                     className="bg-sky-500 hover:bg-sky-600 px-6 py-3 rounded-lg font-medium transition-colors flex items-center"
                   >
                     <Save className="w-4 h-4 mr-2" />

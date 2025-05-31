@@ -61,11 +61,7 @@ function CreatePlaylistContent() {
   };
 
   const handleCreatePlaylist = () => {
-    // In a real app, this would save to backend
-    console.log('Creating playlist:', {
-      ...playlistData,
-      tracks: selectedTracks
-    });
+    // Here you would typically send the data to your backend
     alert('Playlist created successfully!');
   };
 

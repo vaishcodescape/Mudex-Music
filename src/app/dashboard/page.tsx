@@ -108,9 +108,8 @@ function DashboardContent() {
     }
   };
 
-  const toggleLike = (trackId: number) => {
+  const toggleLike = (trackId: string) => {
     // In a real app, this would update the backend
-    console.log('Toggling like for track:', trackId);
   };
 
   const containerVariants = {
@@ -284,7 +283,7 @@ function DashboardContent() {
                         <div className="flex items-center space-x-2">
                           <span className="text-sm text-sky-200/70">{track.duration}</span>
                           <button
-                            onClick={() => toggleLike(track.id)}
+                            onClick={() => toggleLike(track.id.toString())}
                             className={`p-1 rounded ${
                               track.isLiked ? 'text-red-400' : 'text-sky-200/50 hover:text-sky-400'
                             }`}
@@ -407,7 +406,7 @@ function DashboardContent() {
                           <div className="flex items-center space-x-2">
                             <span className="text-sm text-sky-200/70">{track.duration}</span>
                             <button
-                              onClick={() => toggleLike(track.id)}
+                              onClick={() => toggleLike(track.id.toString())}
                               className="p-1 rounded text-red-400"
                             >
                               <Heart className="w-4 h-4 fill-current" />
@@ -457,7 +456,7 @@ function DashboardContent() {
                         <div className="flex items-center space-x-2">
                           <span className="text-sm text-sky-200/70">{track.duration}</span>
                           <button
-                            onClick={() => toggleLike(track.id)}
+                            onClick={() => toggleLike(track.id.toString())}
                             className={`p-1 rounded ${
                               track.isLiked ? 'text-red-400' : 'text-sky-200/50 hover:text-sky-400'
                             }`}

@@ -16,25 +16,22 @@ export default function Navbar() {
     setIsMobileMenuOpen(false);
   };
 
-  const navigation = [
+  const baseNavigation = [
     { name: 'Home', href: '/' },
     { name: 'Discover', href: '/discover' },
     { name: 'About', href: '/about' },
-    {name:'Community', href:'/community'},
+    { name: 'Community', href: '/community' },
   ];
 
-  const authenticatedNavigation = [
-    { name: 'Home', href: '/' },
-    { name: 'Discover', href: '/discover' },
-    ...(user?.userType === 'listener' ? [{ name: 'Dashboard', href: '/dashboard' }] : []),
-    ...(user?.userType === 'artist' ? [{ name: 'Profile', href: '/profile' }] : []),
+  const currentNavigation = [
+    ...baseNavigation,
+    ...(isAuthenticated && user?.userType === 'listener' ? [{ name: 'Dashboard', href: '/dashboard' }] : []),
+    ...(isAuthenticated && user?.userType === 'artist' ? [{ name: 'Profile', href: '/profile' }] : []),
   ];
-
-  const currentNavigation = isAuthenticated ? authenticatedNavigation : navigation;
 
   return (
     <nav className="fixed top-0 w-full bg-black/90 backdrop-blur-lg border-b border-sky-500/20 z-50 shadow-lg">
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
@@ -45,12 +42,12 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-10">
+          <div className="hidden md:flex items-center space-x-6">
             {currentNavigation.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
-                className="text-sky-200/80 hover:text-sky-400 transition-colors font-semibold text-lg font-sans"
+                className="text-sky-200/80 hover:text-sky-400 transition-colors font-semibold text-base font-sans"
               >
                 {item.name}
               </Link>
@@ -89,7 +86,7 @@ export default function Navbar() {
               <>
                 <Link
                   href="/sign-in"
-                  className="text-sky-200/80 hover:text-sky-400 transition-colors font-semibold text-lg font-sans"
+                  className="text-sky-200/80 hover:text-sky-400 transition-colors font-semibold text-base font-sans"
                 >
                   Sign In
                 </Link>
