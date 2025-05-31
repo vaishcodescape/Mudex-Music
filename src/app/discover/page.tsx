@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { Genre } from '@/types';
+import SearchBar from '@/components/SearchBar';
 
 const genres: Genre[] = [
   {
@@ -53,6 +54,11 @@ export default function Discover() {
             Explore different genres and find your next favorite track
           </p>
         </motion.section>
+
+        {/* Search Bar */}
+        <div className="max-w-2xl mx-auto mb-16">
+          <SearchBar />
+        </div>
 
         {/* Genres Grid */}
         <motion.section

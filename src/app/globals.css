@@ -1,10 +1,12 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --font-sans: system-ui, -apple-system, sans-serif;
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --font-sans: 'Poppins', system-ui, -apple-system, sans-serif;
   --font-mono: ui-monospace, monospace;
+  --card-bg: rgba(30, 41, 59, 0.7);
+  --card-border: rgba(56, 189, 248, 0.15);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -18,4 +20,25 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+  background-image: radial-gradient(circle at 20% 20%, rgba(56,189,248,0.08) 0, transparent 60%),
+    radial-gradient(circle at 80% 80%, rgba(168,85,247,0.08) 0, transparent 60%);
+  min-height: 100vh;
+}
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 1.25rem;
+  box-shadow: 0 4px 32px 0 rgba(0,0,0,0.12);
+  backdrop-filter: blur(8px);
+}
+
+@keyframes color-change {
+  0%, 100% { color: #7dd3fc; }   /* light blue */
+  33%      { color: #a78bfa; }   /* purple */
+  66%      { color: #f472b6; }   /* pink */
+}
+
+.color-change {
+  animation: color-change 4s ease-in-out infinite;
 }

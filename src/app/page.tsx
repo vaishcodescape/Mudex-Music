@@ -45,28 +45,29 @@ const featuresList = [
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-gradient-to-b from-black via-sky-950 to-black text-white pt-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <main className="min-h-screen bg-gradient-to-b from-black via-sky-950 to-black text-white pt-28">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 py-24">
         {/* Hero Section */}
         <motion.section
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-20"
+          transition={{ duration: 0.7, ease: 'easeOut' }}
+          className="text-center mb-28"
         >
-          <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-sky-400 via-purple-500 to-sky-400 bg-clip-text text-transparent">
+          <h1 className="text-6xl md:text-7xl font-extrabold mb-8 bg-gradient-to-r from-sky-400 via-purple-500 to-sky-400 bg-clip-text text-transparent tracking-tight font-sans">
             Welcome to Mudex Music
           </h1>
-          <p className="text-xl text-sky-200/70 max-w-2xl mx-auto mb-8">
-          Elevate the underrated
+          <p className="text-2xl md:text-3xl text-sky-200/80 max-w-3xl mx-auto mb-10 font-light">
+            Elevate the underrated
           </p>
           <motion.div
-            whileHover={{ scale: 1.02 }}
+            whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.98 }}
-            className="inline-block"
+            className="inline-block shadow-xl"
           >
             <Link
               href="/discover"
-              className="bg-gradient-to-r from-sky-500 to-purple-500 text-white px-8 py-4 rounded-lg text-lg font-medium hover:from-sky-600 hover:to-purple-600 transition-colors"
+              className="bg-gradient-to-r from-sky-500 to-purple-500 text-white px-10 py-5 rounded-xl text-xl font-semibold shadow-lg hover:from-sky-600 hover:to-purple-600 transition-all duration-200"
             >
               Start Discovering
             </Link>
@@ -75,27 +76,28 @@ export default function Home() {
 
         {/* Features Section */}
         <motion.section
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mb-20"
+          transition={{ duration: 0.7, ease: 'easeOut' }}
+          className="mb-28"
         >
-          <h2 className="text-3xl font-bold mb-12 text-center bg-gradient-to-r from-sky-400 via-purple-500 to-sky-400 bg-clip-text text-transparent">
+          <h2 className="text-4xl md:text-5xl font-bold mb-14 text-center bg-gradient-to-r from-sky-400 via-purple-500 to-sky-400 bg-clip-text text-transparent tracking-tight font-sans">
             Key Features
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
             {features.map((feature, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-sky-500/20 hover:border-sky-500/40 transition-colors"
+                transition={{ delay: index * 0.1, duration: 0.5 }}
+                className="card p-8 flex flex-col items-center text-center hover:border-sky-400 transition-all duration-200"
               >
-                <div className="text-sky-400 mb-4">{feature.icon}</div>
-                <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-                <p className="text-sky-200/70">{feature.description}</p>
+                <div className="text-sky-400 mb-5">{feature.icon}</div>
+                <h3 className="text-2xl font-semibold mb-2 font-sans">{feature.title}</h3>
+                <p className="text-sky-200/80 text-lg font-light">{feature.description}</p>
               </motion.div>
             ))}
           </div>
@@ -103,28 +105,29 @@ export default function Home() {
 
         {/* Features List */}
         <motion.section
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mb-20"
+          transition={{ duration: 0.7, ease: 'easeOut' }}
+          className="mb-28"
         >
-          <h2 className="text-3xl font-bold mb-12 text-center bg-gradient-to-r from-sky-400 via-purple-500 to-sky-400 bg-clip-text text-transparent">
+          <h2 className="text-4xl md:text-5xl font-bold mb-14 text-center bg-gradient-to-r from-sky-400 via-purple-500 to-sky-400 bg-clip-text text-transparent tracking-tight font-sans">
             What We Offer
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {featuresList.map((feature, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, x: -20 }}
+                initial={{ opacity: 0, x: -30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="flex items-center space-x-3 bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-sky-500/20"
+                transition={{ delay: index * 0.08, duration: 0.4 }}
+                className="card flex items-center space-x-4 p-5"
               >
-                <svg className="w-5 h-5 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-6 h-6 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
-                <span>{feature}</span>
+                <span className="text-lg font-light">{feature}</span>
               </motion.div>
             ))}
           </div>
@@ -132,38 +135,39 @@ export default function Home() {
 
         {/* CTA Section */}
         <motion.section
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
+          transition={{ duration: 0.7, ease: 'easeOut' }}
           className="text-center"
         >
-          <h2 className="text-3xl font-bold mb-6 bg-gradient-to-r from-sky-400 via-purple-500 to-sky-400 bg-clip-text text-transparent">
+          <h2 className="text-4xl md:text-5xl font-bold mb-8 bg-gradient-to-r from-sky-400 via-purple-500 to-sky-400 bg-clip-text text-transparent tracking-tight font-sans">
             Ready to Get Started?
           </h2>
-          <p className="text-xl text-sky-200/70 mb-8">
+          <p className="text-2xl text-sky-200/80 mb-10 font-light">
             Join thousands of music lovers who are already using Mudex Music
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
             <motion.div
-              whileHover={{ scale: 1.02 }}
+              whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.98 }}
-              className="inline-block"
+              className="inline-block shadow-xl"
             >
               <Link
                 href="/sign-up"
-                className="bg-gradient-to-r from-sky-500 to-purple-500 text-white px-8 py-4 rounded-lg text-lg font-medium hover:from-sky-600 hover:to-purple-600 transition-colors"
+                className="bg-gradient-to-r from-sky-500 to-purple-500 text-white px-10 py-5 rounded-xl text-xl font-semibold shadow-lg hover:from-sky-600 hover:to-purple-600 transition-all duration-200"
               >
                 Get Started Now
               </Link>
             </motion.div>
             <motion.div
-              whileHover={{ scale: 1.02 }}
+              whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.98 }}
               className="inline-block"
             >
               <Link
                 href="/learn"
-                className="border border-sky-500 text-sky-400 px-8 py-4 rounded-lg text-lg font-medium hover:bg-sky-500/10 transition-colors"
+                className="border-2 border-sky-500 text-sky-400 px-10 py-5 rounded-xl text-xl font-semibold hover:bg-sky-500/10 transition-all duration-200"
               >
                 Learn More
               </Link>

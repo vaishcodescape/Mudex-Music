@@ -80,7 +80,7 @@ export default function SearchBar() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => setIsOpen(true)}
-          placeholder="Search for songs, artists, or playlists..."
+          placeholder="Search"
           className="w-full px-4 py-2 bg-white/5 border border-sky-500/20 rounded-lg 
                    focus:outline-none focus:border-sky-500/40 focus:ring-1 focus:ring-sky-500/20
                    text-white placeholder-sky-200/50"

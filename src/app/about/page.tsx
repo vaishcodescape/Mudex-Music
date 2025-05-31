@@ -37,17 +37,17 @@ const features: Feature[] = [
 export default function About() {
   return (
     <main className="min-h-screen bg-gradient-to-b from-black via-sky-950 to-black text-white pt-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-20">
         {/* Mission Statement */}
         <motion.section
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-20"
         >
-          <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-sky-400 via-purple-500 to-sky-400 bg-clip-text text-transparent">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-sky-400 via-purple-500 to-sky-400 bg-clip-text text-transparent">
             About Mudex Music
           </h1>
-          <p className="text-xl text-sky-200/70 max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg md:text-xl text-sky-200/70 max-w-2xl mx-auto">
             We&apos;re on a mission to revolutionize the way you discover and experience music
           </p>
         </motion.section>
@@ -59,10 +59,15 @@ export default function About() {
           viewport={{ once: true }}
           className="mb-20"
         >
-          <h2 className="text-3xl font-bold mb-12 text-center bg-gradient-to-r from-sky-400 via-purple-500 to-sky-400 bg-clip-text text-transparent">
+          <div>
+          <h2 className="text-2xl sm:text-3xl font-bold mb-8 sm:mb-12 text-center bg-gradient-to-r from-sky-400 via-purple-500 to-sky-400 bg-clip-text text-transparent">
             What We Do
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        
+          <h3 className="color-change text-3xl grid place-items-center mb-8">We Elevate the Underrated</h3>
+
+          </div> 
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {features.map((feature, index) => (
               <motion.div
                 key={index}
@@ -70,11 +75,11 @@ export default function About() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-sky-500/20 hover:border-sky-500/40 transition-colors"
+                className="bg-white/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-sky-500/20 hover:border-sky-500/40 transition-colors"
               >
                 <div className="text-sky-400 mb-4">{feature.icon}</div>
-                <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-                <p className="text-sky-200/70">{feature.description}</p>
+                <h3 className="text-lg sm:text-xl font-semibold mb-2">{feature.title}</h3>
+                <p className="text-sky-200/70 text-sm sm:text-base">{feature.description}</p>
               </motion.div>
             ))}
           </div>
@@ -87,18 +92,18 @@ export default function About() {
           viewport={{ once: true }}
           className="text-center"
         >
-          <h2 className="text-3xl font-bold mb-6 bg-gradient-to-r from-sky-400 via-purple-500 to-sky-400 bg-clip-text text-transparent">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-6 bg-gradient-to-r from-sky-400 via-purple-500 to-sky-400 bg-clip-text text-transparent">
             Join Our Community
           </h2>
-          <p className="text-xl text-sky-200/70 mb-8 max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg md:text-xl text-sky-200/70 mb-8 max-w-2xl mx-auto">
             Be part of a vibrant community of music lovers and creators
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center w-full">
             <Link href="/discover">
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="bg-sky-500 hover:bg-sky-600 text-white px-8 py-3 rounded-lg text-lg font-medium transition-colors"
+                className="bg-sky-500 hover:bg-sky-600 text-white px-6 py-3 rounded-lg text-base sm:text-lg font-medium transition-colors w-full sm:w-auto"
               >
                 Start Discovering
               </motion.button>
@@ -107,7 +112,7 @@ export default function About() {
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="bg-transparent hover:bg-white/10 text-white border border-white/20 px-8 py-3 rounded-lg text-lg font-medium transition-colors"
+                className="bg-transparent hover:bg-white/10 text-white border border-white/20 px-6 py-3 rounded-lg text-base sm:text-lg font-medium transition-colors w-full sm:w-auto"
               >
                 Learn More
               </motion.button>

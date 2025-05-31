@@ -12,20 +12,20 @@ const links: FooterLink[] = [
 
 export default function Footer() {
   return (
-    <footer className="w-full bg-gradient-to-t from-black/80 via-sky-950/60 to-white/10 backdrop-blur-xl border-t border-sky-500/20 rounded-t-2xl shadow-2xl text-white py-12 mt-16">
+    <footer className="w-full bg-gradient-to-t from-black/90 via-sky-950/70 to-white/10 backdrop-blur-2xl border-t border-sky-500/20 rounded-t-3xl shadow-2xl text-white py-10 mt-24 font-sans">
       <div className="max-w-3xl mx-auto px-4 sm:px-8 flex flex-col items-center">
         <div className="w-full flex flex-col items-center gap-8">
           {links.map((section) => (
             <div key={section.title} className="w-full flex flex-col items-center">
-              <h3 className="text-base font-semibold text-sky-400 uppercase tracking-wider mb-3 text-center">
+              <h3 className="text-base font-semibold text-sky-400 uppercase tracking-wider mb-2 text-center font-sans">
                 {section.title}
               </h3>
-              <ul className="flex flex-col items-center gap-2">
+              <ul className="flex flex-col items-center gap-2 mt-1">
                 {section.links.map((link) => (
                   <li key={link.name}>
                     <Link
                       href={link.href}
-                      className="flex items-center text-sky-200/80 hover:text-sky-400 transition-colors text-base"
+                      className="flex items-center text-sky-200/90 hover:text-sky-400 transition-colors text-base font-sans"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -49,8 +49,8 @@ export default function Footer() {
             </div>
           ))}
         </div>
-        <div className="w-full mt-12 pt-8 border-t border-sky-500/20 flex flex-col items-center">
-          <p className="text-sky-200/60 text-sm text-center">
+        <div className="w-full mt-10 pt-6 border-t border-sky-500/20 flex flex-col items-center">
+          <p className="text-sky-200/60 text-sm text-center font-sans">
             © {new Date().getFullYear()} Mudex Music. All rights reserved.
           </p>
         </div>

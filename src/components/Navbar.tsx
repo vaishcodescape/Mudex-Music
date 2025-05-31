@@ -20,6 +20,7 @@ export default function Navbar() {
     { name: 'Home', href: '/' },
     { name: 'Discover', href: '/discover' },
     { name: 'About', href: '/about' },
+    {name:'Community', href:'/community'},
   ];
 
   const authenticatedNavigation = [
@@ -32,24 +33,24 @@ export default function Navbar() {
   const currentNavigation = isAuthenticated ? authenticatedNavigation : navigation;
 
   return (
-    <nav className="fixed top-0 w-full bg-black/80 backdrop-blur-md border-b border-sky-500/20 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+    <nav className="fixed top-0 w-full bg-black/90 backdrop-blur-lg border-b border-sky-500/20 z-50 shadow-lg">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12">
+        <div className="flex justify-between items-center h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
             <RecordLogo size={32} />
-            <span className="text-xl font-bold bg-gradient-to-r from-sky-400 via-purple-500 to-sky-400 bg-clip-text text-transparent">
+            <span className="text-2xl font-extrabold bg-gradient-to-r from-sky-400 via-purple-500 to-sky-400 bg-clip-text text-transparent font-sans tracking-tight">
               Mudex Music
             </span>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-10">
             {currentNavigation.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
-                className="text-sky-200/70 hover:text-sky-400 transition-colors font-medium"
+                className="text-sky-200/80 hover:text-sky-400 transition-colors font-semibold text-lg font-sans"
               >
                 {item.name}
               </Link>
@@ -57,10 +58,10 @@ export default function Navbar() {
           </div>
 
           {/* Desktop Auth Actions */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden md:flex items-center space-x-6">
             {isAuthenticated ? (
               <div className="flex items-center space-x-4">
-                <div className="flex items-center space-x-2 text-sky-200/70">
+                <div className="flex items-center space-x-2 text-sky-200/80">
                   <User className="w-4 h-4" />
                   <span className="text-sm">{user?.name}</span>
                 </div>
@@ -68,7 +69,7 @@ export default function Navbar() {
                 {user?.userType === 'listener' && (
                   <Link
                     href="/dashboard/settings"
-                    className="p-2 text-sky-200/70 hover:text-sky-400 transition-colors"
+                    className="p-2 text-sky-200/80 hover:text-sky-400 transition-colors rounded-lg hover:bg-sky-500/10"
                     title="Settings"
                   >
                     <Settings className="w-4 h-4" />
@@ -77,7 +78,7 @@ export default function Navbar() {
 
                 <button
                   onClick={handleSignOut}
-                  className="flex items-center space-x-2 px-4 py-2 bg-red-500/20 border border-red-500/30 rounded-lg text-red-400 hover:bg-red-500/30 transition-colors"
+                  className="flex items-center space-x-2 px-5 py-2 bg-red-500/20 border border-red-500/30 rounded-xl text-red-400 hover:bg-red-500/30 transition-colors font-semibold shadow-sm"
                   title="Sign Out"
                 >
                   <LogOut className="w-4 h-4" />
@@ -88,13 +89,13 @@ export default function Navbar() {
               <>
                 <Link
                   href="/sign-in"
-                  className="text-sky-200/70 hover:text-sky-400 transition-colors font-medium"
+                  className="text-sky-200/80 hover:text-sky-400 transition-colors font-semibold text-lg font-sans"
                 >
                   Sign In
                 </Link>
                 <Link
                   href="/sign-up"
-                  className="bg-sky-500 hover:bg-sky-600 px-4 py-2 rounded-lg text-white font-medium transition-colors"
+                  className="bg-sky-500 hover:bg-sky-600 px-5 py-2 rounded-xl text-white font-semibold transition-colors shadow-md"
                 >
                   Get Started
                 </Link>
@@ -106,7 +107,7 @@ export default function Navbar() {
           <div className="md:hidden">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="text-sky-200/70 hover:text-sky-400 transition-colors p-2"
+              className="text-sky-200/80 hover:text-sky-400 transition-colors p-3 rounded-lg hover:bg-sky-500/10"
             >
               {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -121,14 +122,14 @@ export default function Navbar() {
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.2 }}
-              className="md:hidden border-t border-sky-500/20"
+              className="md:hidden border-t border-sky-500/20 shadow-lg bg-black/95 backdrop-blur-xl rounded-b-2xl"
             >
-              <div className="px-2 pt-2 pb-3 space-y-1">
+              <div className="px-4 py-3 space-y-1">
                 {currentNavigation.map((item) => (
                   <Link
                     key={item.name}
                     href={item.href}
-                    className="block px-3 py-2 text-sky-200/70 hover:text-sky-400 transition-colors font-medium"
+                    className="block px-4 py-3 text-sky-200/80 hover:text-sky-400 transition-colors font-semibold text-lg font-sans"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     {item.name}
@@ -136,11 +137,11 @@ export default function Navbar() {
                 ))}
                 
                 {isAuthenticated ? (
-                  <div className="border-t border-sky-500/20 pt-3 mt-3">
-                    <div className="flex items-center space-x-2 px-3 py-2 text-sky-200/70">
+                  <div className="border-t border-sky-500/20 pt-4 mt-4">
+                    <div className="flex items-center space-x-2 px-4 py-3 text-sky-200/80">
                       <User className="w-4 h-4" />
                       <span className="text-sm">{user?.name}</span>
-                      <span className="text-xs bg-sky-500/20 px-2 py-1 rounded capitalize">
+                      <span className="text-xs bg-sky-500/20 px-3 py-1 rounded-xl capitalize font-semibold">
                         {user?.userType}
                       </span>
                     </div>
@@ -148,7 +149,7 @@ export default function Navbar() {
                     {user?.userType === 'listener' && (
                       <Link
                         href="/dashboard/settings"
-                        className="flex items-center space-x-2 px-3 py-2 text-sky-200/70 hover:text-sky-400 transition-colors"
+                        className="flex items-center space-x-2 px-4 py-3 text-sky-200/80 hover:text-sky-400 transition-colors font-semibold text-lg font-sans"
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
                         <Settings className="w-4 h-4" />
@@ -158,24 +159,24 @@ export default function Navbar() {
 
                     <button
                       onClick={handleSignOut}
-                      className="flex items-center space-x-2 px-3 py-2 w-full text-left text-red-400 hover:bg-red-500/10 transition-colors"
+                      className="flex items-center space-x-2 px-4 py-3 w-full text-left text-red-400 hover:bg-red-500/10 transition-colors rounded-xl font-semibold"
                     >
                       <LogOut className="w-4 h-4" />
                       <span>Sign Out</span>
                     </button>
                   </div>
                 ) : (
-                  <div className="border-t border-sky-500/20 pt-3 mt-3 space-y-1">
+                  <div className="border-t border-sky-500/20 pt-4 mt-4 space-y-2">
                     <Link
                       href="/sign-in"
-                      className="block px-3 py-2 text-sky-200/70 hover:text-sky-400 transition-colors font-medium"
+                      className="block px-4 py-3 text-sky-200/80 hover:text-sky-400 transition-colors font-semibold text-lg font-sans"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       Sign In
                     </Link>
                     <Link
                       href="/sign-up"
-                      className="block px-3 py-2 bg-sky-500 hover:bg-sky-600 text-white font-medium transition-colors rounded-lg mx-3"
+                      className="block px-4 py-3 bg-sky-500 hover:bg-sky-600 text-white font-semibold transition-colors rounded-xl mx-3 shadow-md"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       Get Started
