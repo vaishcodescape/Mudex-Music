@@ -152,9 +152,9 @@ export default function About() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/pages/discover">
-                <button className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25">
-                  Start Discovering
-                </button>
+              <button className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25">
+                Start Discovering
+              </button>
               </Link>
               <button 
                 onClick={() => alert('Music submission feature coming soon!')}
