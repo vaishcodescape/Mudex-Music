@@ -11,15 +11,24 @@ export default function Footer() {
           </div>
           <div className="flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-10 animate-in fade-in duration-1000 delay-700">
             <div className="flex space-x-8">
-              <a href="#" className="text-gray-400 hover:text-blue-400 transition-all duration-300 text-sm font-medium hover:scale-110 hover:-translate-y-1">
+              <button 
+                onClick={() => alert('Privacy policy coming soon!')}
+                className="text-gray-400 hover:text-blue-400 transition-all duration-300 text-sm font-medium hover:scale-110 hover:-translate-y-1"
+              >
                 Privacy
-              </a>
-              <a href="#" className="text-gray-400 hover:text-blue-400 transition-all duration-300 text-sm font-medium hover:scale-110 hover:-translate-y-1">
+              </button>
+              <button 
+                onClick={() => alert('Terms of service coming soon!')}
+                className="text-gray-400 hover:text-blue-400 transition-all duration-300 text-sm font-medium hover:scale-110 hover:-translate-y-1"
+              >
                 Terms
-              </a>
-              <a href="#" className="text-gray-400 hover:text-blue-400 transition-all duration-300 text-sm font-medium hover:scale-110 hover:-translate-y-1">
+              </button>
+              <button 
+                onClick={() => alert('Contact form coming soon!')}
+                className="text-gray-400 hover:text-blue-400 transition-all duration-300 text-sm font-medium hover:scale-110 hover:-translate-y-1"
+              >
                 Contact
-              </a>
+              </button>
             </div>
             <div className="flex space-x-4">
               <a 
