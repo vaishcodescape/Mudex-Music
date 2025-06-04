@@ -1,9 +1,13 @@
+import LoadingAnimation from './LoadingAnimation';
+
 interface ButtonProps {
   children: React.ReactNode;
   variant?: 'primary' | 'secondary' | 'outline';
   size?: 'sm' | 'md' | 'lg';
   className?: string;
   onClick?: () => void;
+  loading?: boolean;
+  disabled?: boolean;
 }
 
 export default function Button({ 
@@ -11,7 +15,9 @@ export default function Button({
   variant = 'primary', 
   size = 'md', 
   className = '', 
-  onClick 
+  onClick,
+  loading = false,
+  disabled = false
 }: ButtonProps) {
   const baseClasses = 'font-semibold rounded-lg transition-all duration-300 hover:transform hover:scale-105 hover:-translate-y-1 active:scale-95 active:translate-y-0 group relative overflow-hidden animate-shimmer hover-glow';
   
@@ -27,12 +33,26 @@ export default function Button({
     lg: 'px-8 py-4 text-lg'
   };
 
+  const loadingSizeMap = {
+    sm: 'sm' as const,
+    md: 'sm' as const,
+    lg: 'md' as const
+  };
+
+  const isDisabled = disabled || loading;
+
   return (
     <button
-      className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
-      onClick={onClick}
+      className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className} ${
+        isDisabled ? 'opacity-50 cursor-not-allowed hover:transform-none hover:translate-y-0' : ''
+      }`}
+      onClick={!isDisabled ? onClick : undefined}
+      disabled={isDisabled}
     >
-      <span className="relative z-10 transition-all duration-300 group-hover:animate-pulse">
+      <span className={`relative z-10 transition-all duration-300 group-hover:animate-pulse flex items-center justify-center gap-2 ${
+        loading ? 'opacity-70' : ''
+      }`}>
+        {loading && <LoadingAnimation type="spinner" size={loadingSizeMap[size]} />}
         {children}
       </span>
       

@@ -14,6 +14,7 @@ export default function HeroSection() {
             Discover emerging artists, hidden gems, and the next big sounds before they hit the mainstream. 
             Join a community that celebrates authentic music.
           </p>
+          
           <div className="flex flex-col sm:flex-row gap-4 justify-center animate-in slide-in-from-bottom duration-1000 delay-700">
             <Button size="lg">
               Start Listening

@@ -151,6 +151,73 @@ body {
   }
 }
 
+/* Fading Loading Animations */
+@keyframes fade-in-out {
+  0%, 100% { 
+    opacity: 0.3;
+    transform: rotate(0deg);
+  }
+  50% { 
+    opacity: 1;
+    transform: rotate(180deg);
+  }
+}
+
+@keyframes fade-bounce {
+  0%, 100% { 
+    opacity: 0.3;
+    transform: translateY(0px) scale(0.8);
+  }
+  50% { 
+    opacity: 1;
+    transform: translateY(-10px) scale(1.2);
+  }
+}
+
+@keyframes fade-stretch {
+  0%, 100% { 
+    opacity: 0.4;
+    transform: scaleY(0.3);
+  }
+  50% { 
+    opacity: 1;
+    transform: scaleY(1.5);
+  }
+}
+
+@keyframes fade-pulse {
+  0%, 100% { 
+    opacity: 0.2;
+    transform: scale(0.8);
+  }
+  50% { 
+    opacity: 1;
+    transform: scale(1.4);
+  }
+}
+
+@keyframes page-fade-in {
+  from { 
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes skeleton-shimmer {
+  0% { 
+    background-position: -200px 0;
+    opacity: 0.3;
+  }
+  100% { 
+    background-position: calc(200px + 100%) 0;
+    opacity: 0.8;
+  }
+}
+
 /* Custom animation classes */
 .animate-float {
   animation: float 6s ease-in-out infinite;
@@ -214,6 +281,34 @@ body {
 
 .animate-shadow-alternate {
   animation: shadow-alternate 2.5s ease-in-out infinite;
+}
+
+/* Fading Loading Animation Classes */
+.animate-fade-in-out {
+  animation: fade-in-out 2s ease-in-out infinite;
+}
+
+.animate-fade-bounce {
+  animation: fade-bounce 1.4s ease-in-out infinite;
+}
+
+.animate-fade-stretch {
+  animation: fade-stretch 1.2s ease-in-out infinite;
+  transform-origin: bottom;
+}
+
+.animate-fade-pulse {
+  animation: fade-pulse 2s ease-in-out infinite;
+}
+
+.animate-page-fade-in {
+  animation: page-fade-in 0.8s ease-out forwards;
+}
+
+.animate-skeleton-shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200px 100%;
+  animation: skeleton-shimmer 1.5s infinite linear;
 }
 
 /* Background effects */
