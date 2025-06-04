@@ -129,7 +129,7 @@ export default function About() {
                 struggling to find their audience while listeners were hungry for fresh, authentic sounds.
               </p>
               <p className="text-gray-300 text-lg mb-6 leading-relaxed">
-                Founded by music enthusiasts and technology innovators, we set out to create a platform 
+                Founded by a group of technology innovators and people who love building startups, we set out to create a platform 
                 that would bridge this gap. Using cutting-edge recommendation algorithms and human curation, 
                 we&apos;ve built a space where musical discovery thrives.
               </p>
