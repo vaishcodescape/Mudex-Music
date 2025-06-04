@@ -13,12 +13,12 @@ export default function Button({
   className = '', 
   onClick 
 }: ButtonProps) {
-  const baseClasses = 'font-semibold rounded-lg transition-all duration-300 hover:transform hover:scale-105';
+  const baseClasses = 'font-semibold rounded-lg transition-all duration-300 hover:transform hover:scale-105 hover:-translate-y-1 active:scale-95 active:translate-y-0 group relative overflow-hidden animate-shimmer hover-glow';
   
   const variantClasses = {
-    primary: 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-blue-500/25',
-    secondary: 'bg-slate-800 hover:bg-slate-700 text-white border border-slate-600',
-    outline: 'border-2 border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-black'
+    primary: 'bg-blue-600 hover:bg-black text-white shadow-lg hover:shadow-black/50 hover:shadow-2xl',
+    secondary: 'bg-slate-800 hover:bg-slate-700 text-white border border-slate-600 hover:border-slate-500 interactive-border',
+    outline: 'bg-black hover:bg-blue-600 text-white hover:text-white border-2 border-black hover:border-blue-600 hover:shadow-lg hover:shadow-blue-400/30'
   };
   
   const sizeClasses = {
@@ -32,7 +32,25 @@ export default function Button({
       className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
       onClick={onClick}
     >
-      {children}
+      <span className="relative z-10 transition-all duration-300 group-hover:animate-pulse">
+        {children}
+      </span>
+      
+      {/* Enhanced gradient overlay for primary buttons */}
+      {variant === 'primary' && (
+        <>
+          <div className="absolute inset-0 bg-gradient-to-r from-gray-800 to-black opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+        </>
+      )}
+      
+      {/* Glow effect for outline buttons */}
+      {variant === 'outline' && (
+        <div className="absolute inset-0 bg-blue-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"></div>
+      )}
+      
+      {/* Shimmer effect for all buttons */}
+      <div className="absolute inset-0 -top-2 -bottom-2 bg-gradient-to-r from-transparent via-white/10 to-transparent rotate-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
     </button>
   );
 } 
