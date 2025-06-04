@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Header from './components/Header';
 import HeroSection from './components/HeroSection';
 import Footer from './components/Footer';
@@ -8,6 +8,17 @@ import PageLoader from './components/PageLoader';
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Check if this is the first visit
+    const hasVisited = localStorage.getItem('hasVisited');
+    if (hasVisited) {
+      setIsLoading(false);
+    } else {
+      // Set the flag for future visits
+      localStorage.setItem('hasVisited', 'true');
+    }
+  }, []);
 
   const handleLoadComplete = () => {
     setIsLoading(false);
