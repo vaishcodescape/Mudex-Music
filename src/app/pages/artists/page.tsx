@@ -28,7 +28,7 @@ export default function Artists() {
               Featured Artists
             </h1>
             <p className="text-xl md:text-2xl text-gray-300 mb-8 animate-in fade-in duration-1000 delay-300">
-              Spotlight on Tomorrow's Music Icons
+              Spotlight on Tomorrow&apos;s Music Icons
             </p>
             <div className="w-24 h-1 bg-gradient-to-r from-blue-400 to-blue-600 mx-auto animate-in fade-in duration-1000 delay-500"></div>
           </div>
@@ -51,7 +51,7 @@ export default function Artists() {
                   <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">Luna Waves</h2>
                   <p className="text-gray-300 text-lg mb-6 leading-relaxed">
                     An emerging electronic artist from Portland, blending ambient soundscapes with 
-                    ethereal vocals. Luna's unique approach to sound design has garnered attention 
+                    ethereal vocals. Luna&apos;s unique approach to sound design has garnered attention 
                     from music producers worldwide.
                   </p>
                   <div className="flex flex-wrap gap-3 mb-6">

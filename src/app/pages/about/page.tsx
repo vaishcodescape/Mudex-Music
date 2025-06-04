@@ -46,8 +46,8 @@ export default function About() {
                   with listeners who crave authentic, fresh sounds.
                 </p>
                 <p className="text-gray-300 text-lg leading-relaxed">
-                  We're not just another streaming service—we're a movement to democratize music discovery 
-                  and ensure that great music finds its audience, regardless of an artist's current following.
+                  We&apos;re not just another streaming service—we&apos;re a movement to democratize music discovery 
+                  and ensure that great music finds its audience, regardless of an artist&apos;s current following.
                 </p>
               </div>
               <div className="animate-in slide-in-from-right duration-1000 delay-300">
@@ -109,7 +109,7 @@ export default function About() {
                 <h3 className="text-xl font-semibold mb-4 text-white">Community Driven</h3>
                 <p className="text-gray-300">
                   We foster a community where music lovers and artists connect, 
-                  share, and support each other's musical journeys.
+                  share, and support each other&apos;s musical journeys.
                 </p>
               </div>
             </div>
@@ -131,7 +131,7 @@ export default function About() {
               <p className="text-gray-300 text-lg mb-6 leading-relaxed">
                 Founded by music enthusiasts and technology innovators, we set out to create a platform 
                 that would bridge this gap. Using cutting-edge recommendation algorithms and human curation, 
-                we've built a space where musical discovery thrives.
+                we&apos;ve built a space where musical discovery thrives.
               </p>
               <p className="text-gray-300 text-lg leading-relaxed">
                 Today, Mudex Music continues to grow as a community of artists and listeners who believe 

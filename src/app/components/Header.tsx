@@ -10,7 +10,7 @@ export default function Header() {
           {/* Logo - Left */}
           <div className="flex-shrink-0 animate-in fade-in duration-1000 delay-300">
             <Link href="/">
-              <AnimatedLogo />
+            <AnimatedLogo />
             </Link>
           </div>
           

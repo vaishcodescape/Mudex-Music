@@ -18,14 +18,14 @@ export default function HeroSection() {
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center animate-in slide-in-from-bottom duration-1000 delay-700">
             <Link href="/pages/discover">
-              <Button size="lg">
-                Start Listening
-              </Button>
+            <Button size="lg">
+              Start Listening
+            </Button>
             </Link>
             <Link href="/pages/artists">
-              <Button variant="outline" size="lg">
-                Browse Artists
-              </Button>
+            <Button variant="outline" size="lg">
+              Browse Artists
+            </Button>
             </Link>
           </div>
         </div>
