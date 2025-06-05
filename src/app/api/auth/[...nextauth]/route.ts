@@ -64,6 +64,14 @@ const handler = NextAuth({
       }
       return token;
     },
+    async redirect({ url, baseUrl }) {
+      // After sign in, redirect to profile page
+      if (url.startsWith(baseUrl)) {
+        return `${baseUrl}/profile`;
+      }
+      // Default to base URL if the URL is not relative to the base URL
+      return baseUrl;
+    },
   },
   session: {
     strategy: "jwt",
