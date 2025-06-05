@@ -10,22 +10,8 @@ interface PageLoaderProps {
 
 export default function PageLoader({ onLoadComplete }: PageLoaderProps) {
   const [isVisible, setIsVisible] = useState(true);
-  const [loadingPhase, setLoadingPhase] = useState(0);
 
   useEffect(() => {
-    // Simulate loading phases
-    const phases = [
-      { delay: 0, phase: 0 },
-      { delay: 2000, phase: 1 },
-      { delay: 4000, phase: 2 },
-      { delay: 6000, phase: 3 },
-      { delay: 8000, phase: 4 }  // Added an extra phase to reach 100%
-    ];
-
-    phases.forEach(({ delay, phase }) => {
-      setTimeout(() => setLoadingPhase(phase), delay);
-    });
-
     // Complete loading and start fade out
     const completeTimer = setTimeout(() => {
       setIsVisible(false);
@@ -37,7 +23,6 @@ export default function PageLoader({ onLoadComplete }: PageLoaderProps) {
 
     return () => {
       clearTimeout(completeTimer);
-      phases.forEach(({ delay }) => clearTimeout(delay));
     };
   }, [onLoadComplete]);
 
