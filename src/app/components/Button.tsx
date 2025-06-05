@@ -8,6 +8,7 @@ interface ButtonProps {
   onClick?: () => void;
   loading?: boolean;
   disabled?: boolean;
+  type?: 'button' | 'submit' | 'reset';
 }
 
 export default function Button({ 
@@ -17,7 +18,8 @@ export default function Button({
   className = '', 
   onClick,
   loading = false,
-  disabled = false
+  disabled = false,
+  type = 'button'
 }: ButtonProps) {
   const baseClasses = 'font-semibold rounded-lg transition-all duration-300 hover:transform hover:scale-105 hover:-translate-y-1 active:scale-95 active:translate-y-0 group relative overflow-hidden animate-shimmer hover-glow';
   
@@ -48,6 +50,7 @@ export default function Button({
       }`}
       onClick={!isDisabled ? onClick : undefined}
       disabled={isDisabled}
+      type={type}
     >
       <span className={`relative z-10 transition-all duration-300 group-hover:animate-pulse flex items-center justify-center gap-2 ${
         loading ? 'opacity-70' : ''

@@ -34,7 +34,7 @@ export default function SignUp() {
       // Here you would typically make an API call to create the user
       // For now, we'll simulate a successful signup and redirect to sign in
       router.push('/pages/signin');
-    } catch (error) {
+    } catch {
       setError('An error occurred. Please try again.');
     } finally {
       setIsLoading(false);
