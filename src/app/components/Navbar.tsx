@@ -15,7 +15,7 @@ export default function Navbar() {
     { href: '/', label: 'Home' },
     { href: '/pages/discover', label: 'Discover' },
     { href: '/pages/playlists', label: 'Playlists' },
-    { href: '/pages/artists', label: 'Artists' },
+    { href: '/pages/stars', label: 'Stars' },
   ];
 
   return (
