@@ -26,14 +26,15 @@ export default function Header() {
     <header className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md border-b border-gray-800 animate-in fade-in slide-in-from-top-2 duration-500">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <div className='flex items space-x-2'><AnimatedLogo /></div>
+          <div className="flex items-center">
+            <AnimatedLogo />
+          </div>
 
           <div className="flex items-center space-x-4">
             {status === 'loading' ? (
               <div className="h-8 w-20 bg-gray-800 rounded animate-pulse"></div>
             ) : session ? (
               <div className="flex items-center space-x-4">
-                <span className="text-gray-300">{session.user?.email}</span>
                 <Button
                   onClick={handleSignOut}
                   variant="secondary"
@@ -42,27 +43,14 @@ export default function Header() {
                 >
                   Sign Out
                 </Button>
-          </div>
+              </div>
             ) : isHomePage ? (
               <Link href="/pages/signup">
                 <Button variant="primary" size="sm">
                   Get Started
                 </Button>
               </Link>
-            ) : (
-              <div className="flex items-center space-x-4">
-                <Link href="/pages/signup">
-                  <Button variant="primary" size="sm">
-                    Sign Up
-                  </Button>
-              </Link>
-                <Link href="/pages/signin">
-                  <Button variant="secondary" size="sm">
-                    Sign In
-                  </Button>
-              </Link>
-            </div>
-            )}
+            ) : null}
           </div>
         </div>
       </div>
