@@ -13,7 +13,11 @@ export default function Home() {
     // Check if this is the first visit
     const hasVisited = localStorage.getItem('hasVisited');
     if (hasVisited) {
-      setIsLoading(false);
+      // Add a delay even for returning visitors
+      const timer = setTimeout(() => {
+        setIsLoading(false);
+      }, 2000); // 2 second delay
+      return () => clearTimeout(timer);
     } else {
       // Set the flag for future visits
       localStorage.setItem('hasVisited', 'true');
