@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import Button from './Button';
-import AnimatedLogo from './AnimatedLogo';
 import { useSession, signOut } from 'next-auth/react';
 import { useState } from 'react';
 import { usePathname } from 'next/navigation';
@@ -28,7 +27,7 @@ export default function Header() {
         <div className="flex justify-between items-center h-16">
           <Link href="/" className="text-xl font-bold text-white hover:text-blue-400 transition-colors duration-200">
             Mudex Music
-          </Link>
+            </Link>
 
           <div className="flex items-center space-x-4">
             {status === 'loading' ? (
@@ -44,7 +43,7 @@ export default function Header() {
                 >
                   Sign Out
                 </Button>
-              </div>
+          </div>
             ) : isHomePage ? (
               <Link href="/pages/signup">
                 <Button variant="primary" size="sm">
@@ -57,13 +56,13 @@ export default function Header() {
                   <Button variant="primary" size="sm">
                     Sign Up
                   </Button>
-                </Link>
+              </Link>
                 <Link href="/pages/signin">
                   <Button variant="secondary" size="sm">
                     Sign In
                   </Button>
-                </Link>
-              </div>
+              </Link>
+            </div>
             )}
           </div>
         </div>
