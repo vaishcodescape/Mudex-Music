@@ -1,48 +1,73 @@
+'use client';
+
 import Link from 'next/link';
 import Button from './Button';
 import AnimatedLogo from './AnimatedLogo';
+import { useSession, signOut } from 'next-auth/react';
+import { useState } from 'react';
+import { usePathname } from 'next/navigation';
 
 export default function Header() {
+  const { data: session, status } = useSession();
+  const [isLoading, setIsLoading] = useState(false);
+  const pathname = usePathname();
+  const isHomePage = pathname === '/';
+
+  const handleSignOut = async () => {
+    setIsLoading(true);
+    try {
+      await signOut({ callbackUrl: '/' });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <header className="border-b border-slate-800 animate-in slide-in-from-top duration-700 backdrop-blur-sm bg-black/30">
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center h-16">
-          {/* Logo - Left */}
-          <div className="flex-shrink-0 animate-in fade-in duration-1000 delay-300">
-            <Link href="/">
-            <AnimatedLogo />
-            </Link>
-          </div>
-          
-          {/* Navigation - Center */}
-          <div className="flex-1 flex justify-center">
-            <div className="hidden md:flex items-center space-x-8 animate-in fade-in duration-1000 delay-500">
-              <Link href="/pages/discover" className="text-gray-300 hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium transition-all duration-300 hover:scale-105 hover-glow interactive-border">
-                Discover
+    <header className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md border-b border-gray-800 animate-in fade-in slide-in-from-top-2 duration-500">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
+          <Link href="/" className="text-xl font-bold text-white hover:text-blue-400 transition-colors duration-200">
+            Mudex Music
+          </Link>
+
+          <div className="flex items-center space-x-4">
+            {status === 'loading' ? (
+              <div className="h-8 w-20 bg-gray-800 rounded animate-pulse"></div>
+            ) : session ? (
+              <div className="flex items-center space-x-4">
+                <span className="text-gray-300">{session.user?.email}</span>
+                <Button
+                  onClick={handleSignOut}
+                  variant="secondary"
+                  size="sm"
+                  loading={isLoading}
+                >
+                  Sign Out
+                </Button>
+              </div>
+            ) : isHomePage ? (
+              <Link href="/pages/signup">
+                <Button variant="primary" size="sm">
+                  Get Started
+                </Button>
               </Link>
-              <Link href="/pages/artists" className="text-gray-300 hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium transition-all duration-300 hover:scale-105 hover-glow interactive-border">
-                Artists
-              </Link>
-              <Link href="/pages/playlists" className="text-gray-300 hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium transition-all duration-300 hover:scale-105 hover-glow interactive-border">
-                Playlists
-              </Link>
-              <Link href="/pages/about" className="text-gray-300 hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium transition-all duration-300 hover:scale-105 hover-glow interactive-border">
-                About
-              </Link>
-            </div>
-          </div>
-          
-          {/* Sign In Button - Right */}
-          <div className="flex-shrink-0 animate-in fade-in duration-1000 delay-700 animate-bounce-in">
-            <Button 
-              size="sm"
-              onClick={() => alert('Sign in feature coming soon!')}
-            >
-              Sign In
-            </Button>
+            ) : (
+              <div className="flex items-center space-x-4">
+                <Link href="/pages/signup">
+                  <Button variant="primary" size="sm">
+                    Sign Up
+                  </Button>
+                </Link>
+                <Link href="/pages/signin">
+                  <Button variant="secondary" size="sm">
+                    Sign In
+                  </Button>
+                </Link>
+              </div>
+            )}
           </div>
         </div>
-      </nav>
+      </div>
     </header>
   );
 } 
