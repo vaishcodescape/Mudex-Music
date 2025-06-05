@@ -10,7 +10,6 @@ import { usePathname } from 'next/navigation';
 export default function Header() {
   const { data: session, status } = useSession();
   const [isLoading, setIsLoading] = useState(false);
-  const [showAuthDropdown, setShowAuthDropdown] = useState(false);
   const pathname = usePathname();
   const isHomePage = pathname === '/';
 
@@ -37,55 +36,32 @@ export default function Header() {
             ) : session ? (
               <div className="flex items-center space-x-4">
                 <span className="text-gray-300">{session.user?.email}</span>
-                <button
+                <Button
                   onClick={handleSignOut}
-                  className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                  variant="secondary"
+                  size="sm"
+                  loading={isLoading}
                 >
                   Sign Out
-                </button>
+                </Button>
               </div>
             ) : isHomePage ? (
-              <div className="relative">
-                <button
-                  onClick={() => setShowAuthDropdown(!showAuthDropdown)}
-                  className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
-                >
+              <Link href="/pages/signup">
+                <Button variant="primary" size="sm">
                   Get Started
-                </button>
-                {showAuthDropdown && (
-                  <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-gray-900 ring-1 ring-black ring-opacity-5 animate-in fade-in slide-in-from-top-2 duration-200">
-                    <div className="py-1">
-                      <Link
-                        href="/pages/signin"
-                        className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white transition-colors duration-200"
-                        onClick={() => setShowAuthDropdown(false)}
-                      >
-                        Sign In
-                      </Link>
-                      <Link
-                        href="/pages/signup"
-                        className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white transition-colors duration-200"
-                        onClick={() => setShowAuthDropdown(false)}
-                      >
-                        Sign Up
-                      </Link>
-                    </div>
-                  </div>
-                )}
-              </div>
+                </Button>
+              </Link>
             ) : (
               <div className="flex items-center space-x-4">
-                <Link
-                  href="/pages/signup"
-                  className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
-                >
-                  Sign Up
+                <Link href="/pages/signup">
+                  <Button variant="primary" size="sm">
+                    Sign Up
+                  </Button>
                 </Link>
-                <Link
-                  href="/pages/signin"
-                  className="px-4 py-2 text-sm font-medium text-white bg-gray-800 hover:bg-gray-700 rounded-lg transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
-                >
-                  Sign In
+                <Link href="/pages/signin">
+                  <Button variant="secondary" size="sm">
+                    Sign In
+                  </Button>
                 </Link>
               </div>
             )}
