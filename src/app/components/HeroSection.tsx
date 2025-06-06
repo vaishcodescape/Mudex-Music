@@ -22,7 +22,7 @@ export default function HeroSection() {
               Start Listening
             </Button>
             </Link>
-            <Link href="/pages/artists">
+            <Link href="/pages/stars">
             <Button variant="outline" size="lg">
               Browse Artists
             </Button>
