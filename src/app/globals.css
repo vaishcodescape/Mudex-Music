@@ -1,0 +1,359 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #000000;
+  --foreground: #ffffff;
+  --primary: #3b82f6;
+  --primary-light: #60a5fa;
+  --accent: #1e293b;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #000000;
+    --foreground: #ffffff;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+/* Advanced animation keyframes */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 5px rgba(59, 130, 246, 0.3); }
+  50% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.6); }
+}
+
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes typewriter {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+@keyframes bounce-in {
+  0% { transform: scale(0.3) rotate(10deg); opacity: 0; }
+  50% { transform: scale(1.05) rotate(-2deg); }
+  70% { transform: scale(0.9) rotate(1deg); }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+@keyframes slide-glow {
+  0% { transform: translateX(-100%) skewX(-15deg); }
+  100% { transform: translateX(100%) skewX(-15deg); }
+}
+
+@keyframes text-reveal {
+  0% { clip-path: inset(0 100% 0 0); }
+  100% { clip-path: inset(0 0 0 0); }
+}
+
+@keyframes particle-float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
+  25% { transform: translateY(-20px) rotate(90deg); opacity: 1; }
+  50% { transform: translateY(-10px) rotate(180deg); opacity: 0.7; }
+  75% { transform: translateY(-30px) rotate(270deg); opacity: 1; }
+}
+
+@keyframes soundwave {
+  0%, 100% { 
+    transform: scaleY(0.5);
+    opacity: 0.7;
+  }
+  50% { 
+    transform: scaleY(1.2);
+    opacity: 1;
+  }
+}
+
+@keyframes soundwave-reverse {
+  0%, 100% { 
+    transform: scaleY(1.2);
+    opacity: 1;
+  }
+  50% { 
+    transform: scaleY(0.3);
+    opacity: 0.6;
+  }
+}
+
+@keyframes color-alternate {
+  0%, 100% { 
+    background: linear-gradient(45deg, #3b82f6, #1d4ed8);
+  }
+  25% { 
+    background: linear-gradient(45deg, #1d4ed8, #1e3a8a);
+  }
+  50% { 
+    background: linear-gradient(45deg, #60a5fa, #3b82f6);
+  }
+  75% { 
+    background: linear-gradient(45deg, #2563eb, #1d4ed8);
+  }
+}
+
+@keyframes border-alternate {
+  0%, 100% { 
+    border-color: #3b82f6;
+    color: #3b82f6;
+  }
+  25% { 
+    border-color: #60a5fa;
+    color: #60a5fa;
+  }
+  50% { 
+    border-color: #2563eb;
+    color: #2563eb;
+  }
+  75% { 
+    border-color: #1d4ed8;
+    color: #1d4ed8;
+  }
+}
+
+@keyframes shadow-alternate {
+  0%, 100% { 
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+  }
+  25% { 
+    box-shadow: 0 4px 15px rgba(96, 165, 250, 0.4);
+  }
+  50% { 
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+  }
+  75% { 
+    box-shadow: 0 4px 15px rgba(29, 78, 216, 0.4);
+  }
+}
+
+/* Fading Loading Animations */
+@keyframes fade-in-out {
+  0%, 100% { 
+    opacity: 0.3;
+    transform: rotate(0deg);
+  }
+  50% { 
+    opacity: 1;
+    transform: rotate(180deg);
+  }
+}
+
+@keyframes fade-bounce {
+  0%, 100% { 
+    opacity: 0.3;
+    transform: translateY(0px) scale(0.8);
+  }
+  50% { 
+    opacity: 1;
+    transform: translateY(-10px) scale(1.2);
+  }
+}
+
+@keyframes fade-stretch {
+  0%, 100% { 
+    opacity: 0.4;
+    transform: scaleY(0.3);
+  }
+  50% { 
+    opacity: 1;
+    transform: scaleY(1.5);
+  }
+}
+
+@keyframes fade-pulse {
+  0%, 100% { 
+    opacity: 0.2;
+    transform: scale(0.8);
+  }
+  50% { 
+    opacity: 1;
+    transform: scale(1.4);
+  }
+}
+
+@keyframes page-fade-in {
+  from { 
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes skeleton-shimmer {
+  0% { 
+    background-position: -200px 0;
+    opacity: 0.3;
+  }
+  100% { 
+    background-position: calc(200px + 100%) 0;
+    opacity: 0.8;
+  }
+}
+
+/* Custom animation classes */
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+.animate-gradient {
+  background: linear-gradient(45deg, #3b82f6, #1d4ed8, #60a5fa, #3b82f6);
+  background-size: 300% 300%;
+  animation: gradient-shift 4s ease infinite;
+}
+
+.animate-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.animate-shimmer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  animation: shimmer 2s infinite;
+}
+
+.animate-bounce-in {
+  animation: bounce-in 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.animate-text-reveal {
+  animation: text-reveal 1s ease-out forwards;
+}
+
+.animate-particle {
+  animation: particle-float 8s ease-in-out infinite;
+}
+
+.animate-soundwave {
+  animation: soundwave 2s ease-in-out infinite;
+  transform-origin: bottom;
+}
+
+.animate-soundwave-reverse {
+  animation: soundwave-reverse 2s ease-in-out infinite;
+  transform-origin: bottom;
+}
+
+.animate-color-alternate {
+  animation: color-alternate 4s ease-in-out infinite;
+}
+
+.animate-border-alternate {
+  animation: border-alternate 3s ease-in-out infinite;
+}
+
+.animate-shadow-alternate {
+  animation: shadow-alternate 2.5s ease-in-out infinite;
+}
+
+/* Fading Loading Animation Classes */
+.animate-fade-in-out {
+  animation: fade-in-out 2s ease-in-out infinite;
+}
+
+.animate-fade-bounce {
+  animation: fade-bounce 1.4s ease-in-out infinite;
+}
+
+.animate-fade-stretch {
+  animation: fade-stretch 1.2s ease-in-out infinite;
+  transform-origin: bottom;
+}
+
+.animate-fade-pulse {
+  animation: fade-pulse 2s ease-in-out infinite;
+}
+
+.animate-page-fade-in {
+  animation: page-fade-in 0.8s ease-out forwards;
+}
+
+.animate-skeleton-shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200px 100%;
+  animation: skeleton-shimmer 1.5s infinite linear;
+}
+
+/* Background effects */
+.bg-animated-gradient {
+  background: linear-gradient(45deg, #000000, #1e293b, #000000, #0f172a);
+  background-size: 400% 400%;
+  animation: gradient-shift 8s ease infinite;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Enhanced hover effects */
+.hover-lift {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+}
+
+.hover-glow {
+  transition: all 0.3s ease;
+}
+
+.hover-glow:hover {
+  filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.5));
+}
+
+/* Interactive elements */
+.interactive-border {
+  position: relative;
+  border: 1px solid transparent;
+  background: linear-gradient(#000, #000) padding-box,
+              linear-gradient(45deg, #3b82f6, #1d4ed8) border-box;
+  transition: all 0.3s ease;
+}
+
+.interactive-border:hover {
+  background: linear-gradient(#000, #000) padding-box,
+              linear-gradient(45deg, #60a5fa, #3b82f6) border-box;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(59, 130, 246, 0.2);
+}
