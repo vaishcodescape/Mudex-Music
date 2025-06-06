@@ -15,8 +15,10 @@ export async function PUT(request: Request) {
       );
     }
 
-    const { name, email, image } = await request.json();
+    const body = await request.json();
+    const { name, email, image } = body;
 
+    // Validate input
     if (!name || !email) {
       return NextResponse.json(
         { error: 'Name and email are required' },
@@ -24,16 +26,16 @@ export async function PUT(request: Request) {
       );
     }
 
+    // Update user profile
     const db = await getDb();
     const usersCollection = db.collection('users');
-
     const updatedUser = await usersCollection.findOneAndUpdate(
       { _id: new ObjectId(session.user.id) },
       { 
         $set: { 
           name,
           email,
-          image,
+          image: image || session.user.image,
           updatedAt: new Date()
         } 
       },
@@ -63,4 +65,4 @@ export async function PUT(request: Request) {
       { status: 500 }
     );
   }
-} 
+}

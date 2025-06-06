@@ -36,11 +36,12 @@ export async function POST(request: Request) {
 
     const result = await songsCollection.insertOne({
       title,
-      description,
-      genre,
+      description: description || '',
+      genre: genre || '',
       artistId: new ObjectId(session.user.id),
       audioUrl: 'placeholder', // Replace with actual URL after file upload
       coverImageUrl: 'placeholder', // Replace with actual URL after file upload
+      duration: '0:00', // Will be updated after audio processing
       createdAt: new Date(),
       updatedAt: new Date()
     });
@@ -51,7 +52,10 @@ export async function POST(request: Request) {
         title,
         description,
         genre,
-        artistId: session.user.id
+        artistId: session.user.id,
+        audioUrl: 'placeholder',
+        coverImageUrl: 'placeholder',
+        duration: '0:00'
       }
     });
   } catch (error) {
@@ -61,4 +65,4 @@ export async function POST(request: Request) {
       { status: 500 }
     );
   }
-} 
+}

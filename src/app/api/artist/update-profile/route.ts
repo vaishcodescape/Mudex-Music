@@ -15,7 +15,15 @@ export async function PUT(request: Request) {
       );
     }
 
-    const { name, email, bio, genre, image } = await request.json();
+    const formData = await request.formData();
+    const name = formData.get('name') as string;
+    const email = formData.get('email') as string;
+    const bio = formData.get('bio') as string;
+    const genre = formData.get('genre') as string;
+    const instagram = formData.get('instagram') as string;
+    const twitter = formData.get('twitter') as string;
+    const youtube = formData.get('youtube') as string;
+    const profileImage = formData.get('profileImage') as File;
 
     if (!name || !email) {
       return NextResponse.json(
@@ -24,9 +32,19 @@ export async function PUT(request: Request) {
       );
     }
 
-    const db = await getDb();
-    const usersCollection = db.collection('users');
+    // Handle image upload if provided
+    let imageUrl = session.user.image;
+    if (profileImage) {
+      const bytes = await profileImage.arrayBuffer();
+      const buffer = Buffer.from(bytes);
+      const base64Image = `data:${profileImage.type};base64,${buffer.toString('base64')}`;
+      imageUrl = base64Image;
+    }
 
+    const db = await getDb();
+    
+    // Update user profile
+    const usersCollection = db.collection('users');
     const updatedUser = await usersCollection.findOneAndUpdate(
       { 
         _id: new ObjectId(session.user.id),
@@ -36,9 +54,7 @@ export async function PUT(request: Request) {
         $set: { 
           name,
           email,
-          bio,
-          genre,
-          image,
+          image: imageUrl,
           updatedAt: new Date()
         } 
       },
@@ -52,15 +68,37 @@ export async function PUT(request: Request) {
       );
     }
 
+    // Update or create artist profile
+    const artistProfilesCollection = db.collection('artistprofiles');
+    const artistProfile = await artistProfilesCollection.findOneAndUpdate(
+      { userId: session.user.id },
+      { 
+        $set: { 
+          bio: bio || '',
+          genre: genre || '',
+          instagram: instagram || '',
+          twitter: twitter || '',
+          youtube: youtube || '',
+          updatedAt: new Date()
+        } 
+      },
+      { upsert: true, returnDocument: 'after' }
+    );
+
     return NextResponse.json({
       artist: {
         id: updatedUser.value._id.toString(),
         name: updatedUser.value.name,
         email: updatedUser.value.email,
-        bio: updatedUser.value.bio,
-        genre: updatedUser.value.genre,
         image: updatedUser.value.image,
-        role: updatedUser.value.role
+        role: updatedUser.value.role,
+        profile: {
+          bio: artistProfile.value.bio,
+          genre: artistProfile.value.genre,
+          instagram: artistProfile.value.instagram,
+          twitter: artistProfile.value.twitter,
+          youtube: artistProfile.value.youtube
+        }
       }
     });
   } catch (error) {
@@ -70,4 +108,4 @@ export async function PUT(request: Request) {
       { status: 500 }
     );
   }
-} 
+}

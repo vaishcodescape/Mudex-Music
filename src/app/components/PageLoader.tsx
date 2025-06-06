@@ -10,21 +10,8 @@ interface PageLoaderProps {
 
 export default function PageLoader({ onLoadComplete }: PageLoaderProps) {
   const [isVisible, setIsVisible] = useState(true);
-  const [loadingPhase, setLoadingPhase] = useState(0);
 
   useEffect(() => {
-    // Simulate loading phases
-    const phases = [
-      { delay: 0, phase: 0 },
-      { delay: 800, phase: 1 },
-      { delay: 1600, phase: 2 },
-      { delay: 2400, phase: 3 }
-    ];
-
-    phases.forEach(({ delay, phase }) => {
-      setTimeout(() => setLoadingPhase(phase), delay);
-    });
-
     // Complete loading and start fade out
     const completeTimer = setTimeout(() => {
       setIsVisible(false);
@@ -32,9 +19,11 @@ export default function PageLoader({ onLoadComplete }: PageLoaderProps) {
       setTimeout(() => {
         onLoadComplete?.();
       }, 500);
-    }, 3000);
+    }, 2000);
 
-    return () => clearTimeout(completeTimer);
+    return () => {
+      clearTimeout(completeTimer);
+    };
   }, [onLoadComplete]);
 
   if (!isVisible) {
@@ -71,22 +60,6 @@ export default function PageLoader({ onLoadComplete }: PageLoaderProps) {
           {/* Loading animation */}
           <div className="animate-in fade-in duration-500 delay-700">
             <LoadingAnimation type="bars" className="scale-125" />
-          </div>
-          
-          {/* Progress indicator */}
-          <div className="w-64 h-1 bg-slate-800 rounded-full overflow-hidden animate-in slide-in-from-left duration-600 delay-1000">
-            <div 
-              className="h-full bg-gradient-to-r from-blue-500 to-blue-600 rounded-full transition-all duration-1000 ease-out"
-              style={{
-                width: `${(loadingPhase + 1) * 25}%`,
-                boxShadow: '0 0 10px rgba(59, 130, 246, 0.5)'
-              }}
-            ></div>
-          </div>
-          
-          {/* Loading percentage */}
-          <div className="text-blue-400 font-mono text-sm animate-fade-pulse">
-            {(loadingPhase + 1) * 25}%
           </div>
         </div>
         

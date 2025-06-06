@@ -1,4 +1,4 @@
-import { MongoClient } from 'mongodb';
+ import { MongoClient, Db } from 'mongodb';
 
 if (!process.env.MONGODB_URI) {
   throw new Error('Please add your Mongo URI to .env.local');
@@ -7,8 +7,9 @@ if (!process.env.MONGODB_URI) {
 const uri = process.env.MONGODB_URI;
 const options = {};
 
-let client;
+let client: MongoClient | null = null;
 let clientPromise: Promise<MongoClient>;
+let db: Db | null = null;
 
 if (process.env.NODE_ENV === 'development') {
   // In development mode, use a global variable so that the value
@@ -28,9 +29,28 @@ if (process.env.NODE_ENV === 'development') {
   clientPromise = client.connect();
 }
 
-export async function getDb() {
-  const client = await clientPromise;
-  return client.db(process.env.MONGODB_DB || 'mudex');
+export async function getDb(): Promise<Db> {
+  if (db) {
+    return db;
+  }
+
+  try {
+    const client = await clientPromise;
+    db = client.db(process.env.MONGODB_DB || 'mudex');
+    return db;
+  } catch (error) {
+    console.error('Failed to connect to MongoDB:', error);
+    throw error;
+  }
 }
 
-export default clientPromise; 
+export async function closeConnection(): Promise<void> {
+  if (client) {
+    await client.close();
+    db = null;
+    client = null;
+    console.log('MongoDB connection closed');
+  }
+}
+
+export default clientPromise;
