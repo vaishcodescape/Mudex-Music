@@ -19,7 +19,7 @@ export default function PageLoader({ onLoadComplete }: PageLoaderProps) {
       setTimeout(() => {
         onLoadComplete?.();
       }, 500);
-    }, 10000);
+    }, 2000);
 
     return () => {
       clearTimeout(completeTimer);
